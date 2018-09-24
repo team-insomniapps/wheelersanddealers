@@ -191,8 +191,8 @@ if(isset($_POST['submit'])){
 				</ul>
 				<!-- login button -->
 				<div>
-					<a class="btn btn-sm btn-outline-secondary" type="button" href="add.html">Login</a>
-					<a href="#">Register</a>
+					<a class="btn btn-sm btn-outline-secondary" type="button" href="index.php">Logout</a>
+					
 				</div>
 			</div>
 		</nav>
