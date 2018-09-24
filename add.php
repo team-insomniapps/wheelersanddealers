@@ -174,7 +174,7 @@ if(isset($_POST['submit'])){
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<!-- branding logo image -->
 			<a class="navbar-brand" href="#">
-				<img src="images/robber-clipart-car-5.png" class="nav-logo">
+				<img src="images/robber-clipart-car-5.png" class="navLogo">
 			</a>
 			<!-- collapse navigation to hamburger on small/mobile screens -->
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
