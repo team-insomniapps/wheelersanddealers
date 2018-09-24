@@ -9,3 +9,25 @@
 	float: left;
     width: 50%;
 }
+
+.navHeader{
+	background-color: #EEEEEE;
+	margin: 5px;
+	padding: 10px;
+}
+
+.navLogo{
+	height:50px;
+	float:left;
+}
+
+.nav{
+	margin-top: 15px;
+	margin-left: 0px;
+}
+
+.page-footer{
+	background-color: #EEEEEE;
+	margin: 5px;
+	padding: 10px;
+}
