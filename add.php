@@ -11,7 +11,7 @@ $dbname = "efftwelv_wheelersanddealers";
 $dsn = "mysql:host=$servername;dbname=$dbname";
 
 if(isset($_POST['submit'])){
-	
+
 	// check if all fields have been entered
 	// 'image' is currently the only optional field
 	if( $_POST['vin'] == "" ||
