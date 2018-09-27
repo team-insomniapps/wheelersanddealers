@@ -34,7 +34,7 @@ if(isset($_POST['submit'])){
 		$_POST['price'] == "")
 	{
 		echo "<script>alert('Please enter all fields')</script>";
-		
+	
 	}else{
 		
 		// if all fields are entered then proceed with connection to database 
