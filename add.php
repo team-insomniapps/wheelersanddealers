@@ -13,6 +13,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 if(isset($_POST['submit'])){
 	
 	// check if all fields have been entered
+	// 'image' is currently the only optional field
 	if( $_POST['vin'] == "" ||
 		$_POST['year'] == "" ||
 		$_POST['make'] == "" ||
@@ -60,6 +61,7 @@ if(isset($_POST['submit'])){
 		$regos = $_POST['rego'];
 		$desc = $_POST['description'];
 		$price = $_POST['price'];
+		$image = addslashes(file_get_contents($_FILES['image']['tmp_name']));
 		
 		try 
 		{
@@ -92,7 +94,7 @@ if(isset($_POST['submit'])){
 			$query_add_car_model = "INSERT INTO `car_models` (`car_make_id`,`name`) VALUES ('{$make}','{$model}')";
 			
 			// add the vehicle id to the car_photos table ** Note car_photo blob is null
-			$query_add_car_photos = "INSERT INTO `car_photos` (`vehicle_id`, `car_description`) VALUES ('{$regos}','{$desc}')";
+			$query_add_car_photos = "INSERT INTO `car_photos` (`vehicle_id`, `car_description`, `car_photo`) VALUES ('{$regos}','{$desc}','{$image}')";
 			
 			echo '<script>alert("' . $query . '");</script>';
 			
@@ -200,7 +202,7 @@ if(isset($_POST['submit'])){
 		<div class="main">
 			<h1>Wheelers & Dealers</h1>
 			<p>Complete the form to add your Vehicle</p>
-			<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+			<form method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 			
 			
 			<div  class="row">	
@@ -419,6 +421,15 @@ if(isset($_POST['submit'])){
 					<label for="price" class="col-sm-4 col-form-label">Price</label>
 					<div class="col-sm-6">
 						<input class="form-control" id="price" name="price">
+					</div>
+				</div>
+				
+				
+				<!-- Image -->
+				<div class="form-group row">
+					<label for="image" class="col-sm-4 col-form-label">Image</label>
+					<div class="col-sm-6">
+						<input type="file" id="image" name="image">
 					</div>
 				</div>
 				
