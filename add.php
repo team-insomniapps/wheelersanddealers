@@ -6,7 +6,7 @@
 *
 */
 // database info
-$servername = "localhost";
+$servername = "local";
 $dbname = "efftwelv_wheelersanddealers";
 $dsn = "mysql:host=$servername;dbname=$dbname";
 
@@ -94,8 +94,6 @@ if(isset($_POST['submit'])){
 			// add the vehicle id to the car_photos table ** Note car_photo blob is null
 			$query_add_car_photos = "INSERT INTO `car_photos` (`vehicle_id`, `car_description`) VALUES ('{$regos}','{$desc}')";
 			
-			echo '<script>alert("' . $query . '");</script>';
-			
 			// add all fields to all the tables
 			$conn->beginTransaction();	
 			$conn->exec($query_add_transmission);
@@ -119,7 +117,7 @@ if(isset($_POST['submit'])){
 		catch(PDOException $e)
 		{
 			// echo "Connection failed: " . $e->getMessage();
-			echo "<script>alert('Connection failed: ')</script>";
+			echo "<script>alert('Connection failed')</script>";
 		} 
 	
 	}
@@ -184,20 +182,24 @@ if(isset($_POST['submit'])){
 			<!-- navigation bar -->
 			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
 				<ul class="navbar-nav mr-auto mx-auto">
-					<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="#">About</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Register</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+					<li class="nav-item active"><a class="nav-link" href="index_log.php">Home</a></li>
+					<li class="nav-item"><a class="nav-link" href="inventory.php">Inventory <span class="sr-only">(current)</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Help</a></li>
 				</ul>
-				<!-- login button -->
+					
+					
+				</ul>
+				<!-- login/logout button -->
 				<div>
 					<a class="btn btn-sm btn-outline-secondary" type="button" href="index.php">Logout</a>
-					
 				</div>
 			</div>
 		</nav>
 		
-		<div class="main">
+		
+		<div class="container">
 			<h1>Wheelers & Dealers</h1>
 			<p>Complete the form to add your Vehicle</p>
 			<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
