@@ -21,7 +21,7 @@ if(isset($_POST['submit'])){
 	if($_FILES['image']['size'] > 16700000){ // the maximum size of mediumblog
     echo"<script>alert('File uploaded exceeds maximum upload size')</script>";
 	}
-	
+
 	// check if all fields have been entered
 	// 'image' is currently the only optional field
 	if( $_POST['vin'] == "" ||
