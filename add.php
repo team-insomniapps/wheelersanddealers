@@ -12,6 +12,16 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 
 if(isset($_POST['submit'])){
 	
+	// check the uploaded image
+	if(($_FILES['image']['type'] != 'image/png') && ($_FILES['image']['type'] != 'image/jpg') &&
+	($_FILES['image']['type'] != 'image/jpeg') && ($_FILES['image']['type'] != 'image/gif')){
+    echo"<script>alert('Unsupported filetype uploaded')</script>";
+	}
+	
+	if($_FILES['image']['size'] > 16700000){ // the maximum size of mediumblog
+    echo"<script>alert('File uploaded exceeds maximum upload size')</script>";
+	}
+	
 	// check if all fields have been entered
 	// 'image' is currently the only optional field
 	if( $_POST['vin'] == "" ||
@@ -97,9 +107,9 @@ if(isset($_POST['submit'])){
 			$query_add_car_photos = "INSERT INTO `car_photos` (`vehicle_id`, `car_description`, `car_photo`) VALUES ('{$regos}','{$desc}','{$image}')";
 			
 			echo '<script>alert("' . $query . '");</script>';
-			
+
 			// add all fields to all the tables
-			$conn->beginTransaction();	
+			$conn->beginTransaction();
 			$conn->exec($query_add_transmission);
 			$conn->exec($query_add_body_types);
 			$conn->exec($query_add_car_make);
@@ -115,7 +125,6 @@ if(isset($_POST['submit'])){
 			// {$_POST['interiorColor']}', '{$_POST['condition']}', 
 			
 			// database not yet used in the form
-			//
 			
 		}
 		catch(PDOException $e)
@@ -125,8 +134,7 @@ if(isset($_POST['submit'])){
 		} 
 	
 	}
-}	
-	
+}
 ?>
 
 <!doctype html>
