@@ -48,6 +48,18 @@
 	color: #ba1f13;
 }
 
+/* styling for submit button when mouse hover and clicked */
+.form-control:hover{
+	background-color: #ba1f13;
+	color: white;
+}
+
+.form-control:active{
+	background-color: grey;
+	color: white;
+}
+
+
 .page-footer{
 	background-color: #ba1f13;
 	margin: 5px;
