@@ -27,13 +27,15 @@
 	
 }
 
-.nav-link{
+.nav-link, .footerTxt{
 	color: white ;
 	text-decoration: none;
 	font-size: 1.2em;
 	margin: 0 15px;
 	font-weight: 550;
 }
+
+.footerTxt{ font-size: 0.8em; font-weight: 350; }
 
 .logBtn{
 	color: white;
@@ -47,10 +49,12 @@
 }
 
 .page-footer{
-	background-color: #EEEEEE;
+	background-color: #ba1f13;
 	margin: 5px;
 	padding: 10px;
 }
+
+
 
 .carShortInfo{
 	border-style: none none solid none;
