@@ -22,6 +22,16 @@ if(isset($_POST['submit'])){
     echo"<script>alert('File uploaded exceeds maximum upload size')</script>";
 	}
 	
+	/*
+	//THIS CODE IS FOR USE WHEN DISPLAYING IMAGES FROM THE DATABASE
+	// im sure this doesnt need to be here but i couldnt get it working without it
+	$con=mysqli_connect("localhost","efftwelv_andrew","Andrew1000","efftwelv_wheelersanddealers");
+	$sql = "SELECT * FROM `car_photos` where id = 142";
+	$sth = $con->query($sql);
+	$result = mysqli_fetch_array($sth);
+	echo '<img src="data:image/jpeg;base64,'.base64_encode( $result['car_photo'] ).'"/>';
+	*/
+	
 	// check if all fields have been entered
 	// 'image' is currently the only optional field
 	if( $_POST['vin'] == "" ||
