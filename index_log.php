@@ -33,15 +33,16 @@
 			<!-- navigation bar -->
 			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
 				<ul class="navbar-nav mr-auto mx-auto">
-					<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="#">About</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Register</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+					<li class="nav-item active"><a class="nav-link" href="index_log.php">Home <span class="sr-only">(current)</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="inventory.php">Inventory </a></li>
+					<li class="nav-item"><a class="nav-link" href="add.php">Add</a></li>
 				</ul>
-				<!-- login button -->
+					
+					
+				</ul>
+				<!-- login/logout button -->
 				<div>
-					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index_log.php">Login</a>
-					<a class="logBtn btn btn-sm btn-outline-secondary" href="#">Register</a>
+					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
 				</div>
 			</div>
 			
@@ -52,7 +53,7 @@
 			<h1>Wheelers & Dealers</h1>
 			<h4>A cool subtitle</h4>
 			<p>The concise description bit that says what we do</p>
-			<button>Get Started</button>
+			<a  class="btn btn-sm btn-outline-secondary" type="button" href="add.php">Get Started</a>
 			
 		</div>	
 		
