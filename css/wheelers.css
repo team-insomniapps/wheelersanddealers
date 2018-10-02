@@ -1,3 +1,6 @@
+body{
+	background-color: #fafafa;
+}
 
 .main{
 	margin-left: auto;
@@ -21,22 +24,59 @@
 	float:left;
 }
 
-.nav{
-	margin-top: 15px;
-	margin-left: 0px;
+.navbar{
+	margin: 10px;
+	background-color: #ba1f13;
+	
+}
+
+.nav-link, .footerTxt{
+	color: white ;
+	text-decoration: none;
+	font-size: 1.2em;
+	margin: 0 15px;
+	font-weight: 550;
+}
+
+.footerTxt{ font-size: 0.8em; font-weight: 350; }
+
+.logBtn{
+	color: white;
+    /* background-color: transparent; */
+    border-color: white;
+}
+
+.logBtn:hover{
+	background-color: white;
+	color: #ba1f13;
 }
 
 .page-footer{
-	background-color: #EEEEEE;
+	background-color: #ba1f13;
 	margin: 5px;
 	padding: 10px;
+	
 }
 
+.form-control:hover{
+	background-color: rgba(186,31,19, 0.6);
+	color: white;
+}
+
+.form-control:active{
+	background-color: grey;
+	color: white;
+}
+
+
+
 .carShortInfo{
-	border-style: none none solid none;
-	/* border-color: #EEEEEE; */
+	border-style: solid;
+	border-color: #cccccc;
 	border-width: 0.5px;
 	padding: 20px 0px;
+	margin: 10px;
+	background-color: #ffffff;
 }
 
 .carPhoto{
@@ -52,14 +92,32 @@
 	margin: 0;
 }
 
+.carTitle{
+	color: #06386d;
+}
+	
 .filterBox{
 	margin: 20px;
 	padding: 10%;
 	border-style: solid;
 	border-width: 1px;
-	
+	border-color: #cccccc;
+	background-color: #ffffff;
+}
+
+.container{
+	border-style: solid;
+	border-width: 1px;
+	border-color: #cccccc;
+	background-color: #ffffff;
 }
 
 .invisible{
 	visibility: invisible;
 }
+
+.carLink, .carLink:hover{
+	text-decoration: none;
+	color: black;
+}
+

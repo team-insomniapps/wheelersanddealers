@@ -104,13 +104,13 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<nav class="navbar navbar-expand-lg">
 			<!-- branding logo image -->
 			<a class="navbar-brand" href="#">
-				<img src="images/robber-clipart-car-5.png" class="navLogo">
+				<img src="images/logo_uncoloured.svg" class="navLogo">
 			</a>
 			<!-- collapse navigation to hamburger on small/mobile screens -->
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
+			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			
@@ -131,7 +131,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 				</ul>
 				<!-- login/logout button -->
 				<div>
-					<a class="btn btn-sm btn-outline-secondary" type="button" href="index.php">Logout</a>
+					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
 				</div>
 			</div>
 		</nav>
@@ -162,11 +162,9 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 								}
 							</script>
 							
-						<a type="button" label="add" id="addCategory" onclick="addCategory();">Add</a>
+						<a class="filterBtn btn btn-sm btn-outline-secondary">Filter</a>
 						
-						<div id="Year" class="invisible">
-							Cat
-						</div>
+						
 					</div>
 				</aside>
 				<section class="col-sm-8">
@@ -186,22 +184,29 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						if(!$result){
 								die("Database query failed. ");
 						}
-					
+						
 						while($row = mysqli_fetch_assoc($result)){
 							echo '<section class="row col-sm-12 carShortInfo">';
+							echo '<a class="carLink" href="carPage.php">';
 							echo "<article class='col-sm-10'>";
 							echo "<ul class='carInfoList'>";
-							echo "<li><h4>{$row['car_make_id']}";
+							echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
 							echo " {$row['car_model_id']}<h3></li>";
 							echo "<li><h6>$ {$row['car_price']}<h6></li>";
 							echo "<li>Dealership</li>";
 							echo "<li>Suburb/Town, STATE</li>";
-							echo "<li>{$row['description']}</li>";
+							// echo "<li>{$row['description']}</li>";
+							echo "</a>";
+							
+							echo '<a class="carLink" href="carPage.php">';
+							
 							echo "</article>";
 							echo "<aside class='col-sm-2'>";
 							echo "	<img class='carPhoto' src='images/Placeholder.png'>";
 							echo "</aside>";
+							echo "</a>";
 							echo "</section>";
+							
 							
 						}
 					
@@ -219,11 +224,11 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 			
 		</div>	
 		
-		<footer class="page-footer fixed-bottom">
-			<div class="container-fluid text-left">
-				<a href="#">Privacy Policy</a>
-				<a href="#">Contact</a>
-				<a href="#">Logout</a>
+		<footer class="page-footer">
+			<div class="footerTxt container-fluid text-left">
+				<a class="footerTxt" href="#">Privacy Policy</a>
+				<a class="footerTxt" href="#">Contact</a>
+				<a class="footerTxt" href="#">Logout</a>
 			</div>
 		</footer>
 		
