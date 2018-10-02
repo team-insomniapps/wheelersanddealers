@@ -11,7 +11,7 @@ $dbname = "efftwelv_wheelersanddealers";
 $dsn = "mysql:host=$servername;dbname=$dbname";
 
 if(isset($_POST['submit'])){
-
+	
 	// check the uploaded image
 	if(($_FILES['image']['type'] != 'image/png') && ($_FILES['image']['type'] != 'image/jpg') &&
 	($_FILES['image']['type'] != 'image/jpeg') && ($_FILES['image']['type'] != 'image/gif')){
@@ -21,7 +21,7 @@ if(isset($_POST['submit'])){
 	if($_FILES['image']['size'] > 16700000){ // the maximum size of mediumblog
     echo"<script>alert('File uploaded exceeds maximum upload size')</script>";
 	}
-
+	
 	// check if all fields have been entered
 	// 'image' is currently the only optional field
 	if( $_POST['vin'] == "" ||
@@ -106,10 +106,8 @@ if(isset($_POST['submit'])){
 			// add the vehicle id to the car_photos table ** Note car_photo blob is null
 			$query_add_car_photos = "INSERT INTO `car_photos` (`vehicle_id`, `car_description`, `car_photo`) VALUES ('{$regos}','{$desc}','{$image}')";
 			
-			echo '<script>alert("' . $query . '");</script>';
-
 			// add all fields to all the tables
-			$conn->beginTransaction();
+			$conn->beginTransaction();	
 			$conn->exec($query_add_transmission);
 			$conn->exec($query_add_body_types);
 			$conn->exec($query_add_car_make);
@@ -125,16 +123,18 @@ if(isset($_POST['submit'])){
 			// {$_POST['interiorColor']}', '{$_POST['condition']}', 
 			
 			// database not yet used in the form
+			//
 			
 		}
 		catch(PDOException $e)
 		{
 			// echo "Connection failed: " . $e->getMessage();
-			echo "<script>alert('Connection failed: ')</script>";
+			echo "<script>alert('Connection failed')</script>";
 		} 
 	
 	}
-}
+}	
+	
 ?>
 
 <!doctype html>
@@ -181,33 +181,38 @@ if(isset($_POST['submit'])){
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<nav class="navbar navbar-expand-lg">
 			<!-- branding logo image -->
 			<a class="navbar-brand" href="#">
-				<img src="images/robber-clipart-car-5.png" class="navLogo">
+				<img src="images/logo_uncoloured.svg" class="navLogo">
 			</a>
 			<!-- collapse navigation to hamburger on small/mobile screens -->
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
+			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
+			
 			
 			<!-- navigation bar -->
 			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
 				<ul class="navbar-nav mr-auto mx-auto">
-					<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="#">About</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Register</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+					<li class="nav-item active"><a class="nav-link" href="index_log.php">Home</a></li>
+					<li class="nav-item"><a class="nav-link" href="inventory.php">Inventory <span class="sr-only">(current)</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Help</a></li>
 				</ul>
-				<!-- login button -->
-				<div>
-					<a class="btn btn-sm btn-outline-secondary" type="button" href="index.php">Logout</a>
 					
+					
+				</ul>
+				<!-- login/logout button -->
+				<div>
+					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
 				</div>
 			</div>
 		</nav>
 		
-		<div class="main">
+		
+		<div class="container">
 			<h1>Wheelers & Dealers</h1>
 			<p>Complete the form to add your Vehicle</p>
 			<form method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
@@ -441,6 +446,7 @@ if(isset($_POST['submit'])){
 					</div>
 				</div>
 				
+				
 				<!-- submit -->
 				<div  class="form-group row">
 					<div class="col-sm-6">
@@ -454,11 +460,11 @@ if(isset($_POST['submit'])){
 			</form>
 		</div>	
 		
-		<footer class="page-footer fixed-bottom">
-			<div class="container-fluid text-left">
-				<a href="#">Privacy Policy</a>
-				<a href="#">Contact</a>
-				<a href="#">Logout</a>
+		<footer class="page-footer">
+			<div class="footerTxt container-fluid text-left">
+				<a class="footerTxt" href="#">Privacy Policy</a>
+				<a class="footerTxt" href="#">Contact</a>
+				<a class="footerTxt" href="#">Logout</a>
 			</div>
 		</footer>
 		
