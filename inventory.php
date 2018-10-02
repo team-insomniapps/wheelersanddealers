@@ -162,11 +162,9 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 								}
 							</script>
 							
-						<a type="button" label="add" id="addCategory" onclick="addCategory();">Add</a>
+						<a class="filterBtn btn btn-sm btn-outline-secondary">Filter</a>
 						
-						<div id="Year" class="invisible">
-							Cat
-						</div>
+						
 					</div>
 				</aside>
 				<section class="col-sm-8">
@@ -186,25 +184,29 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						if(!$result){
 								die("Database query failed. ");
 						}
-					
+						
 						while($row = mysqli_fetch_assoc($result)){
 							echo '<section class="row col-sm-12 carShortInfo">';
+							echo '<a class="carLink" href="carPage.php">';
 							echo "<article class='col-sm-10'>";
 							echo "<ul class='carInfoList'>";
-							echo "<li><h4>{$row['car_make_id']}";
+							echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
 							echo " {$row['car_model_id']}<h3></li>";
 							echo "<li><h6>$ {$row['car_price']}<h6></li>";
 							echo "<li>Dealership</li>";
 							echo "<li>Suburb/Town, STATE</li>";
-							echo "<li>{$row['description']}</li>";
-							echo '<a class="carLink" href="carPage.php">';
-							echo "View";
+							// echo "<li>{$row['description']}</li>";
 							echo "</a>";
+							
+							echo '<a class="carLink" href="carPage.php">';
+							
 							echo "</article>";
 							echo "<aside class='col-sm-2'>";
 							echo "	<img class='carPhoto' src='images/Placeholder.png'>";
 							echo "</aside>";
+							echo "</a>";
 							echo "</section>";
+							
 							
 						}
 					
