@@ -12,7 +12,18 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 
 if(isset($_POST['submit'])){
 	
+	// check the uploaded image
+	if(($_FILES['image']['type'] != 'image/png') && ($_FILES['image']['type'] != 'image/jpg') &&
+	($_FILES['image']['type'] != 'image/jpeg') && ($_FILES['image']['type'] != 'image/gif')){
+    echo"<script>alert('Unsupported filetype uploaded')</script>";
+	}
+	
+	if($_FILES['image']['size'] > 16700000){ // the maximum size of mediumblog
+    echo"<script>alert('File uploaded exceeds maximum upload size')</script>";
+	}
+	
 	// check if all fields have been entered
+	// 'image' is currently the only optional field
 	if( $_POST['vin'] == "" ||
 		$_POST['year'] == "" ||
 		$_POST['make'] == "" ||
@@ -60,6 +71,7 @@ if(isset($_POST['submit'])){
 		$regos = $_POST['rego'];
 		$desc = $_POST['description'];
 		$price = $_POST['price'];
+		$image = addslashes(file_get_contents($_FILES['image']['tmp_name']));
 		
 		try 
 		{
@@ -92,7 +104,7 @@ if(isset($_POST['submit'])){
 			$query_add_car_model = "INSERT INTO `car_models` (`car_make_id`,`name`) VALUES ('{$make}','{$model}')";
 			
 			// add the vehicle id to the car_photos table ** Note car_photo blob is null
-			$query_add_car_photos = "INSERT INTO `car_photos` (`vehicle_id`, `car_description`) VALUES ('{$regos}','{$desc}')";
+			$query_add_car_photos = "INSERT INTO `car_photos` (`vehicle_id`, `car_description`, `car_photo`) VALUES ('{$regos}','{$desc}','{$image}')";
 			
 			// add all fields to all the tables
 			$conn->beginTransaction();	
@@ -203,7 +215,7 @@ if(isset($_POST['submit'])){
 		<div class="container">
 			<h1>Wheelers & Dealers</h1>
 			<p>Complete the form to add your Vehicle</p>
-			<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+			<form method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 			
 			
 			<div  class="row">	
@@ -424,8 +436,8 @@ if(isset($_POST['submit'])){
 						<input class="form-control" id="price" name="price">
 					</div>
 				</div>
-					
-        
+				
+				
 				<!-- Image -->
 				<div class="form-group row">
 					<label for="image" class="col-sm-4 col-form-label">Image</label>
@@ -434,7 +446,7 @@ if(isset($_POST['submit'])){
 					</div>
 				</div>
 				
-        
+				
 				<!-- submit -->
 				<div  class="form-group row">
 					<div class="col-sm-6">
