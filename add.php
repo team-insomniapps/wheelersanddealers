@@ -424,7 +424,17 @@ if(isset($_POST['submit'])){
 						<input class="form-control" id="price" name="price">
 					</div>
 				</div>
+					
+        
+				<!-- Image -->
+				<div class="form-group row">
+					<label for="image" class="col-sm-4 col-form-label">Image</label>
+					<div class="col-sm-6">
+						<input type="file" id="image" name="image">
+					</div>
+				</div>
 				
+        
 				<!-- submit -->
 				<div  class="form-group row">
 					<div class="col-sm-6">
