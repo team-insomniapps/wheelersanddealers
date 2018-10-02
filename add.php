@@ -6,7 +6,7 @@
 *
 */
 // database info
-$servername = "local";
+$servername = "localhost";
 $dbname = "efftwelv_wheelersanddealers";
 $dsn = "mysql:host=$servername;dbname=$dbname";
 
