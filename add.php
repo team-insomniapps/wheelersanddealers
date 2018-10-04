@@ -237,6 +237,7 @@ echo "<h3> posted array is ".$value."<br></h3>";
 
 			echo '<script>alert("' . $query . '");</script>';
 
+
 			// add all fields to all the tables
 			$conn->beginTransaction();
 			$conn->exec($query_add_transmission);
@@ -261,11 +262,10 @@ echo "<h3> posted array is ".$value."<br></h3>";
 		{
 			// echo "Connection failed: " . $e->getMessage();
 			echo "<script>alert('Connection failed: ')</script>";
-		}
-
-
-
-
+		} 
+	
+	}
+}	
 ?>
 
 <!doctype html>
@@ -314,33 +314,35 @@ echo "<h3> posted array is ".$value."<br></h3>";
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<nav class="navbar navbar-expand-lg">
 			<!-- branding logo image -->
 			<a class="navbar-brand" href="#">
-				<img src="images/robber-clipart-car-5.png" class="navLogo">
+				<img src="images/logo_uncoloured.svg" class="navLogo">
 			</a>
 			<!-- collapse navigation to hamburger on small/mobile screens -->
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
+			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
+      
 			<!-- navigation bar -->
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto mx-auto">
-					<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="#">About</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Register</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+					<li class="nav-item active"><a class="nav-link" href="index_log.php">Home</a></li>
+					<li class="nav-item"><a class="nav-link" href="inventory.php">Inventory <span class="sr-only">(current)</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Help</a></li>
 				</ul>
-				<!-- login button -->
+				<!-- login/logout button -->
 				<div>
-					<a class="btn btn-sm btn-outline-secondary" type="button" href="index.php">Logout</a>
-
+					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
 				</div>
 			</div>
 		</nav>
-
-		<div class="main">
+		
+		
+		<div class="container">
 			<h1>Wheelers & Dealers</h1>
 			<p>Complete the form to add your Vehicle</p>
 			<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
@@ -587,13 +589,14 @@ echo "<h3> posted array is ".$value."<br></h3>";
 			</div>
 			</div>
 			</form>
-		</div>
 
-		<footer class="page-footer fixed-bottom">
-			<div class="container-fluid text-left">
-				<a href="#">Privacy Policy</a>
-				<a href="#">Contact</a>
-				<a href="#">Logout</a>
+		</div>	
+		
+		<footer class="page-footer">
+			<div class="footerTxt container-fluid text-left">
+				<a class="footerTxt" href="#">Privacy Policy</a>
+				<a class="footerTxt" href="#">Contact</a>
+				<a class="footerTxt" href="#">Logout</a>
 			</div>
 		</footer>
 
