@@ -1,0 +1,22 @@
+//@CHARSET "UTF-8";
+css *{ margin: 0; padding: 0; }
+html,body
+
+/* body,input
+{
+  background: rgba(234,33,77,0.3);
+}
+div
+{
+  background: rgba(0,220,44,0.8);
+} */
+input:focus
+{
+  //color: rgb(255,255,255);
+  background-color: rgb(255,255,255) !important;
+}
+
+.mandatory
+{
+  background-color : rgb(246,220,148) !important;
+}
