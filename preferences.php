@@ -308,7 +308,7 @@ if(isset($_POST['submit'])){
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<!-- branding logo image -->
-			<a class="navbar-brand" href="#">
+			<a class="navbar-brand" href="http://www.wheelersanddealers.efftwelve.com/index_log.php">
 				<img src="images/robber-clipart-car-5.png" class="navLogo">
 			</a>
 			<!-- collapse navigation to hamburger on small/mobile screens -->

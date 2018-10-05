@@ -106,7 +106,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
 		<nav class="navbar navbar-expand-lg">
 			<!-- branding logo image -->
-			<a class="navbar-brand" href="#">
+			<a class="navbar-brand" href="http://www.wheelersanddealers.efftwelve.com/index_log.php">
 				<img src="images/logo_uncoloured.svg" class="navLogo">
 			</a>
 			<!-- collapse navigation to hamburger on small/mobile screens -->
@@ -202,12 +202,24 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 							
 							echo "</article>";
 							echo "<aside class='col-sm-2'>";
-							echo "	<img class='carPhoto' src='images/Placeholder.png'>";
+							
+							// DISPLAY IMAGE - using a second query. im sure there's a better way to do this but i cannot figure out how to get images and other data in one query
+							//echo "	<img class='carPhoto' src='images/Placeholder.png'>";
+							$queryID2 = "SELECT car_photo ";
+							$queryID2 .= "FROM car_photos ";
+							$queryID2 .= "WHERE 1";
+							$img = $conn->query($queryID2);
+							$imgresult = mysqli_fetch_array($img);
+							// if no image is supplied use default image
+							if(!file_exists($imgresult['car_photo'])) {
+								echo '<img this.onerror=null src="data:image/jpeg;base64,'.base64_encode( $imgresult['car_photo'] ).'" height=150 width=150>';
+							} else {
+								echo "	<img class='carPhoto' src='images/Placeholder.png'>";
+							}
+							
 							echo "</aside>";
 							echo "</a>";
 							echo "</section>";
-							
-							
 						}
 					
 						// release returned data

@@ -183,7 +183,7 @@ if(isset($_POST['submit'])){
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
 		<nav class="navbar navbar-expand-lg">
 			<!-- branding logo image -->
-			<a class="navbar-brand" href="#">
+			<a class="navbar-brand" href="http://www.wheelersanddealers.efftwelve.com/index_log.php">
 				<img src="images/logo_uncoloured.svg" class="navLogo">
 			</a>
 			<!-- collapse navigation to hamburger on small/mobile screens -->
