@@ -106,7 +106,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
 		<nav class="navbar navbar-expand-lg">
 			<!-- branding logo image -->
-			<a class="navbar-brand" href="http://www.wheelersanddealers.efftwelve.com/index_log.php">
+			<a class="navbar-brand" href="#">
 				<img src="images/logo_uncoloured.svg" class="navLogo">
 			</a>
 			<!-- collapse navigation to hamburger on small/mobile screens -->
@@ -173,7 +173,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 					
 					 <?php
 						// MySQL database query
-						$queryID = "SELECT * ";
+						$queryID = "SELECT *";
 						$queryID .= "FROM vehicle ";
 						$queryID .= "WHERE 1";
 						// echo "<script>alert('$queryID')</script>";
@@ -186,6 +186,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						}
 						
 						while($row = mysqli_fetch_assoc($result)){
+												
 							echo '<section class="row col-sm-12 carShortInfo">';
 							echo '<a class="carLink" href="carPage.php">';
 							echo "<article class='col-sm-10'>";
@@ -197,29 +198,14 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 							echo "<li>Suburb/Town, STATE</li>";
 							// echo "<li>{$row['description']}</li>";
 							echo "</a>";
-							
 							echo '<a class="carLink" href="carPage.php">';
-							
 							echo "</article>";
 							echo "<aside class='col-sm-2'>";
-							
-							// DISPLAY IMAGE - using a second query. im sure there's a better way to do this but i cannot figure out how to get images and other data in one query
-							//echo "	<img class='carPhoto' src='images/Placeholder.png'>";
-							$queryID2 = "SELECT car_photo ";
-							$queryID2 .= "FROM car_photos ";
-							$queryID2 .= "WHERE 1";
-							$img = $conn->query($queryID2);
-							$imgresult = mysqli_fetch_array($img);
-							// if no image is supplied use default image
-							if(!file_exists($imgresult['car_photo'])) {
-								echo '<img this.onerror=null src="data:image/jpeg;base64,'.base64_encode( $imgresult['car_photo'] ).'" height=150 width=150>';
-							} else {
-								echo "	<img class='carPhoto' src='images/Placeholder.png'>";
-							}
-							
+							echo '<img height=150 width=200 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
 							echo "</aside>";
 							echo "</a>";
 							echo "</section>";
+							
 						}
 					
 						// release returned data
