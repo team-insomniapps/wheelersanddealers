@@ -102,54 +102,57 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 	</head>
 		
 	<body>
-		<!-- Header/navigation bar div -->
-		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<nav class="navbar navbar-expand-lg">
-			<!-- branding logo image -->
-			<a class="navbar-brand" href="#">
-				<img src="images/logo_uncoloured.svg" class="navLogo">
-			</a>
-			<!-- collapse navigation to hamburger on small/mobile screens -->
-			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+		<div class="container">
+			<?php include('nav.php'); ?>
 			
-			<!-- navigation bar -->
-			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
-				<ul class="navbar-nav mr-auto mx-auto">
-					<li class="nav-item"><a class="nav-link" href="index_log.php">Home</a></li>
-					<li class="nav-item active"><a class="nav-link" href="inventory.php">Inventory <span class="sr-only">(current)</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="add.php">Add</a></li>
-					<!-- <li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Help</a></li>
-					-->
-					
-				</ul>
-					
-					
-				</ul>
-				<!-- login/logout button -->
-				<div>
-					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
-				</div>
-			</div>
-		</nav>
-		
-		<div class="main">
 			<div class="row">
 				<!-- Search filter box area -->
-				<aside class="col-sm-4">
+				<div class="col-md-4">
 					<div class="filterBox">
-						<p>Filter results:</p>
-						<p>Price</p>
-						<input type="text" label="Price">
-						<br>
-						<br>
-						<form>
-						<p>Category</p>
-						<input list="categories" name="categories" class="form-control" onfocus="this.value=''">
-							<datalist id="categories">
+						<h4>Filter results:</h4>
+
+						<div class="filterGroup">
+							<div class="filter-label" data-toggle="collapse" data-target="#priceCollapse" aria-expanded="true" aria-controls="priceCollapse">Price</div>
+							<div id="priceCollapse" class="collapse">
+								<div class="form-group">
+									<label for="priceMin">Price minimum:</label>
+									<input class="form-control" type="number" id="priceMin" />
+								</div>
+								<div class="form-group">
+									<label for="priceMax">Price maximum:</label>
+									<input class="form-control" type="number" id="priceMax" />
+								</div>
+							</div>
+						</div>
+
+						<div class="filterGroup">
+							<div class="filter-label" data-toggle="collapse" data-target="#distCollapse" aria-expanded="true" aria-controls="distCollapse">Distance</div>
+							<div id="distCollapse" class="collapse">
+								<div class="form-group">
+									<label for="distMax">Maximum distance:</label>
+									<input class="form-control" type="number" id="distMax" />
+								</div>
+							</div>
+						</div>
+
+						<div class="filterGroup">
+							<div class="filter-label" data-toggle="collapse" data-target="#colourCollapse" aria-expanded="true" aria-controls="colourCollapse">Colour</div>
+							<div id="colourCollapse" class="collapse">
+								<div class="form-group">
+									<label for="distMax">Colour:</label>
+									<select class="form-control" multiple>
+										<option value="black">Black</option>
+										<option value="blue">Blue</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary">Filter</button>
+					</div>
+				</div>
+
+
+<!-- Leftovers, kept for category reference.
 								<script>
 									document.getElementById("categories").innerHTML = loadArray(["Vin", "Year", "Make", "Model", "Exterior Color", "Condition", "Body Style", "Transmission", "Drivetrain", "Cylinders", "Mileage", "Fuel", "Doors", "Passenger Capacity", "Interior Color", "Rego", "Description", "Price"]);
 								</script>
@@ -161,13 +164,9 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 									cat.classList.toggle("invisible");
 								}
 							</script>
-							
-						<a class="filterBtn btn btn-sm btn-outline-secondary">Filter</a>
-						
-						
-					</div>
-				</aside>
-				<section class="col-sm-8">
+-->
+				
+				<div class="col-md-8">
 					<article class="row carShortArticle">
 					
 					
@@ -217,18 +216,10 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						
 					?>
 					<article>
-				</section>
+				</div>
 			</div>
 			
+			<?php include('footer.php'); ?>
 		</div>	
-		
-		<footer class="page-footer">
-			<div class="footerTxt container-fluid text-left">
-				<a class="footerTxt" href="#">Privacy Policy</a>
-				<a class="footerTxt" href="#">Contact</a>
-				<a class="footerTxt" href="#">Logout</a>
-			</div>
-		</footer>
-		
 	</body>
 </html>
