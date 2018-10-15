@@ -241,7 +241,7 @@ if(isset($_POST['submit'])){
 			
 			// database not yet used in the form
 			//
-			
+			$conn->null;
 		}
 		catch(PDOException $e)
 		{
@@ -311,7 +311,7 @@ if(isset($_POST['submit'])){
 			<a class="navbar-brand" href="#">
 				<img src="images/robber-clipart-car-5.png" class="navLogo">
 			</a>
-			<!-- collapse navigation to hamburger on small/mobile screens -->
+			<!-- collapse navigation to hamburger(WTF) on small/mobile screens -->
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -346,31 +346,6 @@ if(isset($_POST['submit'])){
 			<div  class="row">	
 			<div class="col-sm-6">
 			
-				<!-- Make -->
-				<div  class="form-group row">
-					<label for="make" class="col-sm-4 col-form-label">Make</label>
-					<div class="col-sm-6">
-						<input list="make" name="make" class="form-control">
-							<datalist id="make">
-								<script>
-									document.getElementById("make").innerHTML = loadArray(["Toyota", "BMW", "Holden", "Nissan"]);
-								</script>
-							</datalist>
-					</div>
-				</div>
-				
-				<!-- Model -->
-				<div  class="form-group row">
-					<label for="model" class="col-sm-4 col-form-label">Model</label>
-					<div class="col-sm-6">
-						<input list="model" name="model" class="form-control">
-							<datalist id="model">
-								<script>
-									document.getElementById("model").innerHTML = loadArray([""]);
-								</script>
-							</datalist> 
-					</div>
-				</div>
 				<!-- Vehicle Lifestyle --> 
 				<div  class="form-group row">
 					<label for="vehicle_ls" class="col-sm-4 col-form-label">Vehicle LifeStyle</label>

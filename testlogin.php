@@ -8,15 +8,32 @@
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/wheelers.css">
 		
-		<!-- link Jquery, Bootstrap, and Popper.js -->
+		<!-- link Jquery, Bootstrap -->
 		<script src="js/jquery-3.3.1.slim.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		
+		<title>Wheelers & Deelers - Login</title>
 		
-		<title>Wheelers & Deelers</title>
-		
+		<script>
+			<!-- Generating year ranges -->
+			var yearRangeStr; 
+			var year = 2018;
+			while (year > 1919){
+				yearRangeStr += '<option value="' + year + '">';
+				year -= 1;
+			}
+		</script>	
+		<script>	
+			<!-- generic loading -->
+			function loadArray(array){
+				var arrString = "";
+				for (var i=0; i < array.length; i++){
+					arrString += '<option value="' + array[i] + '">';
+				}
+				return arrString;
+			}
+		</script>
 	</head>
-		
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
@@ -30,7 +47,6 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			
-			
 			<!-- navigation bar -->
 			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
 				<ul class="navbar-nav mr-auto mx-auto">
@@ -40,42 +56,60 @@
 					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">Help</a></li>
 				</ul>
-					
-					
+
 				</ul>
 				<!-- login/logout button -->
 				<div>
-					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
+					
+					<!-- <a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Login</a>
+					-->
+					<button type="button" class="logBtn btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#myModal">Login</button>
+
+					
 				</div>
+				
+				<!-- Modal -->
+					<div id="myModal" class="modal fade" role="dialog">
+					  <div class="modal-dialog">
+
+						  <!-- Modal content-->
+					  <div class="modal-content">
+						<div class="modal-header">
+						  <h4 class="modal-title">Login</h4>
+						   <button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+						  <p>Register</p>
+						</div>
+						<div class="modal-footer">
+						  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					  </div>
+
+					  </div>
+					</div>
+				
 			</div>
 		</nav>
+	</div>
 		
-		<div class="container">
-		
-			<h1>Wheelers & Dealers</h1>
-			<h4>Lets make deals on your wheels</h4>
-			<p>Welcome to Wheelers and Dealers, the exclusive car matchmaking and exchange sevice.
-			Wheelers and Dealers is an online Web application, that maintains your list of vehicles
-			that you want to buy, sell or trade with other dealers or customers.</p>
-			
-			<p><img class="col-sm-12" src="images/mazda.jpg"/></p>
-			
-			
-			<p>If you have a vehicle that you want to sell, buy or trade. Wheelers and Dealers will put you in 
-			our network of dealers that would like to buy your car. </p>
-			
-			
-			<button>Get Started</button>
-			
-		</div>	
-		
-		<footer class="page-footer">
+	<div class="container">
+		<h1>Wheelers & Dealers</h1>
+		<p>Login</p>
+
+	<!-- link Jquery, Bootstrap, and Popper.js -->
+		<script src="js/jquery-3.3.1.slim.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+
+	</div>
+	<footer class="page-footer">
 			<div class="footerTxt container-fluid text-left">
 				<a class="footerTxt" href="#">Privacy Policy</a>
 				<a class="footerTxt" href="#">Contact</a>
 				<a class="footerTxt" href="#">Logout</a>
 			</div>
 		</footer>
-
+		
 	</body>
 </html>
+		

@@ -9,39 +9,10 @@
 $servername = "localhost";
 $dbname = "efftwelv_wheelersanddealers";
 $dsn = "mysql:host=$servername;dbname=$dbname";
-
+/*
 if(isset($_POST['submit'])){
 	
-	// check the uploaded image
-	if(($_FILES['image']['type'] != 'image/png') && ($_FILES['image']['type'] != 'image/jpg') &&
-	($_FILES['image']['type'] != 'image/jpeg') && ($_FILES['image']['type'] != 'image/gif')){
-    echo"<script>alert('Unsupported filetype uploaded')</script>";
-	}
-	
-	if($_FILES['image']['size'] > 16700000){ // the maximum size of mediumblog
-    echo"<script>alert('File uploaded exceeds maximum upload size')</script>";
-	}
-	// here
-	// check if all fields have been entered
-	// 'image' is currently the only optional field
-	if( $_POST['vin'] == "" ||
-		$_POST['year'] == "" ||
-		$_POST['make'] == "" ||
-		$_POST['model'] == "" ||
-		$_POST['exteriorColor'] == "" ||
-		$_POST['conditions'] == "" ||
-		$_POST['bodyStyle'] == "" ||
-		$_POST['transmission'] == "" ||
-		$_POST['drivetrain'] == "" ||
-		$_POST['cylinders'] == "" ||
-		$_POST['mileage'] == "" ||
-		$_POST['fuel'] == "" ||
-		$_POST['doors'] == "" ||
-		$_POST['passengerCapacity'] == "" ||
-		$_POST['interiorColor'] == "" ||
-		$_POST['rego'] == "" ||
-		$_POST['description'] == "" ||
-		$_POST['price'] == "")
+
 	{
 		echo "<script>alert('Please enter all fields')</script>";
 		
@@ -51,7 +22,7 @@ if(isset($_POST['submit'])){
 		// connect to database
 		$username = "efftwelv_andrew";
 		$password = "Andrew1000";
-	 	
+	 	/*
 		// variables to hold post information by form
 		$vin = $_POST['vin'];
 		$year = $_POST['year'];
@@ -125,7 +96,7 @@ if(isset($_POST['submit'])){
 			// database not yet used in the form
 			//
 			
-		}
+		
 		catch(PDOException $e)
 		{
 			// echo "Connection failed: " . $e->getMessage();
@@ -134,12 +105,8 @@ if(isset($_POST['submit'])){
 	
 	}
 }	
-	
+*/	
 ?>
-
-
-
-
 
 
 <!doctype html>
@@ -427,29 +394,11 @@ if(isset($_POST['submit'])){
 				</div>
 				
 				
-				<!-- Description -->
-				<div class="form-group row">
-					<label for="price" class="col-sm-4 col-form-label">Description</label>
-					<div class="col-sm-6">
-						<input class="form-control" id="description" name="description">
-					</div>
-				</div>
-				
-				
 				<!-- price  -->
 				<div class="form-group row">
 					<label for="price" class="col-sm-4 col-form-label">Price</label>
 					<div class="col-sm-6">
 						<input class="form-control" id="price" name="price">
-					</div>
-				</div>
-				
-				
-				<!-- Image -->
-				<div class="form-group row">
-					<label for="image" class="col-sm-4 col-form-label">Image</label>
-					<div class="col-sm-6">
-						<input type="file" id="image" name="image">
 					</div>
 				</div>
 				
