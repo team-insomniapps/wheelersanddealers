@@ -191,7 +191,9 @@ if(isset($_POST['submit'])){
 		<nav class="navbar navbar-expand-lg">
 			<!-- branding logo image -->
 			<a class="navbar-brand" href="http://www.wheelersanddealers.efftwelve.com/index_log.php">
+
 				<img src="images/logo_red.svg" class="navLogo">
+
 			</a>
 			<!-- collapse navigation to hamburger on small/mobile screens -->
 			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">

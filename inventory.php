@@ -214,6 +214,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 							echo "</article>";
 							echo "<aside class='col-sm-6'>";
 							echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
+
 							echo "</aside>";
 							echo "</a>";
 							echo "</section>";
