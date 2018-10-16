@@ -1,3 +1,23 @@
+<?php
+	// database info
+	$servername = "localhost";
+	$dbname = "efftwelv_wheelersanddealers";
+	$dsn = "mysql:host=$servername;dbname=$dbname";
+
+	// connect to database
+	$username = "efftwelv_andrew";
+	$password = "Andrew1000";
+
+	try 
+	{		
+		$conn = mysqli_connect($servername,$username,$password,$dbname);
+	}
+	catch(PDOException $e)
+	{
+		echo "<script>alert('Connection failed: ')</script>";
+	}
+?>
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -21,164 +41,178 @@
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<!-- branding logo image -->
-			<a class="navbar-brand" href="http://www.wheelersanddealers.efftwelve.com/index_log.php">
-				<img src="images/robber-clipart-car-5.png" class="navLogo">
-			</a>
-			<!-- collapse navigation to hamburger on small/mobile screens -->
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			
-			<!-- navigation bar -->
-			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
-				<ul class="navbar-nav mr-auto mx-auto">
-					<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="#">About</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Register</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-				</ul>
-				<!-- login button -->
-				<div>
-					<a class="btn btn-sm btn-outline-secondary" type="button" href="add.php">Login</a>
-					<a href="#">Register</a>
-				</div>
-			</div>
-			
-		</nav>
+		<?php include('nav.php'); ?>
 		
 		<div class="container">
-		
-			<h1>Wheelers & Dealers</h1>
-			<h4>A cool subtitle</h4>
-			<p>The concise description bit that says what we do</p>
-			<p>My Matches</p>
+		<h1>Your Matches</h1>
+		<br>
 			
-		</div>	
-		
-		<div>
-		<?php
-		
-		//initilize variables so I can use the data in them down the track
-		$makes = "";
-		$models = "";
-		$years = 0;
-		$car_con = "";
-		$bodys = "";
-		$trans = "";
-		$drive = "";
-		$engines = 0;
-		$door = 0;
-		$cap = 0;
-		$ex = "";
-		$incol = "";
-		
+			<!-- new matches -->
+			<?php
+				// TEMPORARY QUERY
+				// MySQL database query
+				$queryID = "SELECT *";
+				$queryID .= "FROM vehicle ";
+				$queryID .= "WHERE 1";
+				// echo "<script>alert('$queryID')</script>";
+				
+				$result = mysqli_query($conn, $queryID);
+				
+				// Test query error
+				if(!$result){
+						die("Database query failed. ");
+				}
+				
+				// get number of rows returned by query
+				$row_cnt = $result->num_rows;
+
+				//printf("Result set has %d rows.\n", $row_cnt);
+				echo "<h2>Congratulations! You have ".$row_cnt. " new matches!</h2>";
 	
-			// database info
-			$servername = "localhost";
-			$dbname = "efftwelv_wheelersanddealers";
-			$dsn = "mysql:host=$servername;dbname=$dbname";	
-			$username = "efftwelv_andrew";
-			$password = "Andrew1000";
-		
-		try {
-			
-			// connecting to the database
-			$conn = $conn = new PDO($dsn, $username, $password);
-			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			
-			// selection query
-			$stmt = $conn->prepare("SELECT `make`, `model`, `year`, `car_condition`, `body`,
-				`transmission`, `drive`, `engine`, `doors`, `capacity`, `ex_color`, `in_color` FROM `preferences` WHERE `id` = 2"); 
-			$stmt->execute();
-			
-			
-			while($row=$stmt->fetch()){ 
-			
-				// grab data from the database table and store in variables
-				$makes = $row['make'];
-				$models = $row['model'];
-				$years = $row['year'];
-				$car_con = $row['car_condition'];
-				$bodys = $row['body'];
-				$trans = $row['transmission'];
-				$drives = $row['drive'];
-				$engines = $row['engine'];
-				$door = $row['doors'];
-				$cap = $row['capacity'];
-				$ex = $row['ex_color'];
-				$incol = $row['in_color'];
-				
-			}
-			
-			/*
-			
-			// set the resulting array to associative
-			$result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
+				//incrementer for modal id
+				$modelNum = 0;
+						
+				while($row = mysqli_fetch_assoc($result)){
+					echo '<section class="row col-sm-12 carShortInfo" data-toggle="modal" data-target="#mod'.$modelNum.'">';
+					//echo '<a class="carLink" href="carPage.php">';
+					echo "<article class='col-sm-10'>";
+					echo "<ul class='carInfoList'>";
+					echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
+					echo " {$row['car_model_id']}<h3></li>";
+					echo "<li><h6>$ {$row['car_price']}<h6></li>";
+					echo "<li>Dealership</li>";
+					echo "<li>Suburb/Town, STATE</li>";
+					// echo "<li>{$row['description']}</li>";
+					echo "</a>";
+					echo '<a class="carLink" href="carPage.php">';
+					echo "</article>";
+					echo "<aside class='col-sm-2'>";
+					echo '<img height=150 width=200 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
+					echo "</aside>";
+					echo "</a>";
+					echo "</section>";
+					
+					// modal
+					// some of the following code was sourced from: https://www.w3schools.com/bootstrap/bootstrap_modal.asp
+					echo '<div class="modal fade" id="mod'.$modelNum.'" role="dialog">';
+					echo '<div class="modal-dialog modal-lg">';
 
-			foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) { 
-			echo $v;
-			}
-			*/
-		}
-		catch(PDOException $e) {
-				echo "Error: " . $e->getMessage();
-		}
-		
-	$conn = null;
+					// modal content
+					echo '<div class="modal-content">';
+					echo '<div class="modal-header">';
+					echo "<h4 class='modal-title'>{$row['car_make_id']} {$row['car_model_id']}</h4>";
+					echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+					echo '</div>';
+					echo '<div class="modal-body">';
+					echo '<p>Im thinking this should contain extensive info on the vehicle / dealer. This may be unneccisary duplication, if so, I was thinking it would still be nice to offer the dealer options in a modal like this</p>';
+					echo '<img height=500 width=765 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
+					echo '</div>';
+					echo '<div class="modal-footer">';
+					echo '<button type="button" class="btn btn-default" data-dismiss="modal">Remove Vehicle</button>';
+					echo '<button type="button" class="btn btn-default" data-dismiss="modal">View Vehicle</button>';
+					echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
+					echo '</div>';
+					echo '</div>';
+					echo '</div>';
+					echo '</div>';
+							
+					$modelNum++;
+				}
 
-		try {
+				// release returned data
+				mysqli_free_result($result);						
+			?>
 			
-			// connecting to the database
-			$conn = $conn = new PDO($dsn, $username, $password);
-			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			</div>
+			<br>
 			
-			// selection query
-			$stmt = $conn->prepare("SELECT * FROM `preferences`, `vehicle` WHERE `vehicle`.`car_make_id` = '{$makes}' AND `vehicle`.`car_exterior_color` = '{$ex}'"); 
-			$stmt->execute();
+			<!-- old matches -->
+			<div class="container">
+			<h2>Stored matches</h2>
 			
-			
-			while($row=$stmt->fetch()){ 
-			
-				// grab data from the database table and store in variables
-				$ids = $row['id'];
-				$vins = $row['car_vin'];
-				$years = $row['car_year'];
-				$makes = $row['car_make_id'];
-				$models = $row['car_model_id'];
-				
-				echo $ids;
-				echo $vins;
-				echo $years;
-				echo $makes;
-				echo $models;
-				
-			}
-			
-			
-			
-			/*
-			
-			// set the resulting array to associative
-			$result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
+			<!-- TEMPORARY QUERY -->
+			<?php
+						// MySQL database query
+						$queryID = "SELECT *";
+						$queryID .= "FROM vehicle ";
+						$queryID .= "WHERE 1";
+						// echo "<script>alert('$queryID')</script>";
+						
+						$result = mysqli_query($conn, $queryID);
+						
+						// Test query error
+						if(!$result){
+								die("Database query failed. ");
+						}
+						
+						//incrementer for modal id
+						$modelNum = 0;
+						
+						while($row = mysqli_fetch_assoc($result)){
+							echo '<section class="row col-sm-12 carShortInfo" data-toggle="modal" data-target="#mod'.$modelNum.'">';
+							//echo '<a class="carLink" href="carPage.php">';
+							echo "<article class='col-sm-10'>";
+							echo "<ul class='carInfoList'>";
+							echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
+							echo " {$row['car_model_id']}<h3></li>";
+							echo "<li><h6>$ {$row['car_price']}<h6></li>";
+							echo "<li>Dealership</li>";
+							echo "<li>Suburb/Town, STATE</li>";
+							// echo "<li>{$row['description']}</li>";
+							echo "</a>";
+							echo '<a class="carLink" href="carPage.php">';
+							echo "</article>";
+							echo "<aside class='col-sm-2'>";
+							echo '<img height=150 width=200 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
+							echo "</aside>";
+							echo "</a>";
+							echo "</section>";
+							
+							// modal
+							// some of the following code was sourced from: https://www.w3schools.com/bootstrap/bootstrap_modal.asp
+							echo '<div class="modal fade" id="mod'.$modelNum.'" role="dialog">';
+							echo '<div class="modal-dialog modal-lg">';
 
-			foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) { 
-			echo $v;
-			}
-			*/
-		}
-		catch(PDOException $e) {
-				echo "Error: " . $e->getMessage();
-		}
-		
-?> 
-		
-		<footer class="page-footer fixed-bottom">
-			<div class="container-fluid text-left">
-				<a href="#">Privacy Policy</a>
-				<a href="#">Contact</a>
-				<a href="#">Logout</a>
+							// modal content
+							echo '<div class="modal-content">';
+							echo '<div class="modal-header">';
+							echo "<h4 class='modal-title'>{$row['car_make_id']} {$row['car_model_id']}</h4>";
+							echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+							echo '</div>';
+							echo '<div class="modal-body">';
+							echo '<p>Im thinking this should contain extensive info on the vehicle / dealer. This may be unneccisary duplication, if so, I was thinking it would still be nice to offer the dealer options in a modal like this</p>';
+							echo '<img height=500 width=765 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
+							echo '</div>';
+							echo '<div class="modal-footer">';
+							echo '<button type="button" class="btn btn-default" data-dismiss="modal">Remove Vehicle</button>';
+							echo '<button type="button" class="btn btn-default" data-dismiss="modal">View Vehicle</button>';
+							echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
+							echo '</div>';
+							echo '</div>';
+							echo '</div>';
+							echo '</div>';
+							
+							$modelNum++;
+						}
+					
+						// release returned data
+						mysqli_free_result($result);
+							
+						// close database connection
+						mysqli_close($conn);
+								
+						
+					?>
+					</div>
+		</div>
+  
+</div>
+		<div>		
+		<footer class="page-footer">
+			<div class="footerTxt container-fluid text-left">
+				<a class="footerTxt" href="#">Privacy Policy</a>
+				<a class="footerTxt" href="#">Contact</a>
+				<a class="footerTxt" href="#">Logout</a>
 			</div>
 		</footer>
 

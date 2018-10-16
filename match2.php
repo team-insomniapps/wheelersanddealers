@@ -9,39 +9,10 @@
 $servername = "localhost";
 $dbname = "efftwelv_wheelersanddealers";
 $dsn = "mysql:host=$servername;dbname=$dbname";
-
+/*
 if(isset($_POST['submit'])){
 	
-	// check the uploaded image
-	if(($_FILES['image']['type'] != 'image/png') && ($_FILES['image']['type'] != 'image/jpg') &&
-	($_FILES['image']['type'] != 'image/jpeg') && ($_FILES['image']['type'] != 'image/gif')){
-    echo"<script>alert('Unsupported filetype uploaded')</script>";
-	}
-	
-	if($_FILES['image']['size'] > 16700000){ // the maximum size of mediumblog
-    echo"<script>alert('File uploaded exceeds maximum upload size')</script>";
-	}
-	// here
-	// check if all fields have been entered
-	// 'image' is currently the only optional field
-	if( $_POST['vin'] == "" ||
-		$_POST['year'] == "" ||
-		$_POST['make'] == "" ||
-		$_POST['model'] == "" ||
-		$_POST['exteriorColor'] == "" ||
-		$_POST['conditions'] == "" ||
-		$_POST['bodyStyle'] == "" ||
-		$_POST['transmission'] == "" ||
-		$_POST['drivetrain'] == "" ||
-		$_POST['cylinders'] == "" ||
-		$_POST['mileage'] == "" ||
-		$_POST['fuel'] == "" ||
-		$_POST['doors'] == "" ||
-		$_POST['passengerCapacity'] == "" ||
-		$_POST['interiorColor'] == "" ||
-		$_POST['rego'] == "" ||
-		$_POST['description'] == "" ||
-		$_POST['price'] == "")
+
 	{
 		echo "<script>alert('Please enter all fields')</script>";
 		
@@ -51,7 +22,7 @@ if(isset($_POST['submit'])){
 		// connect to database
 		$username = "efftwelv_andrew";
 		$password = "Andrew1000";
-	 	
+	 	/*
 		// variables to hold post information by form
 		$vin = $_POST['vin'];
 		$year = $_POST['year'];
@@ -125,7 +96,7 @@ if(isset($_POST['submit'])){
 			// database not yet used in the form
 			//
 			
-		}
+		
 		catch(PDOException $e)
 		{
 			// echo "Connection failed: " . $e->getMessage();
@@ -134,12 +105,8 @@ if(isset($_POST['submit'])){
 	
 	}
 }	
-	
+*/	
 ?>
-
-
-
-
 
 
 <!doctype html>
@@ -188,7 +155,35 @@ if(isset($_POST['submit'])){
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<?php include('nav.php'); ?>
+		<nav class="navbar navbar-expand-lg">
+			<!-- branding logo image -->
+			<a class="navbar-brand" href="http://www.wheelersanddealers.efftwelve.com/index_log.php">
+				<img src="images/logo_red.svg" class="navLogo">
+			</a>
+			<!-- collapse navigation to hamburger on small/mobile screens -->
+			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			
+			
+			<!-- navigation bar -->
+			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
+				<ul class="navbar-nav mr-auto mx-auto">
+					<li class="nav-item active"><a class="nav-link" href="index.php">Home</a></li>
+					<li class="nav-item"><a class="nav-link" href="inventory.php">Inventory <span class="sr-only">(current)</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Help</a></li>
+				</ul>
+					
+					
+				</ul>
+				<!-- login/logout button -->
+				<div>
+					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
+				</div>
+			</div>
+		</nav>
 		
 		
 		<div class="container">
@@ -399,29 +394,11 @@ if(isset($_POST['submit'])){
 				</div>
 				
 				
-				<!-- Description -->
-				<div class="form-group row">
-					<label for="price" class="col-sm-4 col-form-label">Description</label>
-					<div class="col-sm-6">
-						<input class="form-control" id="description" name="description">
-					</div>
-				</div>
-				
-				
 				<!-- price  -->
 				<div class="form-group row">
 					<label for="price" class="col-sm-4 col-form-label">Price</label>
 					<div class="col-sm-6">
 						<input class="form-control" id="price" name="price">
-					</div>
-				</div>
-				
-				
-				<!-- Image -->
-				<div class="form-group row">
-					<label for="image" class="col-sm-4 col-form-label">Image</label>
-					<div class="col-sm-6">
-						<input type="file" id="image" name="image">
 					</div>
 				</div>
 				
