@@ -152,10 +152,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						// release returned data
 						mysqli_free_result($result);
 							
-						
-					?>
-					
-					 <?php
+
 						// MySQL database query
 						$queryID = "SELECT *";
 						$queryID .= "FROM vehicle ";
@@ -173,7 +170,11 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						while($row = mysqli_fetch_assoc($result)){
 												
 							echo '<section class="row col-sm-12 carShortInfo">';
-							echo '<a class="carLink" href="carPage.php">';
+
+              //echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
+							
+							echo "<a class='carLink' onclick= location.href='vehicle_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">";
+
 							echo "<article class='col-sm-6'>";
 							echo "<ul class='carInfoList'>";
 							echo "<li><h4 class='carTitle'>{$row['car_make_id']}";

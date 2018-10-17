@@ -193,8 +193,9 @@
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		
+
 		<?php include('nav.php'); ?>
+
 		
 		<div class="container">
 		<h1>Vehicle Information</h1>
@@ -204,10 +205,15 @@
 			
 		<!-- TEMPORARY QUERY -->
 		<?php
+
+					// get the car_vin sent from the match page
+					$car_vin=$_GET['car_vin'];
+					
 					// MySQL database query
 					$queryID = "SELECT *";
 					$queryID .= "FROM vehicle ";
-					$queryID .= "WHERE id=1";
+					$queryID .= "WHERE `car_vin`='{$car_vin}'";
+
 					
 					$result = mysqli_query($conn, $queryID);
 					
