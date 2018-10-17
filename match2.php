@@ -1,4 +1,7 @@
 <?php
+session_start();
+?>
+<?php
 /*
 *	php code to check if form has been submitted.
 *	If true, then connect to the database and input the data.
