@@ -16,26 +16,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 	// connect to database
 	$username = "efftwelv_andrew";
 	$password = "Andrew1000";
-		
-	/* // variables to hold post information by form
-	$vin = $_POST['vin'];
-	$year = $_POST['year'];
-	$make = $_POST['make'];
-	$model = $_POST['model'];
-	$ex_color = $_POST['exteriorColor'];
-	$conditions = $_POST['conditions'];
-	$body_style = $_POST['bodyStyle'];
-	$transmission = $_POST['transmission'];
-	$drivetrain = $_POST['drivetrain'];
-	$cyclinders = $_POST['cylinders'];
-	$mileage = $_POST['mileage'];
-	$fuel = $_POST['fuel'];
-	$doors = $_POST['doors'];
-	$passenger_capacity = $_POST['passengerCapacity'];
-	$in_color = $_POST['interiorColor'];
-	$regos = $_POST['rego'];
-	$desc = $_POST['description'];
-	$price = $_POST['price']; */
+	
 	
 	try 
 	{
@@ -45,9 +26,6 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 		
 		$conn = mysqli_connect($servername,$username,$password,$dbname);
 		
-		//$conn = new PDO($dsn, $username, $password);
-		
-		// echo "<script>alert('Connection Success: ')</script>";
 	}
 	catch(PDOException $e)
 	{
@@ -104,46 +82,25 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<nav class="navbar navbar-expand-lg">
-			<!-- branding logo image -->
-			<a class="navbar-brand" href="http://www.wheelersanddealers.efftwelve.com/index_log.php">
-				<img src="images/logo_uncoloured.svg" class="navLogo">
-			</a>
-			<!-- collapse navigation to hamburger on small/mobile screens -->
-			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			
-			<!-- navigation bar -->
-			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
-				<ul class="navbar-nav mr-auto mx-auto">
-					<li class="nav-item"><a class="nav-link" href="index_log.php">Home</a></li>
-					<li class="nav-item active"><a class="nav-link" href="inventory.php">Inventory <span class="sr-only">(current)</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="add.php">Add</a></li>
-					<!-- <li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Help</a></li>
-					-->
-					
-				</ul>
-					
-					
-				</ul>
-				<!-- login/logout button -->
-				<div>
-					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
-				</div>
-			</div>
-		</nav>
+		
+		<?php include('nav.php'); ?>
+		
+		
 		
 		<div class="main">
+			<div class ="row col-sm-3">
+				<a class="addCar btn btn-sm btn-outline-secondary"  href="add.php">Add Vehicle</a>
+			</div>
+		
+		
 			<div class="row">
 				<!-- Search filter box area -->
-				<aside class="col-sm-4">
+				<aside class="col-sm-3">
+					
 					<div class="filterBox">
 						<p>Filter results:</p>
 						<p>Price</p>
-						<input type="text" label="Price">
+						<input class="form-control" type="text" label="Price">
 						<br>
 						<br>
 						<form>
@@ -161,7 +118,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 									cat.classList.toggle("invisible");
 								}
 							</script>
-							
+							</br>
 						<a class="filterBtn btn btn-sm btn-outline-secondary">Filter</a>
 						
 						
@@ -169,11 +126,34 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 				</aside>
 				<section class="col-sm-8">
 					<article class="row carShortArticle">
+					<?php 
 					
-					
-					 <?php
+					// MySQL database query
+						$queryRecords = "SELECT COUNT(`id`) FROM `vehicle`";
+						$result = mysqli_query($conn, $queryRecords);
+						
+						// Test query error
+						if(!$result){
+								die("Database query failed. ");
+						}
+						
+						echo '<section class="col-sm-12">';
+						echo "<article class='results'>";
+						
+						while($row = mysqli_fetch_assoc($result)){
+							
+							echo "<h6 style='float:left';>Results: {$row['COUNT(`id`)']}</h6><h6 style='text-align:right;'>Sort: <input type='text' class='' name='' value=' Price - Descending '</h6>";
+										
+						}
+						
+						echo "</article>";
+						echo "</section>";
+						
+						// release returned data
+						mysqli_free_result($result);
+							
 						// MySQL database query
-						$queryID = "SELECT * ";
+						$queryID = "SELECT *";
 						$queryID .= "FROM vehicle ";
 						$queryID .= "WHERE 1";
 						// echo "<script>alert('$queryID')</script>";
@@ -186,40 +166,30 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						}
 						
 						while($row = mysqli_fetch_assoc($result)){
+												
 							echo '<section class="row col-sm-12 carShortInfo">';
-							echo '<a class="carLink" href="carPage.php">';
-							echo "<article class='col-sm-10'>";
+							
+							//echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
+							
+							echo "<a class='carLink' onclick= location.href='vehicle_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">";
+							echo "<article class='col-sm-6'>";
 							echo "<ul class='carInfoList'>";
 							echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
 							echo " {$row['car_model_id']}<h3></li>";
 							echo "<li><h6>$ {$row['car_price']}<h6></li>";
 							echo "<li>Dealership</li>";
 							echo "<li>Suburb/Town, STATE</li>";
-							// echo "<li>{$row['description']}</li>";
+							echo "<li>{$row['description']}</li>";
 							echo "</a>";
-							
 							echo '<a class="carLink" href="carPage.php">';
-							
 							echo "</article>";
-							echo "<aside class='col-sm-2'>";
-							
-							// DISPLAY IMAGE - using a second query. im sure there's a better way to do this but i cannot figure out how to get images and other data in one query
-							//echo "	<img class='carPhoto' src='images/Placeholder.png'>";
-							$queryID2 = "SELECT car_photo ";
-							$queryID2 .= "FROM car_photos ";
-							$queryID2 .= "WHERE 1";
-							$img = $conn->query($queryID2);
-							$imgresult = mysqli_fetch_array($img);
-							// if no image is supplied use default image
-							if(!file_exists($imgresult['car_photo'])) {
-								echo '<img this.onerror=null src="data:image/jpeg;base64,'.base64_encode( $imgresult['car_photo'] ).'" height=150 width=150>';
-							} else {
-								echo "	<img class='carPhoto' src='images/Placeholder.png'>";
-							}
-							
+							echo "<aside class='col-sm-6'>";
+							echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
+
 							echo "</aside>";
 							echo "</a>";
 							echo "</section>";
+							
 						}
 					
 						// release returned data

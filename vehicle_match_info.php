@@ -28,6 +28,10 @@
 		<!-- the following code was sourced from: https://www.w3schools.com/howto/howto_css_modal_images.asp -->
 		<style>
 		
+		#vehicleInfoTable {
+			width:33%;
+		}
+		
 		#myImg {
 			position: relative;
 			bottom: 218px;
@@ -227,9 +231,9 @@
 			
 		<!-- TEMPORARY QUERY -->
 		<?php
-		// get the car_vin sent from the inventory page
-		$car_vin=$_GET['car_vin'];
-		
+					// get the car_vin sent from the match page
+					$car_vin=$_GET['car_vin'];
+					
 					// MySQL database query
 					$queryID = "SELECT *";
 					$queryID .= "FROM vehicle ";
@@ -271,22 +275,25 @@
 						
 						echo "</article>";
 						
-						echo "<h3>Details</h3>";
 						echo "<table>";
-						echo "<tr><td>Vehicle</td><td>{$row['car_make_id']} {$row['car_model_id']}</td></tr>";
-						echo "<tr><td>Year</td><td>{$row['car_year']}</td></tr>";
-						echo "<tr><td>Condition</td><td>{$row['car_new_used_condition']}</td></tr>";
-						echo "<tr><td>Kilometers</td><td>{$row['car_kilometers']}</td></tr>";
-						echo "<tr><td>Exterior Color</td><td>{$row['car_exterior_color']}</td></tr>";
-						echo "<tr><td>Interior Color</td><td>{$row['car_interior_color']}</td></tr>";
-						echo "<tr><td>Body Type</td><td>{$row['car_body_type_id']}</td></tr>";
-						echo "<tr><td>Transmission</td><td>{$row['car_transmission_type_id']}</td></tr>";
-						echo "<tr><td>Drive Type</td><td>{$row['car_drive_type']}</td></tr>";
-						echo "<tr><td>Engine Size</td><td>{$row['car_engine_size']}</td></tr>";
-						echo "<tr><td>Fuel Type</td><td>{$row['car_fuel_type']}</td></tr>";
-						echo "<tr><td>Capacity</td><td>{$row['car_capacity']}</td></tr>";
-						echo "<tr><td>Number of Doors</td><td>{$row['car_num_doors']}</td></tr>";
-						echo "<tr><td>Description</td><td>{$row['description']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Field</b></td><td id='vehicleInfoTable'><b>Vehicle Details</b></td><td id='vehicleInfoTable'><b>Your Match Request</b></td></tr>";
+						echo "</table>";
+						
+						echo "<table>";
+						echo "<tr><td id='vehicleInfoTable'><b>Vehicle</b></td><td id='vehicleInfoTable'>{$row['car_make_id']} {$row['car_model_id']}</td><td id='vehicleInfoTable'>{$row['car_make_id']} {$row['car_model_id']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Year</b></td><td id='vehicleInfoTable'>{$row['car_year']}</td><td id='vehicleInfoTable'>{$row['car_year']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Condition</b></td><td id='vehicleInfoTable'>{$row['car_new_used_condition']}</td><td id='vehicleInfoTable'>{$row['car_new_used_condition']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Kilometers</b></td><td id='vehicleInfoTable'>{$row['car_kilometers']}</td><td id='vehicleInfoTable'>{$row['car_kilometers']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Exterior Color</b></td><td id='vehicleInfoTable'>{$row['car_exterior_color']}</td><td id='vehicleInfoTable'>{$row['car_exterior_color']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Interior Color</b></td><td id='vehicleInfoTable'>{$row['car_interior_color']}</td><td id='vehicleInfoTable'>{$row['car_interior_color']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Body Type</b></td><td id='vehicleInfoTable'>{$row['car_body_type_id']}</td><td id='vehicleInfoTable'>{$row['car_body_type_id']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Transmission</b></td><td id='vehicleInfoTable'>{$row['car_transmission_type_id']}</td><td id='vehicleInfoTable'>{$row['car_transmission_type_id']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Drive Type</b></td><td id='vehicleInfoTable'>{$row['car_drive_type']}</td><td id='vehicleInfoTable'>{$row['car_drive_type']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Engine Size</b></td><td id='vehicleInfoTable'>{$row['car_engine_size']}</td><td id='vehicleInfoTable'>{$row['car_engine_size']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Fuel Type</b></td><td id='vehicleInfoTable'>{$row['car_fuel_type']}</td><td id='vehicleInfoTable'>{$row['car_fuel_type']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Capacity</b></td><td id='vehicleInfoTable'>{$row['car_capacity']}</td><td id='vehicleInfoTable'>{$row['car_capacity']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Number of Doors</b></td><td id='vehicleInfoTable'>{$row['car_num_doors']}</td><td id='vehicleInfoTable'>{$row['car_num_doors']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Description</b></td><td id='vehicleInfoTable'>{$row['description']}</td><td></td></tr>";
 						echo "</table>";
 						echo "<br>";
 					}
