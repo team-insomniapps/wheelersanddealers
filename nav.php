@@ -3,6 +3,7 @@
 <?php 
 
 	if(isset($_SESSION['loginID']))
+
 	{
 	?>
 		<nav class="navbar navbar-expand-lg">
@@ -37,6 +38,7 @@
 				<!-- login/logout button -->
 				<div>
 					<a class="logBtn btn btn-sm btn-outline-secondary"  href="logout.php">Logout</a>
+
 				</div>
 			</div>
 		</nav>
