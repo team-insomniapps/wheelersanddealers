@@ -131,7 +131,9 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 					<?php 
 					
 					// MySQL database query
-						$queryRecords = "SELECT COUNT(`id`) FROM `vehicle`";
+						$queryRecords = "SELECT COUNT(`id`) FROM `vehicle` ";
+						$queryRecords .= "WHERE user_id=".$_SESSION['loginID'];
+
 						$result = mysqli_query($conn, $queryRecords);
 						
 						// Test query error
@@ -144,7 +146,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						
 						while($row = mysqli_fetch_assoc($result)){
 							
-							echo "<h6 style='float:left';>Results: {$row['COUNT(`id`)']}</h6><h6 style='text-align:right;'>Sort: <input type='text' class='' name='' value=' Price - Descending '</h6>";
+							echo "<h6 style='float:left';>Results: {$row['COUNT(`id`)']}</h6><h6 style='text-align:right;'>Sort: <input type='text' class='' name='sort' value=' Price - Descending '</h6>";
 										
 						}
 						
@@ -158,7 +160,10 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						// MySQL database query
 						$queryID = "SELECT *";
 						$queryID .= "FROM vehicle ";
-						$queryID .= "WHERE 1";
+						$queryID .= " INNER JOIN users ON vehicle.user_id=users.id ";
+						if(isset($_SESSION['loginID'])){
+							$queryID .= "WHERE user_id=".$_SESSION['loginID'];
+						}
 						// echo "<script>alert('$queryID')</script>";
 						
 						$result = mysqli_query($conn, $queryID);
@@ -171,29 +176,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						
 						while($row = mysqli_fetch_assoc($result)){
 												
-							echo '<section class="row col-sm-12 carShortInfo">';
-
-              //echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
-							
-							echo "<a class='carLink' onclick= location.href='vehicle_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">";
-
-							echo "<article class='col-sm-6'>";
-							echo "<ul class='carInfoList'>";
-							echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
-							echo " {$row['car_model_id']}<h3></li>";
-							echo "<li><h6>$ {$row['car_price']}<h6></li>";
-							echo "<li>Dealership</li>";
-							echo "<li>Suburb/Town, STATE</li>";
-							echo "<li>{$row['description']}</li>";
-							echo "</a>";
-							echo '<a class="carLink" href="carPage.php">';
-							echo "</article>";
-							echo "<aside class='col-sm-6'>";
-							echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
-
-							echo "</aside>";
-							echo "</a>";
-							echo "</section>";
+							require "car_info_short.php";
 							
 						}
 					

@@ -1,15 +1,9 @@
 <!-- Header/navigation bar div -->
 <!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-
 <?php 
 
-	if(isset($_SESSION['login'])) {}
-	else {
-		$_SESSION['login'] = false;
-    }
+	if(isset($_SESSION['loginID']))
 
-	
-	if(($_SESSION['login']) == 'true')
 	{
 	?>
 		<nav class="navbar navbar-expand-lg">
@@ -43,7 +37,8 @@
 				</ul>
 				<!-- login/logout button -->
 				<div>
-					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
+					<a class="logBtn btn btn-sm btn-outline-secondary"  href="logout.php">Logout</a>
+
 				</div>
 			</div>
 		</nav>
