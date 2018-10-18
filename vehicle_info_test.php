@@ -1,4 +1,7 @@
 <?php
+session_start();
+?>
+<?php
 	// database info
 	$servername = "localhost";
 	$dbname = "efftwelv_wheelersanddealers";

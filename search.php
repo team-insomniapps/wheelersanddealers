@@ -1,4 +1,7 @@
 <?php
+session_start();
+?>
+<?php
 
 // database information and connection 
 // might need to separate this later
