@@ -1,5 +1,10 @@
 <?php
- 
+session_start();
+
+	$_SESSION['loginID'] = $_POST['uid'];
+	require "index.php";
+
+ /* 
 	require 'conn.php';
 	
 
@@ -28,7 +33,7 @@
 
 		$result_check = mysqli_num_rows($result);
 		
-		/*
+		
 		if($result_check < 1){
 		
 		header("Location:testlogin.php?=loginerror");
@@ -44,7 +49,7 @@
 
 		}
 
-		*/
+		
 		header("Location:testlogin.php?=success");
 		echo "You are now Logged in";
 		$_SESSION['login'] = 'true';
@@ -56,6 +61,6 @@
 		header("Location:testlogin.php?=loginerror");
 		exit();
 }
-
+ */
 
 ?>
