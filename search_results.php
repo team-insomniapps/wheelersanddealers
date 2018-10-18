@@ -1,7 +1,7 @@
 <?php
- 
+	session_start();
+
 	require 'conn.php';
-	
 ?>
 
 <!doctype html>
@@ -25,35 +25,9 @@
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<nav class="navbar navbar-expand-lg">
-			<!-- branding logo image -->
-			<a class="navbar-brand" href="http://www.wheelersanddealers.efftwelve.com/index_log.php">
-				<img src="images/logo_red.svg" class="navLogo">
-			</a>
-			<!-- collapse navigation to hamburger on small/mobile screens -->
-			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			
-			
-			<!-- navigation bar -->
-			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
-				<ul class="navbar-nav mr-auto mx-auto">
-					<li class="nav-item active"><a class="nav-link" href="index.php">Home</a></li>
-					<li class="nav-item"><a class="nav-link" href="inventory.php">Inventory <span class="sr-only">(current)</span></a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Help</a></li>
-				</ul>
-					
-					
-				</ul>
-				<!-- login/logout button -->
-				<div>
-					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
-				</div>
-			</div>
-		</nav>
+		<?php
+			require 'nav.php';
+		?>
 		
 		<div class="main">
 			<div class ="row col-sm-3">
@@ -119,7 +93,8 @@
 								
 								
 								// main query
-								$queryRecords = "SELECT COUNT(`id`) FROM `vehicle` WHERE 1";
+								$queryRecords = "SELECT COUNT(`id`) FROM vehicle ";
+								$queryRecords .= "WHERE 1";
 								$result = mysqli_query($conn, $queryRecords);
 								
 								// Test query error
@@ -328,7 +303,7 @@
 								// MySQL database query
 								$queryID = "SELECT *";
 								$queryID .= "FROM vehicle ";
-								
+								$queryID .= " INNER JOIN users ON vehicle.user_id=users.id ";
 								// echo "<script>alert('$queryID')</script>";
 								
 								$result = mysqli_query($conn, $queryID);
@@ -340,27 +315,9 @@
 								
 								
 								
-								while($row = mysqli_fetch_assoc($result)){
-														
-									echo '<section class="row col-sm-12 carShortInfo">';
-									echo '<a class="carLink" href="carPage.php">';
-									echo "<article class='col-sm-6'>";
-									echo "<ul class='carInfoList'>";
-									echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
-									echo " {$row['car_model_id']}<h3></li>";
-									echo "<li><h6>$ {$row['car_price']}<h6></li>";
-									echo "<li>Dealership</li>";
-									echo "<li>Suburb/Town, STATE</li>";
-									echo "<li>{$row['description']}</li>";
-									echo "</a>";
-									echo '<a class="carLink" href="carPage.php">';
-									echo "</article>";
-									echo "<aside class='col-sm-6'>";
-									echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
-									echo "</aside>";
-									echo "</a>";
-									echo "</section>";
-								
+								while($row = mysqli_fetch_assoc($result))
+								{
+									require "car_info_short.php";
 								}
 																
 							}else{
