@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg">
 	<!-- branding logo image -->
 	<a class="navbar-brand" href="index.php">
-	<img src="images/wdlogo.svg" class="navLogo">
+	<img src="images/wdlogo.svg" class="navLogo d-inline-block align-top">
 	</a>
 	<!-- collapse navigation to hamburger on small/mobile screens -->
 	<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
