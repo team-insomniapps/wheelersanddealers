@@ -1,6 +1,7 @@
 <?php
-	session_start();
-
+session_start();
+?>
+<?php
 /*
 *	php code to check if form has been submitted.
 *	If true, then connect to the database and input the data.
@@ -11,39 +12,10 @@
 $servername = "localhost";
 $dbname = "efftwelv_wheelersanddealers";
 $dsn = "mysql:host=$servername;dbname=$dbname";
-
+/*
 if(isset($_POST['submit'])){
 	
-	// check the uploaded image
-	if(($_FILES['image']['type'] != 'image/png') && ($_FILES['image']['type'] != 'image/jpg') &&
-	($_FILES['image']['type'] != 'image/jpeg') && ($_FILES['image']['type'] != 'image/gif')){
-    echo"<script>alert('Unsupported filetype uploaded')</script>";
-	}
-	
-	if($_FILES['image']['size'] > 16700000){ // the maximum size of mediumblog
-    echo"<script>alert('File uploaded exceeds maximum upload size')</script>";
-	}
-	// here
-	// check if all fields have been entered
-	// 'image' is currently the only optional field
-	if( $_POST['vin'] == "" ||
-		$_POST['year'] == "" ||
-		$_POST['make'] == "" ||
-		$_POST['model'] == "" ||
-		$_POST['exteriorColor'] == "" ||
-		$_POST['conditions'] == "" ||
-		$_POST['bodyStyle'] == "" ||
-		$_POST['transmission'] == "" ||
-		$_POST['drivetrain'] == "" ||
-		$_POST['cylinders'] == "" ||
-		$_POST['mileage'] == "" ||
-		$_POST['fuel'] == "" ||
-		$_POST['doors'] == "" ||
-		$_POST['passengerCapacity'] == "" ||
-		$_POST['interiorColor'] == "" ||
-		$_POST['rego'] == "" ||
-		$_POST['description'] == "" ||
-		$_POST['price'] == "")
+
 	{
 		echo "<script>alert('Please enter all fields')</script>";
 		
@@ -53,7 +25,7 @@ if(isset($_POST['submit'])){
 		// connect to database
 		$username = "efftwelv_andrew";
 		$password = "Andrew1000";
-	 	
+	 	/*
 		// variables to hold post information by form
 		$vin = $_POST['vin'];
 		$year = $_POST['year'];
@@ -88,10 +60,10 @@ if(isset($_POST['submit'])){
 														 `car_body_type_id`, `car_transmission_type_id`,
 														 `car_drive_type`, `car_engine_size`, `car_kilometers`,
 														 `car_fuel_type`, `car_num_doors`, `car_capacity`,
-														 `car_interior_color`, `vehicle_id`,`description`, `car_price`, `user_id`) 
+														 `car_interior_color`, `vehicle_id`,`description`, `car_price`) 
 								  VALUES ('{$vin}',{$year}, '{$make}', '{$model}', '{$ex_color}', '{$conditions}',
 								  '{$body_style}','{$transmission}', '{$drivetrain}', {$cyclinders}, {$mileage},'{$fuel}',
-									  {$doors}, '{$passenger_capacity}','{$in_color}','{$regos}','{$desc}', '{$price}', '".$_SESSION["loginID"]."')"; 
+									  {$doors}, '{$passenger_capacity}','{$in_color}','{$regos}','{$desc}', {$price})"; 
 			
 			// add the transmission type to the car_transmission_types table
 			$query_add_transmission = "INSERT INTO `car_transmission_types` (`name`) VALUES ('{$transmission}')"; 
@@ -114,7 +86,7 @@ if(isset($_POST['submit'])){
 			$conn->exec($query_add_body_types);
 			$conn->exec($query_add_car_make);
 			$conn->exec($query_add_car_model);
-			//$conn->exec($query_add_car_photos);
+			$conn->exec($query_add_car_photos);
 			$conn->exec($query_add_vehicle);
 			$conn->commit();
 			
@@ -127,7 +99,7 @@ if(isset($_POST['submit'])){
 			// database not yet used in the form
 			//
 			
-		}
+		
 		catch(PDOException $e)
 		{
 			// echo "Connection failed: " . $e->getMessage();
@@ -136,12 +108,8 @@ if(isset($_POST['submit'])){
 	
 	}
 }	
-	
+*/	
 ?>
-
-
-
-
 
 
 <!doctype html>
@@ -190,7 +158,35 @@ if(isset($_POST['submit'])){
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<?php include('nav.php'); ?>
+		<nav class="navbar navbar-expand-lg">
+			<!-- branding logo image -->
+			<a class="navbar-brand" href="http://www.wheelersanddealers.efftwelve.com/index_log.php">
+				<img src="images/logo_red.svg" class="navLogo">
+			</a>
+			<!-- collapse navigation to hamburger on small/mobile screens -->
+			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			
+			
+			<!-- navigation bar -->
+			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
+				<ul class="navbar-nav mr-auto mx-auto">
+					<li class="nav-item active"><a class="nav-link" href="index.php">Home</a></li>
+					<li class="nav-item"><a class="nav-link" href="inventory.php">Inventory <span class="sr-only">(current)</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Help</a></li>
+				</ul>
+					
+					
+				</ul>
+				<!-- login/logout button -->
+				<div>
+					<a class="logBtn btn btn-sm btn-outline-secondary"  href="index.php">Logout</a>
+				</div>
+			</div>
+		</nav>
 		
 		
 		<div class="container">
@@ -199,24 +195,22 @@ if(isset($_POST['submit'])){
 			<form method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 			
 			
-			<div  class="row">
+			<div  class="row">	
 			<div class="col-sm-6">
-
+			
 				<!-- VIN -->
 				<div  class="form-group row">
 					<label for="vin" class="col-sm-4 col-form-label">VIN</label>
 					<div class="col-sm-6">
-						<input list="vin" name="vin" placeholder="Mandatory" id="inputVIN" class="form-control mandatory" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['vin']);} ?>"	>
-						
-						
+						<input list="vin" name="vin" class="form-control">
 					</div>
 				</div>
-
+				
 				<!-- year-->
 				<div class="form-group row">
 					<label for="year" class="col-sm-4 col-form-label">Year</label>
 					<div class="col-sm-6">
-						<input type="number" min="1920" max="2018" list="year" name="year" id="inputYear" class="form-control"  value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['year']);} ?>" mandatory>
+						<input type="number" min="1920" max="2018" list="year" name="year" class="form-control">
 							<datalist id="year">
 								<script>
 									document.getElementById("year").innerHTML = yearRangeStr;
@@ -224,12 +218,12 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
+				
 				<!-- Make -->
 				<div  class="form-group row">
 					<label for="make" class="col-sm-4 col-form-label">Make</label>
 					<div class="col-sm-6">
-						<input list="make" name="make" id="inputMake" class="form-control" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['make']);} ?>">
+						<input list="make" name="make" class="form-control">
 							<datalist id="make">
 								<script>
 									document.getElementById("make").innerHTML = loadArray(["Toyota", "BMW", "Holden", "Nissan"]);
@@ -237,33 +231,25 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
-        <div class = "RequestAddVehiclePrompt" id = addMake style="display: none">
-          <!-- css will need visibility:hidden by default -->
-        </div>
-
-        <!-- Model -->
+				
+				<!-- Model -->
 				<div  class="form-group row">
 					<label for="model" class="col-sm-4 col-form-label">Model</label>
 					<div class="col-sm-6">
-						<input list="model" name="model" id = "inputModel" class="form-control" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['model']);} ?>">
-							<datalist id="model">
+						<input list="model" name="model" class="form-control">
+							<!-- <datalist id="model">
 								<script>
-									document.getElementById("model").innerHTML = loadArray(["test1","test2"]);
+									document.getElementById("model").innerHTML = loadArray([""]);
 								</script>
-							</datalist>
+							</datalist> -->
 					</div>
 				</div>
-
-        <div class = "RequestAddVehiclePrompt" id = addModel style="visibility: none">
-          <!-- css will need visibility:hidden by default -->
-        </div>
-
+				
 				<!-- exterior color -->
 				<div  class="form-group row">
 					<label for="exteriorColor" class="col-sm-4 col-form-label">Exterior Color</label>
 					<div class="col-sm-6">
-						<input list="exteriorColor" name="exteriorColor" id="inputExteriorColor" class="form-control"  value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['exteriorColor']);} ?>"	>
+						<input list="exteriorColor" name="exteriorColor" class="form-control">
 							<datalist id="exteriorColor">
 								<script>
 									document.getElementById("exteriorColor").innerHTML = loadArray(["Red","Yellow", "Blue"]);
@@ -271,12 +257,12 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
+				
 				<!-- condition -->
 				<div  class="form-group row">
 					<label for="conditions" class="col-sm-4 col-form-label">Condition</label>
 					<div class="col-sm-6">
-						<input list="conditions" name="conditions" id="inputCondition" class="form-control"  value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['conditions']);} ?>">
+						<input list="conditions" name="conditions" class="form-control">
 							 <datalist id="conditions">
 								<script>
 									document.getElementById("conditions").innerHTML = loadArray(["new", "used"]);
@@ -284,12 +270,12 @@ if(isset($_POST['submit'])){
 							 </datalist>
 					</div>
 				</div>
-
+				
 				<!-- body style -->
 				<div  class="form-group row">
 					<label for="bodyStyle" class="col-sm-4 col-form-label">Body Style</label>
 					<div class="col-sm-6">
-						<input list="bodyStyle" name="bodyStyle" id="inputBodyStyle" class="form-control"  value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['bodyStyle']);} ?>">
+						<input list="bodyStyle" name="bodyStyle" class="form-control">
 							<datalist id="bodyStyle">
 								<script>
 									document.getElementById("bodyStyle").innerHTML = loadArray(["bus", "hatch", "sedan", "wagon", "SUV", "people mover", "coupe", "convertable", "performance", "ute/pick-up", "cab chassis", "van"]);
@@ -297,12 +283,12 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
+				
 				<!-- transmission -->
 				<div  class="form-group row">
 					<label for="transmission" class="col-sm-4 col-form-label">Transmission</label>
 					<div class="col-sm-6">
-						<input list="transmission" name="transmission" id="inputTransmission" class="form-control" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['transmission']);} ?>">
+						<input list="transmission" name="transmission" class="form-control">
 							<datalist id="transmission">
 								<script>
 									document.getElementById("transmission").innerHTML = loadArray(["automatic", "manual", "CVT", "automanual"]);
@@ -310,12 +296,12 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
+				
 				<!-- passenger capacity -->
 				<div  class="form-group row">
 					<label for="passengerCapacity" class="col-sm-4 col-form-label">Passenger Capacity</label>
 					<div class="col-sm-6">
-						<input list="passengerCapacity" name="passengerCapacity" id="inputPassengerCapacity" class="form-control" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['passengerCapacity']);}?>">
+						<input list="passengerCapacity" name="passengerCapacity" class="form-control">
 							<datalist id="passengerCapacity">
 								<script>
 									document.getElementById("passengerCapacity").innerHTML = loadArray(["1", "2", "3", "4", "5", "6", "7", "8", "10", "12+"]);
@@ -323,17 +309,17 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
-
+				
+				
 			</div>
-
+			
 			<div class="col-sm-6">
-
+				
 				<!-- drivetrain -->
 				<div  class="form-group row">
 					<label for="drivetrain" class="col-sm-4 col-form-label">Drivetrain</label>
 					<div class="col-sm-6">
-						<input list="drivetrain" name="drivetrain" id="inputDriveTrain" class="form-control" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['drivetrain']);} ?>">
+						<input list="drivetrain" name="drivetrain" class="form-control">
 							<datalist id="drivetrain">
 								<script>
 									document.getElementById("drivetrain").innerHTML = loadArray(["2 wheel-drive", "4 wheel-drive", "rear wheel-drive", "front wheel-drive", "all wheel-drive"]);
@@ -341,12 +327,12 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
+				
 				<!-- Cylinders -->
 				<div  class="form-group row">
 					<label for="cylinders" class="col-sm-4 col-form-label">Cylinders</label>
 					<div class="col-sm-6">
-						<input list="cylinders" name="cylinders" id="inputCylinders" class="form-control" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['cylinders']);} ?>">
+						<input list="cylinders" name="cylinders" class="form-control">
 							<datalist id="cylinders">
 								<script>
 									document.getElementById("cylinders").innerHTML = loadArray(["2", "4", "6", "8", "10", "12+"]);
@@ -354,23 +340,20 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
+				
 				<!-- Mileage-->
 				<div class="form-group row">
 					<label for="mileage" class="col-sm-4 col-form-label">Mileage</label>
 					<div class="col-sm-6">
-						<input id="mileage" name="mileage" class="form-control mandatory" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['mileage']);} ?>">
+						<input id="mileage" name="mileage" class="form-control">
 					</div>
 				</div>
-
-        <div class = "clearPrompt" id = "clearMileagePrompt" style="display: none">
-        </div>
-
+				
 				<!-- fuel -->
 				<div  class="form-group row">
 					<label for="fuel" class="col-sm-4 col-form-label">Fuel</label>
 					<div class="col-sm-6">
-						<input list="fuel" name="fuel" id="inputFuel" class="form-control" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['fuel']);} ?>">
+						<input list="fuel" name="fuel" class="form-control">
 							<datalist id="fuel">
 								<script>
 									document.getElementById("fuel").innerHTML = loadArray(["gasoline", "diesel", "electric", "hybrid"]);
@@ -378,12 +361,12 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
+				
 				<!-- doors -->
 				<div  class="form-group row">
 					<label for="doors" class="col-sm-4 col-form-label">Doors</label>
 					<div class="col-sm-6">
-						<input list="doors" name="doors" id="inputDoors" class="form-control" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['doors']);} ?>">
+						<input list="doors" name="doors" class="form-control">
 							<datalist id="doors">
 								<script>
 									document.getElementById("doors").innerHTML = loadArray(["2", "4", "5+"]);
@@ -391,12 +374,12 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
+				
 				<!-- interior color -->
 				<div  class="form-group row">
 					<label for="interiorColor" class="col-sm-4 col-form-label">Interior Color</label>
 					<div class="col-sm-6">
-						<input list="interiorColor" name="interiorColor" id="inputInteriorColor" class="form-control" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['interiorColor']);} ?>">
+						<input list="interiorColor" name="interiorColor" class="form-control">
 							<datalist id="interiorColor">
 								<script>
 									document.getElementById("interiorColor").innerHTML = loadArray(["Red","Yellow", "Blue"]);
@@ -404,39 +387,21 @@ if(isset($_POST['submit'])){
 							</datalist>
 					</div>
 				</div>
-
+				
 				<!-- Rego -->
 				<div class="form-group row">
 					<label for="rego" class="col-sm-4 col-form-label">Registration Number</label>
 					<div class="col-sm-6">
-						<input id="rego" name="rego" class="form-control mandatory" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['rego']);} ?>">
+						<input id="rego" name="rego" class="form-control">
 					</div>
 				</div>
-
-
-				<!-- Description -->
-				<div class="form-group row">
-					<label for="price" class="col-sm-4 col-form-label">Description</label>
-					<div class="col-sm-6">
-						<input class="form-control" id="description" name="description" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['description']);} ?>">
-					</div>
-				</div>
-
-
+				
+				
 				<!-- price  -->
 				<div class="form-group row">
 					<label for="price" class="col-sm-4 col-form-label">Price</label>
 					<div class="col-sm-6">
-						<input class="form-control" id="price" name="price" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['price']);} ?>"	>
-					</div>
-				</div>
-				
-				
-				<!-- Image -->
-				<div class="form-group row">
-					<label for="image" class="col-sm-4 col-form-label">Image</label>
-					<div class="col-sm-6">
-						<input type="file" id="image" name="image">
+						<input class="form-control" id="price" name="price">
 					</div>
 				</div>
 				

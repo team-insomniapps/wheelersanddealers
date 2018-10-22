@@ -1,5 +1,5 @@
 body{
-	background-color: #fafafa;
+	background-color: #EAEEF2;
 }
 
 .main{
@@ -26,12 +26,12 @@ body{
 
 .navbar{
 	margin: 10px;
-	background-color: #ba1f13;
+	background-color: #FAFAFA;
 	
 }
 
 .nav-link, .footerTxt{
-	color: white ;
+	color: #BA1F13;
 	text-decoration: none;
 	font-size: 1.2em;
 	margin: 0 15px;
@@ -41,18 +41,33 @@ body{
 .footerTxt{ font-size: 0.8em; font-weight: 350; }
 
 .logBtn{
-	color: white;
-    /* background-color: transparent; */
+	color: #FAFAFA;
+    background-color: #6F7072;
     border-color: white;
+	
 }
 
 .logBtn:hover{
-	background-color: white;
-	color: #ba1f13;
+	background-color: #4C4D4F;
+	color: #FAFAFA;
+}
+
+.addCar{
+	
+	color: #FAFAFA;
+    background-color: #BA1F13;
+    border-color: white;
+	margin-left: 25px;
+	
+}
+
+.addCar:hover{
+	background-color: #06386D;
+	color: #FAFAFA;
 }
 
 .page-footer{
-	background-color: #ba1f13;
+	background-color: #FAFAFA;
 	margin: 5px;
 	padding: 10px;
 	
@@ -76,14 +91,18 @@ body{
 	border-width: 0.5px;
 	padding: 20px 0px;
 	margin: 10px;
-	background-color: #ffffff;
+	background-color: #FAFAFA;
+	cursor: pointer;
 }
 
 .carPhoto{
 	/* width: 100%; */
-	height: auto;
+	height:150px;
 	/* min-width: 80px; */
-	width: 80px;
+	width: 200px;
+	clear:right;
+	float:right;
+	
 }
 
 .carInfoList{
@@ -120,4 +139,3 @@ body{
 	text-decoration: none;
 	color: black;
 }
-
