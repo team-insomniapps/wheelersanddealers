@@ -1,4 +1,6 @@
 <?php
+
+	session_start();
 /*
 *	php code to check if form has been submitted.
 *	If true, then connect to the database and input the data.
@@ -16,26 +18,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 	// connect to database
 	$username = "efftwelv_andrew";
 	$password = "Andrew1000";
-		
-	/* // variables to hold post information by form
-	$vin = $_POST['vin'];
-	$year = $_POST['year'];
-	$make = $_POST['make'];
-	$model = $_POST['model'];
-	$ex_color = $_POST['exteriorColor'];
-	$conditions = $_POST['conditions'];
-	$body_style = $_POST['bodyStyle'];
-	$transmission = $_POST['transmission'];
-	$drivetrain = $_POST['drivetrain'];
-	$cyclinders = $_POST['cylinders'];
-	$mileage = $_POST['mileage'];
-	$fuel = $_POST['fuel'];
-	$doors = $_POST['doors'];
-	$passenger_capacity = $_POST['passengerCapacity'];
-	$in_color = $_POST['interiorColor'];
-	$regos = $_POST['rego'];
-	$desc = $_POST['description'];
-	$price = $_POST['price']; */
+	
 	
 	try 
 	{
@@ -45,9 +28,6 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 		
 		$conn = mysqli_connect($servername,$username,$password,$dbname);
 		
-		//$conn = new PDO($dsn, $username, $password);
-		
-		// echo "<script>alert('Connection Success: ')</script>";
 	}
 	catch(PDOException $e)
 	{
@@ -102,57 +82,33 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 	</head>
 		
 	<body>
-		<div class="container">
-			<?php include('nav.php'); ?>
-			
+		<!-- Header/navigation bar div -->
+		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
+		
+		<?php include('nav.php'); ?>
+		
+		
+		
+		<div class="main">
+			<div class ="row col-sm-3">
+				<a class="addCar btn btn-sm btn-outline-secondary"  href="add.php">Add Vehicle</a>
+			</div>
+		
+		
 			<div class="row">
 				<!-- Search filter box area -->
-				<div class="col-md-4">
+				<aside class="col-sm-3">
+					
 					<div class="filterBox">
-						<h4>Filter results:</h4>
-
-						<div class="filterGroup">
-							<div class="filter-label" data-toggle="collapse" data-target="#priceCollapse" aria-expanded="true" aria-controls="priceCollapse">Price</div>
-							<div id="priceCollapse" class="collapse">
-								<div class="form-group">
-									<label for="priceMin">Price minimum:</label>
-									<input class="form-control" type="number" id="priceMin" />
-								</div>
-								<div class="form-group">
-									<label for="priceMax">Price maximum:</label>
-									<input class="form-control" type="number" id="priceMax" />
-								</div>
-							</div>
-						</div>
-
-						<div class="filterGroup">
-							<div class="filter-label" data-toggle="collapse" data-target="#distCollapse" aria-expanded="true" aria-controls="distCollapse">Distance</div>
-							<div id="distCollapse" class="collapse">
-								<div class="form-group">
-									<label for="distMax">Maximum distance:</label>
-									<input class="form-control" type="number" id="distMax" />
-								</div>
-							</div>
-						</div>
-
-						<div class="filterGroup">
-							<div class="filter-label" data-toggle="collapse" data-target="#colourCollapse" aria-expanded="true" aria-controls="colourCollapse">Colour</div>
-							<div id="colourCollapse" class="collapse">
-								<div class="form-group">
-									<label for="distMax">Colour:</label>
-									<select class="form-control" multiple>
-										<option value="black">Black</option>
-										<option value="blue">Blue</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<button type="submit" class="btn btn-primary">Filter</button>
-					</div>
-				</div>
-
-
-<!-- Leftovers, kept for category reference.
+						<p>Filter results:</p>
+						<p>Price</p>
+						<input class="form-control" type="text" label="Price">
+						<br>
+						<br>
+						<form>
+						<p>Category</p>
+						<input list="categories" name="categories" class="form-control" onfocus="this.value=''">
+							<datalist id="categories">
 								<script>
 									document.getElementById("categories").innerHTML = loadArray(["Vin", "Year", "Make", "Model", "Exterior Color", "Condition", "Body Style", "Transmission", "Drivetrain", "Cylinders", "Mileage", "Fuel", "Doors", "Passenger Capacity", "Interior Color", "Rego", "Description", "Price"]);
 								</script>
@@ -164,17 +120,50 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 									cat.classList.toggle("invisible");
 								}
 							</script>
--->
-				
-				<div class="col-md-8">
+							</br>
+						<a class="filterBtn btn btn-sm btn-outline-secondary">Filter</a>
+						
+						
+					</div>
+				</aside>
+				<section class="col-sm-8">
 					<article class="row carShortArticle">
+					<?php 
 					
-					
-					 <?php
+					// MySQL database query
+						$queryRecords = "SELECT COUNT(`id`) FROM `vehicle` ";
+						$queryRecords .= "WHERE user_id=".$_SESSION['loginID'];
+
+						$result = mysqli_query($conn, $queryRecords);
+						
+						// Test query error
+						if(!$result){
+								die("Database query failed. ");
+						}
+						
+						echo '<section class="col-sm-12">';
+						echo "<article class='results'>";
+						
+						while($row = mysqli_fetch_assoc($result)){
+							
+							echo "<h6 style='float:left';>Results: {$row['COUNT(`id`)']}</h6><h6 style='text-align:right;'>Sort: <input type='text' class='' name='sort' value=' Price - Descending '</h6>";
+										
+						}
+						
+						echo "</article>";
+						echo "</section>";
+						
+						// release returned data
+						mysqli_free_result($result);
+							
+
 						// MySQL database query
 						$queryID = "SELECT *";
 						$queryID .= "FROM vehicle ";
-						$queryID .= "WHERE 1";
+						$queryID .= " INNER JOIN users ON vehicle.user_id=users.id ";
+						if(isset($_SESSION['loginID'])){
+							$queryID .= "WHERE user_id=".$_SESSION['loginID'];
+						}
 						// echo "<script>alert('$queryID')</script>";
 						
 						$result = mysqli_query($conn, $queryID);
@@ -184,26 +173,10 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 								die("Database query failed. ");
 						}
 						
+						
 						while($row = mysqli_fetch_assoc($result)){
 												
-							echo '<section class="row col-sm-12 carShortInfo">';
-							echo '<a class="carLink" href="carPage.php">';
-							echo "<article class='col-sm-10'>";
-							echo "<ul class='carInfoList'>";
-							echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
-							echo " {$row['car_model_id']}<h3></li>";
-							echo "<li><h6>$ {$row['car_price']}<h6></li>";
-							echo "<li>Dealership</li>";
-							echo "<li>Suburb/Town, STATE</li>";
-							// echo "<li>{$row['description']}</li>";
-							echo "</a>";
-							echo '<a class="carLink" href="carPage.php">';
-							echo "</article>";
-							echo "<aside class='col-sm-2'>";
-							echo '<img height=150 width=200 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
-							echo "</aside>";
-							echo "</a>";
-							echo "</section>";
+							require "car_info_short.php";
 							
 						}
 					
@@ -216,10 +189,13 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						
 					?>
 					<article>
-				</div>
+				</section>
 			</div>
 			
-			<?php include('footer.php'); ?>
 		</div>	
+		
+		<?php include('footer.php'); ?>
+		
 	</body>
 </html>
+

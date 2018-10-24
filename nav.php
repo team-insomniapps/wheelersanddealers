@@ -1,5 +1,12 @@
 <!-- Header/navigation bar div -->
 <!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
+        
+<?php 
+
+	if(isset($_SESSION['loginID']))
+
+	{
+	?>
 <nav class="navbar navbar-expand-lg">
 	<!-- branding logo image -->
 	<a class="navbar-brand" href="index.php">
@@ -10,19 +17,37 @@
 	<span class="navbar-toggler-icon"></span>
 	</button>
 
-	<!-- navigation bar -->
-	<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
-		<ul class="navbar-nav mr-auto mx-auto">
-			<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
-			<li class="nav-item"><a class="nav-link" href="#">About</a></li>
-			<li class="nav-item"><a class="nav-link" href="#">Register</a></li>
-			<li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-		</ul>
-		<!-- login button -->
-		<div>
-			<button type="button" class="btn btn-secondary btn-sm"  href="index_log.php">Login</button>
-			<button type="button" class="btn btn-primary btn-sm"  href="#"">Register</button>
-		</div>
+  <!-- navigation bar -->
+			<div class="collapse navbar-collapse" id="navbarSupportedContent"> 
+				<ul class="navbar-nav mr-auto mx-auto">
+					<li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+					<li class="nav-item"><a class="nav-link" href="add.php">Add</a></li>
+					<li class="nav-item"><a class="nav-link" href="search.php">Search</a></li>
+					<li class="nav-item"><a class="nav-link" href="match.php">Matches</a></li>
+					<li class="nav-item"><a class="nav-link" href="inventory.php">Inventory</a></li>
+					
+					
+					<!-- <li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
+					-->
+					<li class="nav-item"><a class="nav-link" href="about.php">Help</a></li>
+				</ul>
+					
+					
+				</ul>
+				<!-- login/logout button -->
+				<div>
+					<a class="logBtn btn btn-sm btn-outline-secondary"  href="logout.php">Logout</a>
+
+				</div>
+			</div>
 	</div>
 
 </nav>
+
+<?php 
+	}
+	else{
+		require('nav1.php');
+	}
+	?>
