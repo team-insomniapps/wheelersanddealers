@@ -125,119 +125,102 @@ session_start();
 				<section class="col-sm-12">
 					<div id="New" class="tabcontent">
 						<article class="row carShortArticle">
+						
 						<!-- new matches -->
-			
 						<?php
-						// TEMPORARY QUERY
-						// MySQL database query
-						$queryID = "SELECT *";
-						$queryID .= "FROM vehicle ";
-						$queryID .= "WHERE `id`='1'";
-				
-						$result = mysqli_query($conn, $queryID);
+						// first get users match requests from match_request table
+						// TEMPORARY QUERY, THE USER ID WILL HAVE TO BE SET TO MATCH CURRENT USERS ID
+						$matchRequestsID = "SELECT *";
+						$matchRequestsID .= "FROM match_request ";
+						$matchRequestsID .= "WHERE `user_id`='2'";
+						
+						$matchRequests = mysqli_query($conn, $matchRequestsID);
 				
 						// Test query error
-						if(!$result){
+						if(!$matchRequests){
 								die("Database query failed. ");
 						}
-				
-						// get number of rows returned by query
-						$row_cnt = $result->num_rows;
-
-						//printf("Result set has %d rows.\n", $row_cnt);
-						echo "<h2>Congratulations! You have ".$row_cnt. " new matches!</h2>";
-	
+						
 						//incrementer for modal id
 						$modelNum = 0;
-				
-						echo '<div class="col-sm-12" id="newMatches">';
-				
-						while($row = mysqli_fetch_assoc($result)){
-							echo '<section class="row col-sm-12 carShortInfo" data-toggle="modal" data-target="#mod'.$modelNum.'">';
-								echo "<article class='col-sm-6'>";
-									echo "<ul class='carInfoList'>";
-										echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
-										echo " {$row['car_model_id']}<h3></li>";
-										echo "<li><h6>$ {$row['car_price']}<h6></li>";
-										echo "<li>Dealership</li>";
-										echo "<li>Suburb/Town, STATE</li>";
-									echo "</ul>";
-								echo "</article>";
-								echo '<aside class="col-sm-6" data-toggle="modal" data-target="#mod'.$modelNum.'">';
-									echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'" data-toggle="modal" data-target="#mod'.$modelNum.'">';
-								echo "</aside>";
-							echo "</section>";
-					
-							// modal
-							// some of the following code was sourced from: https://www.w3schools.com/bootstrap/bootstrap_modal.asp
-								echo '<div class="modal fade" id="mod'.$modelNum.'" role="dialog">';
-									echo '<div class="modal-dialog modal-lg">';
-
-										// modal content
-										echo '<div class="modal-content">';
-											echo '<div class="modal-header">';
-												echo "<h4 class='modal-title'>{$row['car_make_id']} {$row['car_model_id']}</h4>";
-													echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-												echo '</div>';
-												echo '<div class="modal-body">';
-													echo '<h5>This vehicle matches your request for:</h5>';
-													echo '<ul id="requestInfoTable">';
-														echo "<li><b>Vehicle: </b>{$row['car_make_id']} {$row['car_model_id']}</li>";
-														echo "<li><b>Year: </b>{$row['car_year']}</li>";
-														echo "<li><b>Condition: </b>{$row['car_new_used_condition']}</li>";
-														echo "<li><b>Kilometers: </b>{$row['car_kilometers']}</li>";
-														echo "<li><b>Exterior Color: </b>{$row['car_exterior_color']}</li>";
-														echo "<li><b>Interior Color: </b>{$row['car_interior_color']}</li>";
-														echo "<li><b>Body Type: </b>{$row['car_body_type_id']}</li>";
-														echo "<li><b>Transmission: </b>{$row['car_transmission_type_id']}</li>";
-														echo "<li><b>Drive Type: </b>{$row['car_drive_type']}</li>";
-														echo "<li><b>Engine Size: </b>{$row['car_engine_size']}</li>";
-														echo "<li><b>Fuel Type: </b>{$row['car_fuel_type']}</li>";
-														echo "<li><b>Capacity: </b>{$row['car_capacity']}</li>";
-														echo "<li><b>Number of Doors: </b>{$row['car_num_doors']}</li>";
-													echo '</ul>';
-													echo '<img height=500 width=765 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
-												echo '</div>';
-												echo '<div class="modal-footer">';
-					
-													echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
-													echo '<button type="button" class="btn btn-default" data-dismiss="modal">Remove Vehicle</button>';
-													echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
-												echo '</div>';
-											echo '</div>';
-										echo '</div>';
-									echo '</div>';
 							
-								$modelNum++;
-								}
-				
-							echo '</div>';
-
-						// release returned data
-						mysqli_free_result($result);						
-						?>
-					</div>
-
-					<div id="Saved" class="tabcontent">
-					
-						<!-- old matches -->	
-						<!-- TEMPORARY QUERY -->
-						<?php
-							// MySQL database query
-							$queryID = "SELECT *";
-							$queryID .= "FROM vehicle ";
-							$queryID .= "WHERE `id`='1'";
+						echo '<div class="col-sm-12" id="newMatches">';
 						
-							$result = mysqli_query($conn, $queryID);
-						
-							// Test query error
-							if(!$result){
-								die("Database query failed. ");
+						while($requestRow = mysqli_fetch_assoc($matchRequests)){
+							// put match request result into variables
+							$make = $requestRow['make_request'];
+							$model = $requestRow['model_request'];
+							$body_style = $requestRow['body_type__request'];
+							$door = $requestRow['min_num_doors_request'];
+							$yearmin = $requestRow['year_min_request'];
+							$yearmax = $requestRow['year_max_request'];
+							$trans = $requestRow['transmission_type_request'];
+							$ex_Color = $requestRow['exterior_color_request'];
+							$fuel = $requestRow['fuel_type_request'];
+							$drive = $requestRow['drive_type_request'];
+							$mile_max = $requestRow['max_kilometers_request'];
+							$cond = $requestRow['condition_request'];
+							$pricemin = $requestRow['min_price_request'];
+							$pricemax = $requestRow['max_price_request'];
+							
+							// find vehicles which match the reuqest
+							$matchqueryID = "SELECT *";
+							$matchqueryID .= "FROM vehicle ";
+							if($make != NULL) {
+								$matchqueryID .= "WHERE `car_make_id`='$make'";
+							}
+							else {
+								$matchqueryID .= "WHERE `car_make_id`!='NULL'";
+							}
+							if($model != NULL) {
+								$matchqueryID .= " && `car_model_id`='$model'";
+							}
+							if($body_style != NULL) {
+								$matchqueryID .= " && `car_body_type_id`='$body_style'";
+							}
+							if($door != NULL) {
+								$matchqueryID .= " && `car_num_doors`>='$door'";
+							}
+							if($yearmin != NULL) {
+								$matchqueryID .= " && `car_year`>='$yearmin'";
+							}
+							if($yearmax != NULL) {
+								$matchqueryID .= " && `car_year`<='$yearmax'";
+							}
+							if($trans != NULL) {
+								$matchqueryID .= " && `car_transmission_type_id`='$trans'";
+							}
+							if($ex_Color != NULL) {
+								$matchqueryID .= " && `car_exterior_color`='$ex_Color'";
+							}
+							if($fuel != NULL) {
+								$matchqueryID .= " && `car_fuel_type`='$fuel'";
+							}
+							if($drive != NULL) {
+								$matchqueryID .= " && `car_drive_type`='$drive'";
+							}
+							if($mile_max != NULL) {
+								$matchqueryID .= " && `car_kilometers`<='$mile_max'";
+							}
+							if($cond != NULL) {
+								$matchqueryID .= " && `car_new_used_condition`='$cond'";
+							}
+							if($pricemin != NULL) {
+								$matchqueryID .= " && `car_price`>='$pricemin'";
+							}
+							if($pricemax != NULL) {
+								$matchqueryID .= " && `car_price`<='$pricemax'";
 							}
 							
-							echo'<h2>Stored matches</h2>';
-							
-							while($row = mysqli_fetch_assoc($result)){
+							$matchList = mysqli_query($conn, $matchqueryID);
+						
+							// get number of rows returned by query
+							//$row_cnt = $result->num_rows;
+
+							//printf("Result set has %d rows.\n", $row_cnt);
+							//echo "<h2>Congratulations! You have ".$row_cnt. " new matches!</h2>";
+				
+							while($row = mysqli_fetch_assoc($matchList)){
 								echo '<section class="row col-sm-12 carShortInfo" data-toggle="modal" data-target="#mod'.$modelNum.'">';
 									echo "<article class='col-sm-6'>";
 										echo "<ul class='carInfoList'>";
@@ -246,60 +229,265 @@ session_start();
 											echo "<li><h6>$ {$row['car_price']}<h6></li>";
 											echo "<li>Dealership</li>";
 											echo "<li>Suburb/Town, STATE</li>";
+										echo "</ul>";
 									echo "</article>";
 									echo '<aside class="col-sm-6" data-toggle="modal" data-target="#mod'.$modelNum.'">';
 										echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'" data-toggle="modal" data-target="#mod'.$modelNum.'">';
 									echo "</aside>";
 								echo "</section>";
-					
+							
+						
 								// modal
 								// some of the following code was sourced from: https://www.w3schools.com/bootstrap/bootstrap_modal.asp
-								echo '<div class="modal fade" id="mod'.$modelNum.'" role="dialog">';
-								echo '<div class="modal-dialog modal-lg">';
+									echo '<div class="modal fade" id="mod'.$modelNum.'" role="dialog">';
+										echo '<div class="modal-dialog modal-lg">';
 
-									// modal content
-									echo '<div class="modal-content">';
-										echo '<div class="modal-header">';
-											echo "<h4 class='modal-title'>{$row['car_make_id']} {$row['car_model_id']}</h4>";
-												echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-											echo '</div>';
-											echo '<div class="modal-body">';
-												echo '<h5>This vehicle matches your request for:</h5>';
-												echo '<ul id="requestInfoTable">';
-													echo "<li><b>Vehicle: </b>{$row['car_make_id']} {$row['car_model_id']}</li>";
-													echo "<li><b>Year: </b>{$row['car_year']}</li>";
-													echo "<li><b>Condition: </b>{$row['car_new_used_condition']}</li>";
-													echo "<li><b>Kilometers: </b>{$row['car_kilometers']}</li>";
-													echo "<li><b>Exterior Color: </b>{$row['car_exterior_color']}</li>";
-													echo "<li><b>Interior Color: </b>{$row['car_interior_color']}</li>";
-													echo "<li><b>Body Type: </b>{$row['car_body_type_id']}</li>";
-													echo "<li><b>Transmission: </b>{$row['car_transmission_type_id']}</li>";
-													echo "<li><b>Drive Type: </b>{$row['car_drive_type']}</li>";
-													echo "<li><b>Engine Size: </b>{$row['car_engine_size']}</li>";
-													echo "<li><b>Fuel Type: </b>{$row['car_fuel_type']}</li>";
-													echo "<li><b>Capacity: </b>{$row['car_capacity']}</li>";
-													echo "<li><b>Number of Doors: </b>{$row['car_num_doors']}</li>";
-												echo '</ul>';
-												echo '<img height=500 width=765 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
-											echo '</div>';
-											echo '<div class="modal-footer">';
-					
-												echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
-												echo '<button type="button" class="btn btn-default" data-dismiss="modal">Remove Vehicle</button>';
-												echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
-
+											// modal content
+											echo '<div class="modal-content">';
+												echo '<div class="modal-header">';
+													echo "<h4 class='modal-title'>{$row['car_make_id']} {$row['car_model_id']}</h4>";
+														echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+													echo '</div>';
+													echo '<div class="modal-body">';
+														echo '<h5>This vehicle matches your request for:</h5>';
+														echo '<ul id="requestInfoTable">';
+														if($make != NULL && $model != NULL) {
+															echo "<li><b>Vehicle: </b>$make $model</li>";
+														}
+														if($yearmin != NULL) {
+															echo "<li><b>Minimum Year: </b>$yearmin</li>";
+														}
+														if($yearmax != NULL) {
+															echo "<li><b>Maximum Year: </b>$yearmax</li>";
+														}
+														if($cond != NULL) {
+															echo "<li><b>Condition: </b>$cond</li>";
+														}
+														if($mile_max != NULL) {
+															echo "<li><b>Max Kilometers: </b>$mile_max</li>";
+														}
+														if($ex_Color != NULL) {
+															echo "<li><b>Exterior Color: </b>$ex_Color</li>";
+														}
+														if($body_style != NULL) {
+															echo "<li><b>Body Type: </b>$body_style</li>";
+														}
+														if($trans != NULL) {
+															echo "<li><b>Transmission: </b>$trans</li>";
+														}
+														if($drive != NULL) {
+															echo "<li><b>Drive Type: </b>$drive</li>";
+														}
+														if($fuel != NULL) {
+															echo "<li><b>Fuel Type: </b>$fuel</li>";
+														}
+														if($door != NULL) {
+															echo "<li><b>Minimum Number of Doors: </b>$door</li>";
+														}
+														echo '</ul>';
+														echo '<img height=500 width=765 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
+													echo '</div>';
+													echo '<div class="modal-footer">';
+						
+														echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
+														echo '<button type="button" class="btn btn-default" data-dismiss="modal">Remove Vehicle</button>';
+														echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
+													echo '</div>';
+												echo '</div>';
 											echo '</div>';
 										echo '</div>';
-									echo '</div>';
-							echo '</div>';
-							
-							$modelNum++;
+								
+									$modelNum++;
 							}
+						}
 					
-						// release returned data
-						mysqli_free_result($result);
+								echo '</div>';
+
+							// release returned data
+							mysqli_free_result($result);						
+							?>
+						</div>
+
+					<div id="Saved" class="tabcontent">
+					
+						<!-- old matches -->	
+						<!-- TEMPORARY QUERY -->
+						<?php
+							// first get users match requests from match_request table
+						// TEMPORARY QUERY, THE USER ID WILL HAVE TO BE SET TO MATCH CURRENT USERS ID
+						$matchRequestsID = "SELECT *";
+						$matchRequestsID .= "FROM match_request ";
+						$matchRequestsID .= "WHERE `user_id`='2'";
+						
+						$matchRequests = mysqli_query($conn, $matchRequestsID);
+				
+						// Test query error
+						if(!$matchRequests){
+								die("Database query failed. ");
+						}
 							
-						// close database connection
+							echo'<h2>Stored matches</h2>';
+						
+						while($requestRow = mysqli_fetch_assoc($matchRequests)){
+							// put match request result into variables
+							$make = $requestRow['make_request'];
+							$model = $requestRow['model_request'];
+							$body_style = $requestRow['body_type__request'];
+							$door = $requestRow['min_num_doors_request'];
+							$yearmin = $requestRow['year_min_request'];
+							$yearmax = $requestRow['year_max_request'];
+							$trans = $requestRow['transmission_type_request'];
+							$ex_Color = $requestRow['exterior_color_request'];
+							$fuel = $requestRow['fuel_type_request'];
+							$drive = $requestRow['drive_type_request'];
+							$mile_max = $requestRow['max_kilometers_request'];
+							$cond = $requestRow['condition_request'];
+							$pricemin = $requestRow['min_price_request'];
+							$pricemax = $requestRow['max_price_request'];
+							
+							// find vehicles which match the reuqest
+							$matchqueryID = "SELECT *";
+							$matchqueryID .= "FROM vehicle ";
+							if($make != NULL) {
+								$matchqueryID .= "WHERE `car_make_id`='$make'";
+							}
+							else {
+								$matchqueryID .= "WHERE `car_make_id`!='NULL'";
+							}
+							if($model != NULL) {
+								$matchqueryID .= " && `car_model_id`='$model'";
+							}
+							if($body_style != NULL) {
+								$matchqueryID .= " && `car_body_type_id`='$body_style'";
+							}
+							if($door != NULL) {
+								$matchqueryID .= " && `car_num_doors`>='$door'";
+							}
+							if($yearmin != NULL) {
+								$matchqueryID .= " && `car_year`>='$yearmin'";
+							}
+							if($yearmax != NULL) {
+								$matchqueryID .= " && `car_year`<='$yearmax'";
+							}
+							if($trans != NULL) {
+								$matchqueryID .= " && `car_transmission_type_id`='$trans'";
+							}
+							if($ex_Color != NULL) {
+								$matchqueryID .= " && `car_exterior_color`='$ex_Color'";
+							}
+							if($fuel != NULL) {
+								$matchqueryID .= " && `car_fuel_type`='$fuel'";
+							}
+							if($drive != NULL) {
+								$matchqueryID .= " && `car_drive_type`='$drive'";
+							}
+							if($mile_max != NULL) {
+								$matchqueryID .= " && `car_kilometers`<='$mile_max'";
+							}
+							if($cond != NULL) {
+								$matchqueryID .= " && `car_new_used_condition`='$cond'";
+							}
+							if($pricemin != NULL) {
+								$matchqueryID .= " && `car_price`>='$pricemin'";
+							}
+							if($pricemax != NULL) {
+								$matchqueryID .= " && `car_price`<='$pricemax'";
+							}
+							
+							$matchList = mysqli_query($conn, $matchqueryID);
+						
+							// get number of rows returned by query
+							//$row_cnt = $result->num_rows;
+
+							//printf("Result set has %d rows.\n", $row_cnt);
+							//echo "<h2>Congratulations! You have ".$row_cnt. " new matches!</h2>";
+				
+							while($row = mysqli_fetch_assoc($matchList)){
+								echo '<section class="row col-sm-12 carShortInfo" data-toggle="modal" data-target="#mod'.$modelNum.'">';
+									echo "<article class='col-sm-6'>";
+										echo "<ul class='carInfoList'>";
+											echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
+											echo " {$row['car_model_id']}<h3></li>";
+											echo "<li><h6>$ {$row['car_price']}<h6></li>";
+											echo "<li>Dealership</li>";
+											echo "<li>Suburb/Town, STATE</li>";
+										echo "</ul>";
+									echo "</article>";
+									echo '<aside class="col-sm-6" data-toggle="modal" data-target="#mod'.$modelNum.'">';
+										echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'" data-toggle="modal" data-target="#mod'.$modelNum.'">';
+									echo "</aside>";
+								echo "</section>";
+							
+						
+								// modal
+								// some of the following code was sourced from: https://www.w3schools.com/bootstrap/bootstrap_modal.asp
+									echo '<div class="modal fade" id="mod'.$modelNum.'" role="dialog">';
+										echo '<div class="modal-dialog modal-lg">';
+
+											// modal content
+											echo '<div class="modal-content">';
+												echo '<div class="modal-header">';
+													echo "<h4 class='modal-title'>{$row['car_make_id']} {$row['car_model_id']}</h4>";
+														echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+													echo '</div>';
+													echo '<div class="modal-body">';
+														echo '<h5>This vehicle matches your request for:</h5>';
+														echo '<ul id="requestInfoTable">';
+														if($make != NULL && $model != NULL) {
+															echo "<li><b>Vehicle: </b>$make $model</li>";
+														}
+														if($yearmin != NULL) {
+															echo "<li><b>Minimum Year: </b>$yearmin</li>";
+														}
+														if($yearmax != NULL) {
+															echo "<li><b>Maximum Year: </b>$yearmax</li>";
+														}
+														if($cond != NULL) {
+															echo "<li><b>Condition: </b>$cond</li>";
+														}
+														if($mile_max != NULL) {
+															echo "<li><b>Max Kilometers: </b>$mile_max</li>";
+														}
+														if($ex_Color != NULL) {
+															echo "<li><b>Exterior Color: </b>$ex_Color</li>";
+														}
+														if($body_style != NULL) {
+															echo "<li><b>Body Type: </b>$body_style</li>";
+														}
+														if($trans != NULL) {
+															echo "<li><b>Transmission: </b>$trans</li>";
+														}
+														if($drive != NULL) {
+															echo "<li><b>Drive Type: </b>$drive</li>";
+														}
+														if($fuel != NULL) {
+															echo "<li><b>Fuel Type: </b>$fuel</li>";
+														}
+														if($door != NULL) {
+															echo "<li><b>Minimum Number of Doors: </b>$door</li>";
+														}
+														echo '</ul>';
+														echo '<img height=500 width=765 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
+													echo '</div>';
+													echo '<div class="modal-footer">';
+						
+														echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
+														echo '<button type="button" class="btn btn-default" data-dismiss="modal">Remove Vehicle</button>';
+														echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
+													echo '</div>';
+												echo '</div>';
+											echo '</div>';
+										echo '</div>';
+								
+									$modelNum++;
+							}
+						}
+					
+								echo '</div>';
+
+							// release returned data
+							mysqli_free_result($result);						
+						// close db connection
 						mysqli_close($conn);
 						?>
 						</article>

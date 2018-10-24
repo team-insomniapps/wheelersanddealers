@@ -133,7 +133,6 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 					// MySQL database query
 						$queryRecords = "SELECT COUNT(`id`) FROM `vehicle` ";
 						$queryRecords .= "WHERE user_id=".$_SESSION['loginID'];
-
 						$result = mysqli_query($conn, $queryRecords);
 						
 						// Test query error
