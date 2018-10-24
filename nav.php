@@ -25,9 +25,9 @@
 					<li class="nav-item"><a class="nav-link" href="search.php">Search</a></li>
 					<li class="nav-item"><a class="nav-link" href="match.php">Matches</a></li>
 					<li class="nav-item"><a class="nav-link" href="inventory.php">Inventory</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
 
-
-					<!-- <li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
+					<!-- 
 					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
 					-->
 					<li class="nav-item"><a class="nav-link" href="about.php">Help</a></li>
