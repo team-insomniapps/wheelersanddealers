@@ -188,18 +188,20 @@ if(isset($_POST['submit'])){
 	</head>
 		
 	<body>
-		<!-- Header/navigation bar div -->
-		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<?php include('nav.php'); ?>
-		
+
 		
 		<div class="container">
-			<h1>Wheelers & Dealers</h1>
+      <!-- Header/navigation bar div -->
+		  <!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
+ 			<?php include('nav.php'); ?>
+
+			<h1>Add a vehicle</h1>
 			<p>Complete the form to add your Vehicle</p>
 			<form method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 			
 			
 			<div  class="row">
+
 			<div class="col-sm-6">
 
 				<!-- VIN -->
@@ -340,6 +342,8 @@ if(isset($_POST['submit'])){
 								</script>
 							</datalist>
 					</div>
+					
+					
 				</div>
 
 				<!-- Cylinders -->
@@ -429,38 +433,38 @@ if(isset($_POST['submit'])){
 					<div class="col-sm-6">
 						<input class="form-control" id="price" name="price" value="<?php if(isset($_POST['submit'])){ echo htmlspecialchars($_POST['price']);} ?>"	>
 					</div>
-				</div>
-				
-				
-				<!-- Image -->
-				<div class="form-group row">
-					<label for="image" class="col-sm-4 col-form-label">Image</label>
-					<div class="col-sm-6">
-						<input type="file" id="image" name="image">
+					
+					
+					<!-- price  -->
+					<div class="form-group row">
+						<label for="price" class="col-sm-4 col-form-label">Price</label>
+						<div class="col-sm-6">
+							<input class="form-control" id="price" name="price">
+						</div>
+					</div>
+					
+					
+					<!-- Image -->
+					<div class="form-group row">
+						<label for="image" class="col-sm-4 col-form-label">Image</label>
+						<div class="col-sm-6">
+							<input type="file" id="image" name="image" class="form-control-file" />
+						</div>
+					</div>
+					
+					
+					<!-- submit -->
+					<div  class="form-group row">
+						<div class="col-sm-6">
+							<button type="submit" name="submit" value="submit" class="form-control btn btn-primary">Submit</button>
+							
+						</div>
 					</div>
 				</div>
-				
-				
-				<!-- submit -->
-				<div  class="form-group row">
-					<div class="col-sm-6">
-						<input type="submit" name="submit" value="submit" class="form-control">
-						
-					</div>
-				</div>
-				
-			</div>
 			</div>
 			</form>
-		</div>	
-		
-		<footer class="page-footer">
-			<div class="footerTxt container-fluid text-left">
-				<a class="footerTxt" href="#">Privacy Policy</a>
-				<a class="footerTxt" href="#">Contact</a>
-				<a class="footerTxt" href="#">Logout</a>
-			</div>
-		</footer>
-		
+
+			<?php include('footer.php'); ?>
+		</div>
 	</body>
 </html>
