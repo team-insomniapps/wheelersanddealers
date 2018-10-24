@@ -214,6 +214,8 @@ session_start();
 					// MySQL database query
 					$queryID = "SELECT *";
 					$queryID .= "FROM vehicle ";
+					$queryID .= "INNER JOIN users ";
+					$queryID .= "ON vehicle.user_id=users.id ";
 					$queryID .= "WHERE `car_vin`='{$car_vin}'";
 
 					
@@ -231,7 +233,7 @@ session_start();
 						echo " {$row['car_model_id']}<h2></li>";
 						echo "<br>";						
 						echo "<li><h6>$ {$row['car_price']}<h6></li>";
-						echo "<li>Dealership";
+						echo "<li>{$row['dealer_name']}";
 						
 						// star rating of the dealership
 						// the following code was sourced from: https://codepen.io/Bluetidepro/pen/GkpEa
@@ -243,7 +245,7 @@ session_start();
 						echo "</li>";
 						echo "<br>";
 						
-						echo "<li>Suburb/Town, STATE</li>";
+						echo "<li>{$row['dealer_location']}</li>";
 						echo "<br>";
 						echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
 						echo "</a>";
