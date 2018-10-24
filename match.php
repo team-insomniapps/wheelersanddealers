@@ -150,7 +150,7 @@ session_start();
 							// put match request result into variables
 							$make = $requestRow['make_request'];
 							$model = $requestRow['model_request'];
-							$body_style = $requestRow['body_type__request'];
+							$body_style = $requestRow['body_type_request'];
 							$door = $requestRow['min_num_doors_request'];
 							$yearmin = $requestRow['year_min_request'];
 							$yearmax = $requestRow['year_max_request'];
@@ -304,7 +304,7 @@ session_start();
 								echo '</div>';
 
 							// release returned data
-							mysqli_free_result($result);						
+							mysqli_free_result($matchList);						
 							?>
 						</div>
 
@@ -332,7 +332,7 @@ session_start();
 							// put match request result into variables
 							$make = $requestRow['make_request'];
 							$model = $requestRow['model_request'];
-							$body_style = $requestRow['body_type__request'];
+							$body_style = $requestRow['body_type_request'];
 							$door = $requestRow['min_num_doors_request'];
 							$yearmin = $requestRow['year_min_request'];
 							$yearmax = $requestRow['year_max_request'];
@@ -417,7 +417,8 @@ session_start();
 										echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'" data-toggle="modal" data-target="#mod'.$modelNum.'">';
 									echo "</aside>";
 								echo "</section>";
-							
+						
+								
 						
 								// modal
 								// some of the following code was sourced from: https://www.w3schools.com/bootstrap/bootstrap_modal.asp
@@ -486,7 +487,7 @@ session_start();
 								echo '</div>';
 
 							// release returned data
-							mysqli_free_result($result);						
+							mysqli_free_result($matchList);						
 						// close db connection
 						mysqli_close($conn);
 						?>
