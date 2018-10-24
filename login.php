@@ -2,8 +2,10 @@
 session_start();
 
 	$_SESSION['loginID'] = $_POST['uid'];
-	require "index.php";
+	//require "index.php";
+	
 
+require "index.php";
  /* 
 	require 'conn.php';
 	
