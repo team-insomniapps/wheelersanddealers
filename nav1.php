@@ -18,7 +18,6 @@
 					<li class="nav-item"><a class="nav-link" href="about.php">Help</a></li>
 				</ul>
 
-				</ul>
 				<!-- login/logout button -->
 				<div>
 					
@@ -95,11 +94,6 @@
 								
 							</form>
 					
-						</div>
-						
-						
-
-						  
 						</div>
 					  </div>
 
