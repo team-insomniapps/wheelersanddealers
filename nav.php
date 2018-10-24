@@ -3,7 +3,6 @@
 <?php 
 
 	if(isset($_SESSION['loginID']))
-
 	{
 	?>
 		<nav class="navbar navbar-expand-lg">
@@ -25,9 +24,8 @@
 					<li class="nav-item"><a class="nav-link" href="search.php">Search</a></li>
 					<li class="nav-item"><a class="nav-link" href="match.php">Matches</a></li>
 					<li class="nav-item"><a class="nav-link" href="inventory.php">Inventory</a></li>
-					
-					
-					<!-- <li class="nav-item"><a class="nav-link" href="#">Messages</a></li>
+					<li class="nav-item"><a class="nav-link" href="messages.php">Messages</a></li>
+					<!--
 					<li class="nav-item"><a class="nav-link" href="#">Account & Settings</a></li>
 					-->
 					<li class="nav-item"><a class="nav-link" href="about.php">Help</a></li>
@@ -38,7 +36,6 @@
 				<!-- login/logout button -->
 				<div>
 					<a class="logBtn btn btn-sm btn-outline-secondary"  href="logout.php">Logout</a>
-
 				</div>
 			</div>
 		</nav>
