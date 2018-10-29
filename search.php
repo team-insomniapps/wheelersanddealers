@@ -313,7 +313,13 @@ $conn = mysqli_connect($servername,$username,$password,$dbname);
 				<div  class="form-group row">
 					<div class="col-sm-6">
 						<input type="submit" name="submit" value="SEARCH" class="form-control">
-						
+					</div>
+				</div>
+				
+				<!-- create match -->
+				<div  class="form-group row">
+					<div class="col-sm-6">
+						<input type="submit" name="create_match" value="CREATE MATCH" class="form-control" formaction="userMatchRequests.php"> 
 					</div>
 				</div>
 				
