@@ -33,20 +33,11 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/wheelers.css">
-		
-		<!-- link Jquery, Bootstrap, and Popper.js -->
-		<script src="js/jquery-3.3.1.slim.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		
-		
-		<title>Wheelers & Deelers</title>
-		
+	
+	<?php
+		$title = "Messages";
+		include "head.php"; ?>
+	
 	</head>
 		
 	<body>
@@ -63,8 +54,8 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 		
 			<h1>My Messages</h1>
 			
-			<section class="col-sm-8">
-					<article class="row carShortArticle">
+			<section class="col-sm-12">
+					<!-- <article class="row carShortArticle col-sm-12"> -->
 					<?php 
 					
 					// MySQL database query
@@ -83,8 +74,11 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						
 						while($row = mysqli_fetch_assoc($result)){
 							
-							echo "<h6 style='float:left';>Results: {$row['COUNT(`to_userID`)']}</h6><h6 style='text-align:right;'>Sort: <input type='text' class='' name='sort' value=' Price - Descending '</h6>";
-										
+							echo "<h6 style='float:left'>Results: {$row['COUNT(`to_userID`)']}</h6>";
+							
+							/*
+							<h6 style='text-align:right;'>Sort: <input type='text' class='' name='sort' value=' Price - Descending '</h6>";
+							*/			
 						}
 						
 						echo "</article>";
@@ -99,7 +93,8 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						$queryID .= " INNER JOIN users ON messages.from_userID=users.id";
 						$queryID .= " INNER JOIN vehicle ON messages.carID=vehicle.id";
 						$queryID .= " WHERE to_userID=".$_SESSION['loginID'];
-						
+						$queryID .= " OR from_userID=".$_SESSION['loginID'];
+						$queryID .= " ORDER BY parentID, date ASC";
 						// echo "<script>alert('$queryID')</script>";
 						
 						$result = mysqli_query($conn, $queryID);
@@ -109,13 +104,47 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 								die("Database query failed. ");
 						}
 						
-						
+						echo "<div>";
+						//echo "<section class='row col-sm-12 carShortInfo' >";
+
+						$pID = null;
 						while($row = mysqli_fetch_assoc($result)){
-												
-							require "message_Content.php";
+							
+							
+							if($row['parentID'] == $row['message_id'] and $pID != null){
+								
+								echo "</article>";
+								echo "</section>";
+								echo "<section class='row col-sm-12 carShortInfo' >";
+								
+								require "message_Content.php";
+								$pID = $row['parentID'];
+								echo "<article class='col-sm-6'>";
+
+							}
+							else if($row['parentID'] == $row['message_id'] and $pID == null){
+								
+								echo "<section class='row col-sm-12 carShortInfo' >";
+								require "message_Content.php";
+								$pID = $row['parentID'];
+								echo "<article class='col-sm-6'>";
+							}
+							
+							
+							if($row['from_userID'] == $_SESSION['loginID'])
+							{
+								echo "<p class='msgSeller'><sub>{$row['customer_fname']} {$row['customer_lname']}</sub><br>";
+								echo "{$row['message']}</p>";
+								
+							}else{
+								echo "<p class='msgBuyer'><sub>{$row['customer_fname']} {$row['customer_lname']}</sub><br>";
+								echo " {$row['message']}</p>";
+							}
+							
+							//require "message_Content.php";
 							
 						}
-					
+					echo "</div>";
 						// release returned data
 						mysqli_free_result($result);
 							

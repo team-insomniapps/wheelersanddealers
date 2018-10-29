@@ -30,6 +30,7 @@ if(isset($_POST['submitReply'])){
 		$fromID = $_SESSION['loginID'];
 		$carID = $_POST['carID'];
 		$replyMessage = $_POST['replyMessage'];
+		$replyID = $_POST['messageID'];
 		
 		try 
 		{
@@ -39,7 +40,7 @@ if(isset($_POST['submitReply'])){
 			
 			
 			// add a vehicle to the vehicle table
-			$query_add_message = "INSERT INTO `messages` (`to_userID`, `from_userID`, `carID`, `message`) VALUES ( {$toID}, {$fromID}, {$carID}, '{$replyMessage}')"; 
+			$query_add_message = "INSERT INTO `messages` (`to_userID`, `from_userID`, `carID`, `message`, `parentID`) VALUES ( {$toID}, {$fromID}, {$carID}, '{$replyMessage}', {$replyID})"; 
 			echo "$query_add_message";
 			// add all fields to all the tables
 			$conn->beginTransaction();	

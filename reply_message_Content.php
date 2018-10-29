@@ -12,6 +12,7 @@ echo "<li><b>VIN:</b> {$row['car_vin']}</li>";
 echo "<li><b>Rego:</b> {$row['vehicle_id']}</li>";
 echo "<li><b>Message:</b> {$row['message']}</li>";
 echo "</ul>";
+echo "<input type='hidden' name='messageID' value='{$row['message_id']}'>";
 echo "</form>";
 echo "</article>";
 
