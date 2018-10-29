@@ -211,6 +211,7 @@ session_start();
 
 					// get the car_vin sent from the match page
 					$car_vin=$_GET['car_vin'];
+					$match_req_id=$_GET['match_request_id'];
 					
 					// MySQL database query
 					$queryID = "SELECT *";
@@ -228,6 +229,16 @@ session_start();
 					}
 					
 					while($row = mysqli_fetch_assoc($result)){
+						
+						// query for match info
+						$innerMatchQuery = "SELECT *";
+						$innerMatchQuery .= "FROM match_request ";
+						$innerMatchQuery .= "WHERE id=$match_req_id";					
+						
+						$innerMatchList = mysqli_query($conn, $innerMatchQuery);
+
+						while($matchRow = mysqli_fetch_assoc($innerMatchList)){
+							
 						echo "<article class='col-sm-10'>";
 						echo "<ul class='carInfoList'>";
 						echo "<li><h2 class='carTitle'>{$row['car_make_id']}";
@@ -261,22 +272,23 @@ session_start();
 						echo "</table>";
 						
 						echo "<table>";
-						echo "<tr><td id='vehicleInfoTable'><b>Vehicle</b></td><td id='vehicleInfoTable'>{$row['car_make_id']} {$row['car_model_id']}</td><td id='vehicleInfoTable'>{$row['car_make_id']} {$row['car_model_id']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Year</b></td><td id='vehicleInfoTable'>{$row['car_year']}</td><td id='vehicleInfoTable'>{$row['car_year']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Condition</b></td><td id='vehicleInfoTable'>{$row['car_new_used_condition']}</td><td id='vehicleInfoTable'>{$row['car_new_used_condition']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Kilometers</b></td><td id='vehicleInfoTable'>{$row['car_kilometers']}</td><td id='vehicleInfoTable'>{$row['car_kilometers']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Exterior Color</b></td><td id='vehicleInfoTable'>{$row['car_exterior_color']}</td><td id='vehicleInfoTable'>{$row['car_exterior_color']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Interior Color</b></td><td id='vehicleInfoTable'>{$row['car_interior_color']}</td><td id='vehicleInfoTable'>{$row['car_interior_color']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Body Type</b></td><td id='vehicleInfoTable'>{$row['car_body_type_id']}</td><td id='vehicleInfoTable'>{$row['car_body_type_id']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Transmission</b></td><td id='vehicleInfoTable'>{$row['car_transmission_type_id']}</td><td id='vehicleInfoTable'>{$row['car_transmission_type_id']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Drive Type</b></td><td id='vehicleInfoTable'>{$row['car_drive_type']}</td><td id='vehicleInfoTable'>{$row['car_drive_type']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Engine Size</b></td><td id='vehicleInfoTable'>{$row['car_engine_size']}</td><td id='vehicleInfoTable'>{$row['car_engine_size']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Fuel Type</b></td><td id='vehicleInfoTable'>{$row['car_fuel_type']}</td><td id='vehicleInfoTable'>{$row['car_fuel_type']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Capacity</b></td><td id='vehicleInfoTable'>{$row['car_capacity']}</td><td id='vehicleInfoTable'>{$row['car_capacity']}</td></tr>";
-						echo "<tr><td id='vehicleInfoTable'><b>Number of Doors</b></td><td id='vehicleInfoTable'>{$row['car_num_doors']}</td><td id='vehicleInfoTable'>{$row['car_num_doors']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Vehicle</b></td><td id='vehicleInfoTable'>{$row['car_make_id']} {$row['car_model_id']}</td><td id='vehicleInfoTable'>{$matchRow['make_request']} {$matchRow['model_request']}</td></tr>";						
+						echo "<tr><td id='vehicleInfoTable'><b>Year</b></td><td id='vehicleInfoTable'>{$row['car_year']}</td><td id='vehicleInfoTable'>{$matchRow['year_min_request']} - {$matchRow['year_max_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Condition</b></td><td id='vehicleInfoTable'>{$row['car_new_used_condition']}</td><td id='vehicleInfoTable'>{$matchRow['condition_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Kilometers</b></td><td id='vehicleInfoTable'>{$row['car_kilometers']}</td><td id='vehicleInfoTable'>Under {$matchRow['max_kilometers_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Exterior Color</b></td><td id='vehicleInfoTable'>{$row['car_exterior_color']}</td><td id='vehicleInfoTable'>{$matchRow['exterior_color_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Interior Color</b></td><td id='vehicleInfoTable'>{$row['car_interior_color']}</td><td id='vehicleInfoTable'>{$matchRow['interior_color_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Body Type</b></td><td id='vehicleInfoTable'>{$row['car_body_type_id']}</td><td id='vehicleInfoTable'>{$matchRow['body_type_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Transmission</b></td><td id='vehicleInfoTable'>{$row['car_transmission_type_id']}</td><td id='vehicleInfoTable'>{$matchRow['transmission_type_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Drive Type</b></td><td id='vehicleInfoTable'>{$row['car_drive_type']}</td><td id='vehicleInfoTable'>{$matchRow['drive_type_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Engine Size</b></td><td id='vehicleInfoTable'>{$row['car_engine_size']}</td><td id='vehicleInfoTable'>{$matchRow['engine_size_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Fuel Type</b></td><td id='vehicleInfoTable'>{$row['car_fuel_type']}</td><td id='vehicleInfoTable'>{$matchRow['fuel_type_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Capacity</b></td><td id='vehicleInfoTable'>{$row['car_capacity']}</td><td id='vehicleInfoTable'>Atleast {$matchRow['min_capacity_request']}</td></tr>";
+						echo "<tr><td id='vehicleInfoTable'><b>Number of Doors</b></td><td id='vehicleInfoTable'>{$row['car_num_doors']}</td><td id='vehicleInfoTable'>Atleast {$matchRow['min_num_doors_request']}</td></tr>";
 						echo "<tr><td id='vehicleInfoTable'><b>Description</b></td><td id='vehicleInfoTable'>{$row['description']}</td><td></td></tr>";
 						echo "</table>";
 						echo "<br>";
+					}
 					}
 				
 					// release returned data

@@ -230,8 +230,8 @@ echo "<h3> posted array is ".$value."<br></h3>";
 			echo "<script>alert('Connection failed: ')</script>";
 		} 
 	
-	}
-}	
+	
+	
 ?>
 
 <!doctype html>
