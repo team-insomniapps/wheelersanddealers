@@ -17,8 +17,16 @@
 	{
 		echo "<script>alert('Connection failed: ')</script>";
 	}	
-
 	
+	// user pressed 'remove' button to remove match request from the database
+	if(isset($_POST['remove_match']))
+	{
+		$vehicle_ID=$_POST['vehicle_id'];
+		$sql = "DELETE FROM match_request WHERE `id`='$vehicle_ID'";
+		mysqli_query($conn, $sql);
+	}
+	
+	// user was directed here by creating a match
 	if(isset($_POST['create_match'])){ /*
 		// create variables for all entered fields
 		if($_POST['make'] != "")
@@ -178,6 +186,7 @@
 						
 						while($requestRow = mysqli_fetch_assoc($matchRequests)){
 							// put match request result into variables
+							$id = $requestRow['id'];
 							$make = $requestRow['make_request'];
 							$model = $requestRow['model_request'];
 							$body_style = $requestRow['body_type_request'];
@@ -238,8 +247,13 @@
 									echo "<li><b>Maximum Price: </b>$$pricemax</li>";
 								}
 								echo '</ul>';
+
 								// button for removing match request from the database
-								echo '<button type="button" class="btn btn-default">Remove Match Request</button>';
+								echo '<form action="" method="post">';
+									echo "<input type='hidden' name='vehicle_id' value='$id'/>";
+									echo '<input type="submit" value="Remove Match Request" name="remove_match">';
+								echo '</form>';
+								
 								echo "</section>";
 						}
 						

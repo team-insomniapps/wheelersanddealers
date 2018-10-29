@@ -500,8 +500,6 @@ session_start();
 														echo '<img height=500 width=765 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
 													echo '</div>';
 													echo '<div class="modal-footer">';
-						
-														echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}&match_request_id={$requestRow['id']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
 														echo '<button type="button" class="btn btn-default" data-dismiss="modal">Remove Vehicle</button>';
 														echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
 													echo '</div>';
