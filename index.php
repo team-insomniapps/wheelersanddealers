@@ -56,28 +56,58 @@
 			</ul>
 					
 			<!-- login button -->
+			
 			<div>
-				<button type="button" class="btn btn-secondary btn-sm"  href="index_log.php">Login</button>
+				<button id="logins" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myModal">Login</button>
+				<button type="button" id="logouts" class="btn btn-secondary btn-sm" onclick="signOut()">Logout</button>
 				<button type="button" class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#myModal2">Register</button>
 			</div>
+			
 		</div>
 
 	</nav>
 	<body>
+	<!-- logged in email address -->
+	<div>
+		<label id="email_value"></label>
+	</div>
 	<div class="container">
 			<div class="jumbotron">
+				
 				<h1 class="display-4">Wheelers & Dealers</h1>
 				<p class="lead">Lets make deals on your wheels</p>
 				<p>Welcome to Wheelers and Dealers, the exclusive car matchmaking and exchange sevice.
 				Wheelers and Dealers is an online Web application, that maintains your list of vehicles
 				that you want to buy, sell or trade with other dealers or customers.</p>
-				
-				
-				
+
 				<p>If you have a vehicle that you want to sell, buy or trade. Wheelers and Dealers will put you in  our network of dealers that would like to buy your car. </p>
 				<a class="btn btn-primary btn-lg" href="#" role="button">Get Started</a>
 			</div>
-			
+		<!-- Modal -->
+			<div id="myModal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<img src="images/logo_red.svg" style="float: left; padding-right: 100px" class="navLogo">
+							<p><h4 class="modal-title">Login</h4></p>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							Username: <input type="text" id="uid" placeholder="Username or Email" class="form-control">
+							Password: <input type="password" id="pwd" placeholder="Password" class="form-control">
+							
+							<div class="modal-footer">
+								<input type="button" value="Login" class="btn btn-secondary btn-block" onclick="signInButton()" class="form-control">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				</div>
+			</div>	
 		<!-- Modal2 = register -->
 			<div id="myModal2" class="modal fade" role="dialog">
 				<div class="modal-dialog">
@@ -89,13 +119,11 @@
 						<h4 class="modal-title">Register an Account</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
-					<div class="modal-body">
-						
-						<form>
+				<div class="modal-body">
+					<form>
 						<p>Username<input type="personalname" class="form-control" id="names" placeholder="Username"></p>
 						<p>Email<input type="personalemail" class="form-control" id="email" placeholder="Email" ></p>
 						<p>Phone<input type="personalphone" class="form-control" id="phone" placeholder="Phone" ></p>
-						
 						<p>Password<input type="password" class="form-control" id="password" placeholder="Password"></p>
 						<p>Confirm Password<input type="password" class="form-control" id="confirmpassword" placeholder="Confirm Password" ></p>
 						<hr>
@@ -105,19 +133,71 @@
 							<button name="submit" class="btn btn-lg btn-primary btn-block" type="button" onclick="posts()"  >Register</button>
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						</div>
-						
-						</form>
-						</div>
-					</div>
+					</form>
+				</div>
+				</div>
 				</div>
 			</div>
 				
 		
 		<div id="results"></div>
-		
+		<div>
+			<label id="email_value"></label>
+		</div>
 	</div>
 		
+		<!-- checks to see if client is logged in via AWS -->
 		<script type="text/javascript">
+		
+		var data = { 
+		
+			UserPoolId : 'ap-southeast-2_lmX0a1XIT',
+			ClientId : '5qts5daiuu5m8d82c443mk26jf'
+		
+		};
+		
+		var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
+		var cognitoUser = userPool.getCurrentUser();
+			
+		window.onload = function(){
+		if (cognitoUser != null) {
+			cognitoUser.getSession(function(err, session) {
+				if (err) {
+					alert(err);
+					return;
+				}
+				console.log('session validity: ' + session.isValid());
+				//Set the profile info
+				cognitoUser.getUserAttributes(function(err, result) {
+					if (err) {
+						console.log(err);
+						return;
+					}
+					console.log(result);
+					document.getElementById("email_value").innerHTML = result[2].getValue();	
+					});			
+				
+				});
+			}
+		}
+		
+		if (cognitoUser != null) {
+          
+			// hide login button 
+			$('#logins').hide();
+
+		}
+		
+		if (cognitoUser == null) {
+          
+			// hide logout button 
+			$('#logouts').hide();
+
+		}
+		
+		</script>
+		<script type="text/javascript">
+		
 		
 		var usernames;
 		var passwords;
@@ -208,6 +288,58 @@
 			
 		  }
 			
+		</script>
+		
+		<script type="text/javascript">
+
+		  function signInButton() {
+				
+			$('#myModal').modal('hide');	
+			
+			var authenticationData = {
+				Username : document.getElementById("uid").value,
+				Password : document.getElementById("pwd").value,
+			};
+			
+			var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+			
+			var poolData = {
+				UserPoolId : 'ap-southeast-2_lmX0a1XIT', // Your user pool id here
+				ClientId : '5qts5daiuu5m8d82c443mk26jf', // Your client id here
+			};
+			
+			var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+			
+			var userData = {
+				Username : document.getElementById("uid").value,
+				Pool : userPool,
+			};
+			
+			var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+			
+			cognitoUser.authenticateUser(authenticationDetails, {
+				onSuccess: function (result) {
+					var accessToken = result.getAccessToken().getJwtToken();
+					console.log(accessToken);	
+					location.reload();
+					
+				},
+
+				onFailure: function(err) {
+					alert(err.message || JSON.stringify(err));
+				},
+			});
+		  }
+		</script>
+		
+		<script type="text/javascript">
+		
+		function signOut(){
+			if (cognitoUser != null) {
+				cognitoUser.signOut();
+				location.reload();
+			}
+		}
 		</script>
 		
 		<footer class="page-footer">
