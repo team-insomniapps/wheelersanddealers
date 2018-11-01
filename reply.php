@@ -49,12 +49,7 @@ if(isset($_POST['submitReply'])){
 			
 			// echo "Connected successfully"; 
 			echo "<script>alert('Connected successfully')</script>";
-			
-			// not yet in the database structure
-			// {$_POST['interiorColor']}', '{$_POST['condition']}', 
-			
-			// database not yet used in the form
-			//
+			header ("Location: messages.php");
 			
 		}
 		catch(PDOException $e)
@@ -66,7 +61,7 @@ if(isset($_POST['submitReply'])){
 	}
 
 	
-
+	
 	
 	
 ?>
@@ -118,8 +113,6 @@ if(isset($_POST['submitReply'])){
 						$queryID .= " INNER JOIN vehicle ON messages.carID=vehicle.id";
 						$queryID .= " WHERE message_id=".$_POST['messageID'];
 						
-						// echo "<script>alert('$queryID')</script>";
-						
 						$result = mysqli_query($conn, $queryID);
 						
 						// Test query error
@@ -142,7 +135,14 @@ if(isset($_POST['submitReply'])){
 					}
 					?>
 				<textarea name="replyMessage"></textarea>
-				<input type="hidden" name="toID" value="<?php echo $row['from_userID'];?>">
+				<input type="hidden" name="toID" value="<?php 
+				
+					if($row['from_userID'] == $_SESSION['loginID']){
+						echo $row['to_userID'];
+					}else{
+						echo $row['from_userID'];
+					}	
+					?>">
 				<input type="hidden" name="carID" value="<?php echo $row['carID'];?>">
 				
 				<!-- submit -->

@@ -61,12 +61,8 @@
 							</br>
 						<a class="filterBtn btn btn-sm btn-outline-secondary">Filter</a>
 						
-						<!-- create match button -->
-						<form method="post" enctype="multipart/form-data" action="search_results.php">
-							<input type="submit" name="create_match" value="CREATE MATCH" class="form-control" formaction="matchList.php">
-						</form>
 						
-					</div>					
+					</div>
 				</aside>
 				<section class="col-sm-8">
 					<article class="row carShortArticle">
