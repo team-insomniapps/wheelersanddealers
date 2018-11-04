@@ -1,28 +1,12 @@
 <?php
 	session_start();
 
-// database info
-$servername = "localhost";
-$dbname = "efftwelv_wheelersanddealers";
-$dsn = "mysql:host=$servername;dbname=$dbname";
-
-
+	$msgID = null;
+	$from_userID = null;
+	$to_userID = null;
 	
-		// if all fields are entered then proceed with connection to database 
 	// connect to database
-	$username = "efftwelv_andrew";
-	$password = "Andrew1000";
-	
-	
-	try 
-	{
-		$conn = mysqli_connect($servername,$username,$password,$dbname);	
-	}
-	catch(PDOException $e)
-	{
-		// echo "Connection failed: " . $e->getMessage();
-		echo "<script>alert('Connection failed: ')</script>";
-	} 
+	require "dbConnection.php";
 
 if(isset($_POST['submitReply'])){
 	
@@ -39,17 +23,17 @@ if(isset($_POST['submitReply'])){
 			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
 			
-			// add a vehicle to the vehicle table
+			// add a message to the message table
 			$query_add_message = "INSERT INTO `messages` (`to_userID`, `from_userID`, `carID`, `message`, `parentID`) VALUES ( {$toID}, {$fromID}, {$carID}, '{$replyMessage}', {$replyID})"; 
-			echo "$query_add_message";
+			
 			// add all fields to all the tables
 			$conn->beginTransaction();	
 			$conn->exec($query_add_message);
 			$conn->commit();
 			
 			// echo "Connected successfully"; 
-			echo "<script>alert('Connected successfully')</script>";
-			header ("Location: messages.php");
+			// echo "<script>alert('Connected successfully')</script>";
+			//header ("Location: reply.php");
 			
 		}
 		catch(PDOException $e)
@@ -81,7 +65,7 @@ if(isset($_POST['submitReply'])){
 		<script src="js/jquery-3.3.1.slim.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		
-		
+		<script src="js/message.js"></script>
 		
 		<title>Wheelers & Deelers</title>
 		
@@ -95,23 +79,35 @@ if(isset($_POST['submitReply'])){
 		
 		
 		<div class="container">
-			<h1>Messages</h1>
-			<p>Reply</p>
+			<h1>Message</h1>
 			<form method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 			
 			
 				<div  class="row">
-				<div class="col-sm-6">
+				
 				<?php
 				// MySQL database query
-					if(isset($_POST['submitReply'])){
-						echo "Message Sent.";
-					}else{
-							
+					
+						
+						/*
 						$queryID = "SELECT * FROM `messages` ";
 						$queryID .= " INNER JOIN users ON messages.from_userID=users.id";
 						$queryID .= " INNER JOIN vehicle ON messages.carID=vehicle.id";
 						$queryID .= " WHERE message_id=".$_POST['messageID'];
+*/
+
+
+						// MySQL database query
+						$queryID = "SELECT * FROM `messages` ";
+						$queryID .= " INNER JOIN users ON messages.from_userID=users.id";
+						$queryID .= " INNER JOIN vehicle ON messages.carID=vehicle.id";
+						$queryID .= " WHERE parentID='".$_POST['parentMsg']."'";
+						
+						//$queryID .= " WHERE message_id=".$_POST['parentMsg'];
+
+						$queryID .= " ORDER BY msgDate ASC";
+
+						
 						
 						$result = mysqli_query($conn, $queryID);
 						
@@ -121,50 +117,106 @@ if(isset($_POST['submitReply'])){
 						}
 						
 						
-						$row = mysqli_fetch_assoc($result);
+						//$row = mysqli_fetch_assoc($result);
 						
-							require "reply_message_Content.php";
+							//require "reply_message_Content.php";
+						//require "message_Content.php";
+						
+						
+						
+						
+						while($row = mysqli_fetch_assoc($result)){
 							
+
+							if($row['parentID'] == $row['message_id']){
+								echo "<section class='row col-sm-12 carShortInfo' >";
+								
+								require "reply_message_Content.php";
+								$msgID = $row['message_id'];
+								$from_userID = $row['from_userID'];
+								$to_userID = $row['to_userID'];
+								$carID = $row['carID'];
+								
+								echo "<article class='col-sm-8 msgLong' id='msgBox'>";
+							}
+							
+							if($row['to_userID'] == $_SESSION['loginID'] and $row['unread'] == 1){	
+								echo "<p class='msgBuyerNew'><sub>{$row['customer_fname']} {$row['customer_lname']} {$row['msgDate']}</sub><br>";
+								echo "{$row['message']}</p>";
+								$queryRead = "UPDATE `messages` SET `unread` = '0' WHERE `messages`.`message_id` = {$row['message_id']}";
+								mysqli_query($conn, $queryRead);
+							}
+							
+							
+
+							else if($row['from_userID'] == $_SESSION['loginID'])
+							{
+								echo "<p class='msgSeller'><sub>{$row['customer_fname']} {$row['customer_lname']} {$row['msgDate']}</sub><br>";
+								echo "{$row['message']}</p>";
+								
+							}else{
+								echo "<p class='msgBuyer'><sub>{$row['customer_fname']} {$row['customer_lname']} {$row['msgDate']}</sub><br>";
+								echo " {$row['message']}</p>";
+								
+							}
+							
+							//echo "</div>";
+							
+							//require "message_Content.php";
+							
+						}
+						
+						?>
+						
+						<textarea class="replyMsgTxt" name="replyMessage"></textarea>
+					<input type="hidden" name="toID" value="<?php 
+				
+								if($from_userID == $_SESSION['loginID']){
+									echo $to_userID;
+								}else{
+									echo $from_userID;
+								}	
+								?>">
+								<input type="hidden" name="carID" value="<?php echo $carID;?>">
+				<input type="hidden" name="parentMsg" value="<?php echo $_POST['parentMsg']?>">
+				<!-- submit -->
+				<div  class="form-group row">
+						<input type="submit" name="submitReply" value="send" class="form-control">
+						
+				</div>
+						</article>
+					</section>
+							<script>scrollToBottom('msgBox')</script>
 						
 					
+							
+							
+						</div>
+						
+						<?php
 						// release returned data
 						mysqli_free_result($result);
 							
 						// close database connection
 						mysqli_close($conn);
-					}
-					?>
-				<textarea name="replyMessage"></textarea>
-				<input type="hidden" name="toID" value="<?php 
-				
-					if($row['from_userID'] == $_SESSION['loginID']){
-						echo $row['to_userID'];
-					}else{
-						echo $row['from_userID'];
-					}	
-					?>">
-				<input type="hidden" name="carID" value="<?php echo $row['carID'];?>">
-				
-				<!-- submit -->
-				<div  class="form-group row">
-					<div class="col-sm-6">
-						<input type="submit" name="submitReply" value="submit" class="form-control">
+					
 						
-					</div>
-				</div>
+					
+					?>
+				
+					
+					
+				
+				
+				
+				
 				
 			</div>
 			</div>
 			</form>
 		</div>	
 		
-		<footer class="page-footer">
-			<div class="footerTxt container-fluid text-left">
-				<a class="footerTxt" href="#">Privacy Policy</a>
-				<a class="footerTxt" href="#">Contact</a>
-				<a class="footerTxt" href="#">Logout</a>
-			</div>
-		</footer>
+		<?php include('footer.php'); ?>
 		
 	</body>
 </html>

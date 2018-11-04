@@ -35,7 +35,7 @@ echo "<li><b>Rego:</b> {$row['vehicle_id']}</li>";
 echo "</ul>";
 
 
-echo "<input type='hidden' name='messageID' value='{$row['message_id']}'>";
+echo "<input type='hidden' name='parentMsg' value='{$row['parentID']}'>";
 echo "<button type='submit' name='submit{$row['message_id']}' value='submit' class='msgReplyBtn btn btn-sm btn-outline-secondary'>reply</button>";
 
 

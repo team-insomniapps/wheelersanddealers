@@ -7,7 +7,7 @@
 	{
 		
 		// Check for any new messages and set alert number next to mail icon button
-		require "conn.php";
+		require "dbConnection.php";
 		
 		// MySQL database query
 			$queryRecords = "SELECT COUNT(`to_userID`) FROM `messages` ";
