@@ -17,17 +17,23 @@
 	{
 		echo "<script>alert('Connection failed: ')</script>";
 	}	
-	
+
 	// user pressed 'remove' button to remove match request from the database
 	if(isset($_POST['remove_match']))
 	{
-		$vehicle_ID=$_POST['vehicle_id'];
-		$sql = "DELETE FROM match_request WHERE `id`='$vehicle_ID'";
+		// remove request from match_request
+		$id=$_POST['value'];
+		$sql = "DELETE FROM match_request WHERE `id`='$id'";
+		mysqli_query($conn, $sql);
+		
+		// remove any vehicles related to this request from match_removed_vehicles
+		$sql = "DELETE FROM match_removed_vehicles WHERE `match_id`='$id'";
 		mysqli_query($conn, $sql);
 	}
-	
+
+
 	// user was directed here by creating a match
-	if(isset($_POST['create_match'])){ /*
+	if(isset($_POST['create_match'])){
 		// create variables for all entered fields
 		if($_POST['make'] != "")
 		{
@@ -97,34 +103,26 @@
 		{
 			$pricemax = $_POST['pricemax'];
 		}
-	
-		// connect to database	
+		
+		// connect to database
 		try 
 		{
-			$conn = new PDO($dsn, $username, $password);
-			// set the PDO error mode to exception
-			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		
 			// TEMPORARY VARIABLES
 			$passenger_capacity = '1';
 			$user_id = '2';
-			$in_color = 'Red';
+			$in_color;
 		
 			// TEMPORARY VARIABLE BEING USED FOR user id - WILL EVENTUALLY NEED TO COME FROM _SESSION
 			// add a vehicle to the match_request table
-			$query_add_match = "INSERT INTO `match_request` (`make_request`, `model_request`, `year_min_request`, `year_max_request`,
+			$query_add_match = "INSERT INTO `match_request` (`user_id`, `make_request`, `model_request`, `year_min_request`, `year_max_request`,
 															`exterior_color_request`, `interior_color_request`, `condition_request`, `body_type_request`,
-															`transmission_type_request`, `drive_type_request`, `engine_size_request`,
-															`max_kilometers_request`, `fuel_type_request`, `min_num_doors_request`,
-															`min_capacity_request`, `min_price_request`,`max_price_request`, `user_id`) 
-									VALUES ('{$make}',{$model}, '{$yearmin}', '{$yearmax}', '{$ex_color}', '{$in_color}', '{$conditions}',
-									'{$body_style}','{$transmission}', '{$drivetrain}', {$cylindersmax}, {$mileagemax},'{$fuel}',
-										{$doors}, '{$passenger_capacity}','{$pricemin}','{$pricemax}', '{$user_id}')";				  
-								  
-			// add all fields to all the tables
-			$conn->beginTransaction();	
-			$conn->exec($query_add_match);
-			$conn->commit();
+															`transmission_type_request`, `drive_type_request`, `engine_size_request`, `max_kilometers_request`,
+															`fuel_type_request`, `min_num_doors_request`, `min_capacity_request`, `min_price_request`,`max_price_request`) 
+								VALUES ('{$user_id}', '{$make}', '{$model}', '{$yearmin}', '{$yearmax}', '{$ex_color}', '{$in_color}', '{$conditions}',
+										'{$body_style}', '{$transmission}', '{$drivetrain}','{$cylindersmax}', '{$mileagemax}','{$fuel}',
+										'{$doors}', '{$passenger_capacity}','{$pricemin}','{$pricemax}')";
+					
+			mysqli_query($conn, $query_add_match);
 
 			// echo "Connected successfully"; 
 			echo "<script>alert('Vehicle Added Successfully')</script>";
@@ -134,7 +132,7 @@
 		{
 			// echo "Connection failed: " . $e->getMessage();
 			echo "<script>alert('Connection failed')</script>";
-		} */
+		}
 	}
 ?>
 
@@ -174,7 +172,7 @@
 			$matchRequestsID = "SELECT *";
 			$matchRequestsID .= "FROM match_request ";
 			$matchRequestsID .= "WHERE `user_id`='$userID'";
-						
+			
 			$matchRequests = mysqli_query($conn, $matchRequestsID);
 				
 			// Test query error
@@ -201,7 +199,7 @@
 							$cond = $requestRow['condition_request'];
 							$pricemin = $requestRow['min_price_request'];
 							$pricemax = $requestRow['max_price_request'];
-							
+
 							echo '<section class="row col-sm-12 carShortInfo">';
 							echo '<ul id="requestInfoTable">';
 								if($make != NULL) {
@@ -247,11 +245,11 @@
 									echo "<li><b>Maximum Price: </b>$$pricemax</li>";
 								}
 								echo '</ul>';
-
-								// button for removing match request from the database
-								echo '<form action="" method="post">';
-									echo "<input type='hidden' name='vehicle_id' value='$id'/>";
-									echo '<input type="submit" value="Remove Match Request" name="remove_match">';
+								
+								// button for removing match request from match_request DB
+								echo '<form method="post" enctype="multipart/form-data" action='.htmlspecialchars($_SERVER["PHP_SELF"]).'>';
+									echo "<input type='hidden' name='value' placeholder='Mandatory' value='{$requestRow['id']}'>";
+									echo '<button type="submit" name="remove_match" class="form-control btn btn-primary">Remove Match Request</button>';
 								echo '</form>';
 								
 								echo "</section>";
