@@ -8301,13 +8301,23 @@ body {
 	max-height: 150px;
 }
 
-.carPhoto {
+.msgLong{ 
+	overflow: scroll;
+	max-height: 60vh; 
+	background-color: white;
+}
+
+.carPhoto, .carPhotoMsg {
   /* width: 100%; */
   height: 150px;
   /* min-width: 80px; */
   width: 200px;
   clear: right;
   float: right;
+}
+
+.carPhotoMsg {
+	float: left;
 }
 
 .carInfoList , .msgInfoList{
@@ -8324,6 +8334,12 @@ body {
 
 .msgReplyBtn{
 	float:right;
+}
+
+.replyMsgTxt{
+	width: 80%;
+	height: 50px;
+	float: right;
 }
 
 .filterBox {
