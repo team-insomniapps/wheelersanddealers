@@ -85,7 +85,7 @@ $conn = mysqli_connect($servername,$username,$password,$dbname);
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<?php include('nav.php');?>
+		<?php include('nav.php'); ?>
 		
 	</div>
 		
@@ -304,15 +304,7 @@ $conn = mysqli_connect($servername,$username,$password,$dbname);
 				<div  class="form-group row">
 					<div class="col-sm-6">
 						<input type="submit" name="submit" value="SEARCH" class="form-control">
-
-					</div>
-				</div>
-				
-				<!-- create match -->
-				<div  class="form-group row">
-					<div class="col-sm-6">
-						<input type="submit" name="create_match" value="CREATE MATCH" class="form-control" formaction="user_match_requests.php">
-
+						
 					</div>
 				</div>
 				
