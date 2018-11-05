@@ -1,26 +1,8 @@
 <?php
 session_start();
-?>
+ 
+	require "dbConnection.php";
 
-<?php
-	// database info
-	$servername = "localhost";
-	$dbname = "efftwelv_wheelersanddealers";
-	$dsn = "mysql:host=$servername;dbname=$dbname";
-
-	// connect to database
-	$username = "efftwelv_andrew";
-	$password = "Andrew1000";
-
-	try 
-	{		
-		$conn = mysqli_connect($servername,$username,$password,$dbname);
-	}
-	catch(PDOException $e)
-	{
-		echo "<script>alert('Connection failed: ')</script>";
-	}
-	
 	// get user ID
 	// this will need to be updated to pull from $_SESSION
 	$userID='2';
@@ -63,18 +45,9 @@ session_start();
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/wheelers.css">
-		
-		<!-- link Jquery, Bootstrap, and Popper.js -->
-		<script src="js/jquery-3.3.1.slim.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>		
-		
-		<title>Wheelers & Deelers</title>
+		<?php
+			$title = "Matches";
+			include "head.php"; ?>
 		
 		<!-- this is temporary and will eventualy be moved to the css folder -->
 		<style>
@@ -598,3 +571,4 @@ session_start();
 
 	</body>
 </html>
+

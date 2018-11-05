@@ -1,7 +1,27 @@
 <?php
 if(!isset($_SESSION)){ session_start(); }
 
-	require "dbConnection.php";
+	// database info
+	$servername = "localhost";
+	$dbname = "efftwelv_wheelersanddealers";
+	$dsn = "mysql:host=$servername;dbname=$dbname";
+
+
+	
+	// if all fields are entered then proceed with connection to database 
+	// connect to database
+	$username = "efftwelv_andrew";
+	$password = "Andrew1000";
+	
+	
+	try 
+	{
+		$conn = mysqli_connect($servername,$username,$password,$dbname);	
+	}
+	catch(PDOException $e)
+	{
+		echo "<script>alert('Connection failed: ')</script>";
+	} 
 
 ?>
 
@@ -13,7 +33,14 @@ if(!isset($_SESSION)){ session_start(); }
 			$title = "Messages";
 			include "head.php"; ?>
 		
-		<script src="js/message.js"></script>
+		<script type="text/javascript"> 
+			
+			function scrollToBottom(msgIDname) {
+				var objDiv = document.getElementById(msgIDname);
+				objDiv.scrollTop = objDiv.scrollHeight;
+			}
+			
+		</script>
 		
 	
 	</head>
@@ -75,7 +102,8 @@ if(!isset($_SESSION)){ session_start(); }
 							if($row['to_userID'] == $_SESSION['loginID'] and $row['unread'] == 1){	
 								echo "<p class='msgBuyerNew'><sub>{$row['customer_fname']} {$row['customer_lname']} {$row['msgDate']}</sub><br>";
 								echo "{$row['message']}</p>";
-								
+								$queryRead = "UPDATE `messages` SET `unread` = '0' WHERE `messages`.`message_id` = {$row['message_id']}";
+								mysqli_query($conn, $queryRead);
 							}
 							else if($row['from_userID'] == $_SESSION['loginID'])
 							{
