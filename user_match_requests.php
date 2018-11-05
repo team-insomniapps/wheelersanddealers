@@ -208,16 +208,16 @@
 								if($model != NULL) {
 									echo "<li><b>Model: </b>$model</li>";
 								}
-								if($yearmin != NULL) {
+								if($yearmin != NULL && $yearmin != 0) {
 									echo "<li><b>Minimum Year: </b>$yearmin</li>";
 								}
-								if($yearmax != NULL) {
+								if($yearmax != NULL && $yearmax != 0) {
 									echo "<li><b>Maximum Year: </b>$yearmax</li>";
 								}
 								if($cond != NULL) {
 									echo "<li><b>Condition: </b>$cond</li>";
 								}
-								if($mile_max != NULL) {
+								if($mile_max != NULL && $mile_max != 0) {
 									echo "<li><b>Max Kilometers: </b>$mile_max</li>";
 								}
 								if($ex_Color != NULL) {
@@ -235,13 +235,13 @@
 								if($fuel != NULL) {
 									echo "<li><b>Fuel Type: </b>$fuel</li>";
 								}
-								if($door != NULL) {
+								if($door != NULL && $door != 0) {
 									echo "<li><b>Minimum Number of Doors: </b>$door</li>";
 								}
-								if($pricemin != NULL) {
+								if($pricemin != NULL && $pricemin != 0) {
 									echo "<li><b>Minimum Price: </b>$$pricemin</li>";
 								}
-								if($pricemax != NULL) {
+								if($pricemax != NULL && pricemax != 0) {
 									echo "<li><b>Maximum Price: </b>$$pricemax</li>";
 								}
 								echo '</ul>';

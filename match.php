@@ -1,8 +1,26 @@
 <?php
 session_start();
- 
-	require "dbConnection.php";
+?>
 
+<?php
+	// database info
+	$servername = "localhost";
+	$dbname = "efftwelv_wheelersanddealers";
+	$dsn = "mysql:host=$servername;dbname=$dbname";
+
+	// connect to database
+	$username = "efftwelv_andrew";
+	$password = "Andrew1000";
+
+	try 
+	{		
+		$conn = mysqli_connect($servername,$username,$password,$dbname);
+	}
+	catch(PDOException $e)
+	{
+		echo "<script>alert('Connection failed: ')</script>";
+	}
+	
 	// get user ID
 	// this will need to be updated to pull from $_SESSION
 	$userID='2';
@@ -25,7 +43,7 @@ session_start();
 		$vehicleVin = $_POST['value'];
 		$matchRequestID = $_POST['matchRequestID'];
 
-		try 
+		try
 		{
 			// add a vehicle to the match_removed_vehicles table
 			$query_add_vehicle = "INSERT INTO `match_removed_vehicles` (`user_id`, `removed_vehicle`, `match_id`)
@@ -45,9 +63,18 @@ session_start();
 <!doctype html>
 <html lang="en">
 	<head>
-		<?php
-			$title = "Matches";
-			include "head.php"; ?>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/wheelers.css">
+		
+		<!-- link Jquery, Bootstrap, and Popper.js -->
+		<script src="js/jquery-3.3.1.slim.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>		
+		
+		<title>Wheelers & Deelers</title>
 		
 		<!-- this is temporary and will eventualy be moved to the css folder -->
 		<style>
@@ -155,22 +182,12 @@ session_start();
 						
 						//incrementer for modal id
 						$modelNum = 0;
-							
-						//echo '<div class="col-sm-12" id="newMatches">';
 						
-						// get number of rows returned by query
-						$row_cnt = $matchRequests->num_rows;
+						// different heading displayed depending on wether or not user has new matches
+						echo "<h2 class='newMatchesHeading'>Congratulations! You have new matches!</h2>";
+						echo "<h2 class='noNewMatchesHeading'>You have no new matches</h2>";
 						
-						if($row_cnt !=0)
-						{
-							echo "<h2 >Congratulations! You have ".$row_cnt. " new matches!</h2>";
-							echo '<div class="col-sm-12" id="newMatches">';
-						}
-						else
-						{
-							echo "<h2 >You have no new matches</h2>";
-							echo '<div>';
-						}
+						echo '<div class="col-sm-12" id="newMatches">';
 						
 						while($requestRow = mysqli_fetch_assoc($matchRequests)){
 							// put match request result into variables
@@ -334,7 +351,19 @@ session_start();
 									$modelNum++;
 							}
 						}
-								echo '</div>';
+						
+						// conditional for heading above list of matches
+						// different heading will be displayed if there are no new matches
+						if($modelNum == 0)
+						{
+							echo '<style type="text/css">h2.newMatchesHeading { display: none;}</style>';
+						}
+						else
+						{
+							echo '<style type="text/css">h2.noNewMatchesHeading { display: none;}</style>';
+						}
+
+						echo '</div>';
 
 							// release returned data
 							mysqli_free_result($matchList);						
@@ -571,4 +600,3 @@ session_start();
 
 	</body>
 </html>
-
