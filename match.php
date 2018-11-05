@@ -1,41 +1,15 @@
 <?php
 session_start();
-?>
-<?php
-	// database info
-	$servername = "localhost";
-	$dbname = "efftwelv_wheelersanddealers";
-	$dsn = "mysql:host=$servername;dbname=$dbname";
-
-	// connect to database
-	$username = "efftwelv_andrew";
-	$password = "Andrew1000";
-
-	try 
-	{		
-		$conn = mysqli_connect($servername,$username,$password,$dbname);
-	}
-	catch(PDOException $e)
-	{
-		echo "<script>alert('Connection failed: ')</script>";
-	}
+ 
+	require "dbConnection.php";
 ?>
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/wheelers.css">
-		
-		<!-- link Jquery, Bootstrap, and Popper.js -->
-		<script src="js/jquery-3.3.1.slim.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>		
-		
-		<title>Wheelers & Deelers</title>
+		<?php
+			$title = "Matches";
+			include "head.php"; ?>
 		
 		<!-- this is temporary and will eventualy be moved to the css folder -->
 		<style>
@@ -150,7 +124,7 @@ session_start();
 							// put match request result into variables
 							$make = $requestRow['make_request'];
 							$model = $requestRow['model_request'];
-							$body_style = $requestRow['body_type__request'];
+							$body_style = $requestRow['body_type_request'];
 							$door = $requestRow['min_num_doors_request'];
 							$yearmin = $requestRow['year_min_request'];
 							$yearmax = $requestRow['year_max_request'];
@@ -304,7 +278,7 @@ session_start();
 								echo '</div>';
 
 							// release returned data
-							mysqli_free_result($result);						
+							mysqli_free_result($matchList);						
 							?>
 						</div>
 
@@ -332,7 +306,7 @@ session_start();
 							// put match request result into variables
 							$make = $requestRow['make_request'];
 							$model = $requestRow['model_request'];
-							$body_style = $requestRow['body_type__request'];
+							$body_style = $requestRow['body_type_request'];
 							$door = $requestRow['min_num_doors_request'];
 							$yearmin = $requestRow['year_min_request'];
 							$yearmax = $requestRow['year_max_request'];
@@ -417,7 +391,8 @@ session_start();
 										echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'" data-toggle="modal" data-target="#mod'.$modelNum.'">';
 									echo "</aside>";
 								echo "</section>";
-							
+						
+								
 						
 								// modal
 								// some of the following code was sourced from: https://www.w3schools.com/bootstrap/bootstrap_modal.asp
@@ -486,7 +461,7 @@ session_start();
 								echo '</div>';
 
 							// release returned data
-							mysqli_free_result($result);						
+							mysqli_free_result($matchList);						
 						// close db connection
 						mysqli_close($conn);
 						?>

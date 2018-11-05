@@ -5,7 +5,7 @@ session_start();
 
 // database information and connection 
 // might need to separate this later
-
+/*
 $servername = "localhost";
 $dbname = "efftwelv_wheelersanddealers";
 $dsn = "mysql:host=$servername;dbname=$dbname";
@@ -14,7 +14,7 @@ $username = "efftwelv_andrew";
 $password = "Andrew1000";
 
 $conn = mysqli_connect($servername,$username,$password,$dbname);		
-
+*/
 /*
 <?php
 							
@@ -57,18 +57,9 @@ $conn = mysqli_connect($servername,$username,$password,$dbname);
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/wheelers.css">
-		
-		<!-- link Jquery, Bootstrap -->
-		<script src="js/jquery-3.3.1.slim.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		
-		<title>Wheelers & Deelers - Search</title>
+		<?php
+			$title = "Search";
+			include "head.php"; ?>
 		
 		<script>
 			<!-- Generating year ranges -->
