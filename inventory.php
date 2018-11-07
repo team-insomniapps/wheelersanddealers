@@ -1,62 +1,17 @@
 <?php
-
 	session_start();
-/*
-*	php code to check if form has been submitted.
-*	If true, then connect to the database and input the data.
-*
-*
-*/
-// database info
-$servername = "localhost";
-$dbname = "efftwelv_wheelersanddealers";
-$dsn = "mysql:host=$servername;dbname=$dbname";
 
+$title = "Inventory";
+	
+	
+	require 'php/header.php';
+	require 'conn.php';
 
-	
-		// if all fields are entered then proceed with connection to database 
-	// connect to database
-	$username = "efftwelv_andrew";
-	$password = "Andrew1000";
-	
-	
-	try 
-	{
-		// $conn = new PDO($dsn, $username, $password);
-		// set the PDO error mode to exception
-		// $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		
-		$conn = mysqli_connect($servername,$username,$password,$dbname);
-		
-	}
-	catch(PDOException $e)
-	{
-		// echo "Connection failed: " . $e->getMessage();
-		echo "<script>alert('Connection failed: ')</script>";
-	} 
-
-
-	
-	
 ?>
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/wheelers.css">
-		
-		<!-- link Jquery, Bootstrap -->
-		<script src="js/jquery-3.3.1.slim.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		
-		
-		
-		<title>Wheelers & Deelers</title>
+	
 		
 		<script>
 			
@@ -78,20 +33,19 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 				return arrString;
 			}
 		
-		</script>
-	</head>
-		
+		</script>	
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
+		<?php require 'php/navAccess.php' ?>
 		
-		<?php include('nav.php'); ?>
+		<div class="container">
 		
+		<h1>Inventory</h1>
+			<hr>
 		
-		
-		<div class="main">
 			<div class ="row col-sm-3">
-				<a class="addCar btn btn-sm btn-outline-secondary"  href="add.php">Add Vehicle</a>
+				<a class="addCar btn btn-primary"  href="add_vehicle.php">Add Vehicle</a>
 			</div>
 		
 		
@@ -121,7 +75,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 								}
 							</script>
 							</br>
-						<a class="filterBtn btn btn-sm btn-outline-secondary">Filter</a>
+						<button class="btn btn-secondary btn-sm">Filter</a>
 						
 						
 					</div>
@@ -132,7 +86,7 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 					
 					// MySQL database query
 						$queryRecords = "SELECT COUNT(`id`) FROM `vehicle` ";
-						$queryRecords .= "WHERE user_id=".$_SESSION['loginID'];
+						$queryRecords .= "WHERE 1";
 						$result = mysqli_query($conn, $queryRecords);
 						
 						// Test query error
@@ -159,10 +113,10 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 						// MySQL database query
 						$queryID = "SELECT *";
 						$queryID .= "FROM vehicle ";
-						$queryID .= " INNER JOIN users ON vehicle.user_id=users.id ";
-						if(isset($_SESSION['loginID'])){
-							$queryID .= "WHERE user_id=".$_SESSION['loginID'];
-						}
+						//$queryID .= " INNER JOIN users ON vehicle.user_id=users.id ";
+						//if(isset($_SESSION['loginID'])){
+							//$queryID .= "WHERE user_id=".$_SESSION['loginID'];
+						//}
 						// echo "<script>alert('$queryID')</script>";
 						
 						$result = mysqli_query($conn, $queryID);
@@ -192,8 +146,17 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 			</div>
 			
 		</div>	
+		<!-- Modal -->
+		<?php 
+			require 'php/logRegmodals.php';
+		?>
+	
+		<div id="results" name="results"></div>
+	<?php 
+		require 'php/footer.php';
 		
-		<?php include('footer.php'); ?>
+	?>	
+		
 		
 	</body>
 </html>

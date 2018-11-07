@@ -77,12 +77,12 @@ function posts(){
 	var dealname = $('#dealername').val();
 	var dealloc = $('#dealerlocation').val();
 	
-	$.post('Register_process.php', {postname:username, postemail:emails, postphone:phones,
+	$.post('php/register_process.php', {postname:username, postemail:emails, postphone:phones,
 	postpass:pass, postconpass:conpass,postdn:dealname, postdl:dealloc},
 	function(data){
 		
 		// prints out post data -- need to be removed after data inserted into database as users.
-		$('#results').html(data);
+		//$('#results').html(data);
 	});
 	
   }

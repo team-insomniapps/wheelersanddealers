@@ -35,4 +35,15 @@
 			alert(err.message || JSON.stringify(err));
 		},
 	});
+	
   }
+  /*
+  var email =  document.getElementById("uid").value;
+	
+	$.post('access.php', {postemail:email},
+	function(data){
+		
+		// prints out post data -- need to be removed after data inserted into database as users.
+		//$('#results2').html(data);
+	});
+	*/

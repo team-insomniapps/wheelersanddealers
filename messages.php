@@ -1,54 +1,25 @@
 <?php
-if(!isset($_SESSION)){ session_start(); }
-
-// database info
-$servername = "localhost";
-$dbname = "efftwelv_wheelersanddealers";
-$dsn = "mysql:host=$servername;dbname=$dbname";
-
-
+	session_start();
 	
-		// if all fields are entered then proceed with connection to database 
-	// connect to database
-	$username = "efftwelv_andrew";
-	$password = "Andrew1000";
+	$title = "Messages";
 	
-	
-	try 
-	{
-		// $conn = new PDO($dsn, $username, $password);
-		// set the PDO error mode to exception
-		// $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		
-		$conn = mysqli_connect($servername,$username,$password,$dbname);
-		
-	}
-	catch(PDOException $e)
-	{
-		// echo "Connection failed: " . $e->getMessage();
-		echo "<script>alert('Connection failed: ')</script>";
-	} 
-
+	require 'php/header.php';
+	require 'conn.php';
 ?>
+
 <!doctype html>
 <html lang="en">
 	<head>
-	
-	<?php
-		$title = "Messages";
-		include "head.php"; ?>
+		
+		<script src="js/message.js"></script>
+		
 	
 	</head>
 		
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		
-		<?php 
-				include('nav.php'); 
-				
-		?>
-		
+		<?php require 'php/navAccess.php' ?>
 		
 		<div class="container">
 		
@@ -57,94 +28,72 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 			<section class="col-sm-12">
 					<!-- <article class="row carShortArticle col-sm-12"> -->
 					<?php 
-					
-					// MySQL database query
-						$queryRecords = "SELECT COUNT(`to_userID`) FROM `messages` ";
-						$queryRecords .= "WHERE to_userID=".$_SESSION['loginID'];
-						$result = mysqli_query($conn, $queryRecords);
 						
-						// Test query error
-						if(!$result){
-								die("Database query failed. ");
-						}
-						
-						
-						echo '<section class="col-sm-12">';
-						echo "<article class='results'>";
-						
-						while($row = mysqli_fetch_assoc($result)){
-							
-							echo "<h6 style='float:left'>Results: {$row['COUNT(`to_userID`)']}</h6>";
-							
-							/*
-							<h6 style='text-align:right;'>Sort: <input type='text' class='' name='sort' value=' Price - Descending '</h6>";
-							*/			
-						}
-						
-						echo "</article>";
-						echo "</section>";
-						
-						// release returned data
-						mysqli_free_result($result);
-							
-
 						// MySQL database query
 						$queryID = "SELECT * FROM `messages` ";
 						$queryID .= " INNER JOIN users ON messages.from_userID=users.id";
 						$queryID .= " INNER JOIN vehicle ON messages.carID=vehicle.id";
 						$queryID .= " WHERE to_userID=".$_SESSION['loginID'];
 						$queryID .= " OR from_userID=".$_SESSION['loginID'];
-						$queryID .= " ORDER BY parentID, date ASC";
-						// echo "<script>alert('$queryID')</script>";
+						$queryID .= " ORDER BY parentID, msgDate ASC";
 						
 						$result = mysqli_query($conn, $queryID);
 						
 						// Test query error
-						if(!$result){
-								die("Database query failed. ");
-						}
-						
-						echo "<div>";
-						//echo "<section class='row col-sm-12 carShortInfo' >";
+						if(!$result){ die("Database query failed. "); }
 
-						$pID = null;
+						$msgID = null;
 						while($row = mysqli_fetch_assoc($result)){
 							
-							
-							if($row['parentID'] == $row['message_id'] and $pID != null){
-								
+							if($row['parentID'] == $row['message_id'] and $msgID == null){
+								echo "<section class='row col-sm-12 carShortInfo' >";
+								require "message_Content.php";
+								$msgID = $row['message_id'];
+								echo "<article class='col-sm-6 msgShort' id='msgID".$msgID."'>";
+							}
+							else if($row['parentID'] == $row['message_id'] and $msgID != null){
+								// close divs for previous message and start a new division
 								echo "</article>";
 								echo "</section>";
-								echo "<section class='row col-sm-12 carShortInfo' >";
 								
-								require "message_Content.php";
-								$pID = $row['parentID'];
-								echo "<article class='col-sm-6'>";
-
-							}
-							else if($row['parentID'] == $row['message_id'] and $pID == null){
+								echo "<script>scrollToBottom('msgID".$msgID."')</script>";
 								
-								echo "<section class='row col-sm-12 carShortInfo' >";
+								echo "<section class='row col-sm-12 carShortInfo'>";
 								require "message_Content.php";
-								$pID = $row['parentID'];
-								echo "<article class='col-sm-6'>";
+								$msgID = $row['message_id'];
+								echo "<article class='col-sm-6 msgShort' id='msgID".$msgID."'>";
 							}
 							
 							
-							if($row['from_userID'] == $_SESSION['loginID'])
+							if($row['to_userID'] == $_SESSION['loginID'] and $row['unread'] == 1){	
+								echo "<p class='msgBuyerNew'><sub>{$row['customer_login']} {$row['msgDate']}</sub><br>";
+								echo "{$row['message']}</p>";
+								
+							}
+							else if($row['from_userID'] == $_SESSION['loginID'])
 							{
-								echo "<p class='msgSeller'><sub>{$row['customer_fname']} {$row['customer_lname']}</sub><br>";
+								echo "<p class='msgSeller'><sub>{$row['customer_login']} {$row['msgDate']}</sub><br>";
 								echo "{$row['message']}</p>";
 								
 							}else{
-								echo "<p class='msgBuyer'><sub>{$row['customer_fname']} {$row['customer_lname']}</sub><br>";
+								echo "<p class='msgBuyer'><sub>{$row['customer_login']} {$row['msgDate']}</sub><br>";
 								echo " {$row['message']}</p>";
+								
 							}
+							
+							//echo "</div>";
 							
 							//require "message_Content.php";
 							
 						}
-					echo "</div>";
+						
+						if($msgID != null){
+							echo "</article>";
+							echo "</section>";
+							echo "<script>scrollToBottom('msgID".$msgID."')</script>";
+						}	
+						echo "</div>";
+					
 						// release returned data
 						mysqli_free_result($result);
 							
@@ -159,9 +108,11 @@ $dsn = "mysql:host=$servername;dbname=$dbname";
 			
 		</div>	
 		
-		
-		
-		<?php include('footer.php'); ?>
+		<!-- Modal -->
+		<?php 
+			require 'php/logRegmodals.php';
+		?>
+		<?php include('php/footer.php'); ?>
 
 	</body>
 </html>

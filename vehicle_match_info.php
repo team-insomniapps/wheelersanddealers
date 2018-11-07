@@ -1,31 +1,15 @@
-<?php
-session_start();
+<?php 
+	session_start();
+	
+	$title = "Vehicle Match Info";
+	require 'php/header.php';
+	require 'conn.php';
 ?>
-<?php
-	// database info
-	$servername = "localhost";
-	$dbname = "efftwelv_wheelersanddealers";
-	$dsn = "mysql:host=$servername;dbname=$dbname";
 
-	// connect to database
-	$username = "efftwelv_andrew";
-	$password = "Andrew1000";
-
-	try 
-	{		
-		$conn = mysqli_connect($servername,$username,$password,$dbname);
-	}
-	catch(PDOException $e)
-	{
-		echo "<script>alert('Connection failed: ')</script>";
-	}
-?>
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
 		
 		<!-- the following css is just here temporarily -->
 		<!-- the following code was sourced from: https://www.w3schools.com/howto/howto_css_modal_images.asp -->
@@ -179,30 +163,17 @@ session_start();
 		
 		</style>
 		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/wheelers.css">
 		
-		<!-- link Jquery, Bootstrap, and Popper.js -->
-		<script src="js/jquery-3.3.1.slim.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		
-		
-		<title>Wheelers & Deelers</title>
-		
-		
-	</head>
 		
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-
-		<?php include('nav.php'); ?>
+		<?php require 'php/navAccess.php' ?>
 
 		
 		<div class="container">
 		<h1>Vehicle Information</h1>
-		<br>
+		<hr>
 			
 		<div class="container">
 			
@@ -319,15 +290,16 @@ session_start();
 				
 				</div>
 		</div>
-</div>
-		<div>		
-		<footer class="page-footer">
-			<div class="footerTxt container-fluid text-left">
-				<a class="footerTxt" href="#">Privacy Policy</a>
-				<a class="footerTxt" href="#">Contact</a>
-				<a class="footerTxt" href="#">Logout</a>
-			</div>
-		</footer>
+
+		<?php 
+			require 'php/logRegmodals.php';
+		?>
+		<div id="results"></div>
+	
+	
+	<?php 
+		require 'php/footer.php';
+	?>
 
 	</body>
 </html>
@@ -359,5 +331,4 @@ span.onclick = function() {
 modal.addEventListener('click',function(){
 this.style.display="none";
 })
-
 </script>

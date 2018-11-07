@@ -9,7 +9,7 @@ echo "<article class='col-sm-6'>";
 echo "<ul class='carInfoList'>";
 echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
 echo " {$row['car_model_id']}<h3></li>";
-echo "<li><h6>$ {$row['car_price']}<h6></li>";
+echo "<li><h6>$ {$row['car_price']}</h6></li>";
 echo "<li>Dealership: <b>{$row['dealer_name']}</b></li>";
 echo "<li>Location: <b>{$row['dealer_location']}</b></li>";
 echo "<li>Description: {$row['description']}</li>";

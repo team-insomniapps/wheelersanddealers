@@ -1,5 +1,8 @@
-<?php
-	session_start();
+<?php session_start(); 
+
+	$title = "Add A vehicle";
+	require 'php/header.php';
+	require 'conn.php';
 
 /*
 *	php code to check if form has been submitted.
@@ -7,10 +10,6 @@
 *
 *
 */
-// database info
-$servername = "localhost";
-$dbname = "Wheelersanddealers";
-$dsn = "mysql:host=$servername;dbname=$dbname";
 
 if(isset($_POST['submit'])){
 	
@@ -57,7 +56,7 @@ if(isset($_POST['submit'])){
 		
 		// if all fields are entered then proceed with connection to database 
 		// connect to database
-		$username = "efftwelv_andrew";
+		$username = "root";
 		$password = "Andrew1000";
 	 	
 		// variables to hold post information by form
@@ -314,21 +313,7 @@ if(isset($_POST['submit'])){
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="../css/bootstrap.min.css">
-		<link rel="stylesheet" href="../css/wheelers.css">
-		
-		<!-- link Jquery, Bootstrap -->
-		<script src="../js/jquery-3.3.1.slim.min.js"></script>
-		<script src="../js/bootstrap.min.js"></script>
-		
-		
-		
-		<title>Wheelers & Deelers</title>
+	
 		
 		<script>
 			
@@ -365,21 +350,17 @@ if(isset($_POST['submit'])){
 				} );
 		</script>
 		
-	<?php include "head.php"; ?>
-	</head>
 		
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<?php include('nav.php'); ?>
-		
+		<?php require 'php/navAccess.php' ?>
 		
 		<div class="container">
 		
 		
-			<h1>Add a vehicle</h1>
-			<p>Complete the form to add your Vehicle</p>
-			
+			<h1>Add a Vehicle</h1>
+			<hr>
 			
 			<form method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 			
@@ -633,7 +614,17 @@ if(isset($_POST['submit'])){
 		</div>
 		
 		<!--  <script type = "text/javascript" src="../js/add_behaviour.js"></script> -->
-		<?php include('footer.php'); ?>
 		
+		<!-- Modal -->
+		<?php 
+			require 'php/logRegmodals.php';
+		?>
+	
+		<div id="results" name="results"></div>
+	<?php 
+		require 'php/footer.php';
+		
+		
+	?>	
 	</body>
 </html>
