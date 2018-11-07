@@ -29,6 +29,10 @@
 		// remove any vehicles related to this request from match_removed_vehicles
 		$sql = "DELETE FROM match_removed_vehicles WHERE `match_id`='$id'";
 		mysqli_query($conn, $sql);
+		
+		// remove any vehicles related to this request from match_stored_vehicles
+		$sql = "DELETE FROM match_stored_vehicles WHERE `match_id`='$id'";
+		mysqli_query($conn, $sql);
 	}
 
 

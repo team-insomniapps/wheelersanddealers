@@ -205,14 +205,18 @@ session_start();
 							$cond = $requestRow['condition_request'];
 							$pricemin = $requestRow['min_price_request'];
 							$pricemax = $requestRow['max_price_request'];
-
+							$matchRequestID = $requestRow['id'];
+							
 							// find vehicles which match the request and are not in the users match_removed_vehicles list
 							$matchqueryID = "SELECT *";
 							$matchqueryID .= "FROM vehicle ";
 							$matchqueryID .= "JOIN users ";
 							$matchqueryID .= "ON vehicle.user_id=users.id ";
-							$matchqueryID .= "AND vehicle.car_vin NOT IN (SELECT removed_vehicle FROM match_removed_vehicles WHERE '$userID'=match_removed_vehicles.user_id)";
-
+							// dont include vehicles which the user has blacklisted
+							$matchqueryID .= "AND vehicle.car_vin NOT IN (SELECT removed_vehicle FROM match_removed_vehicles WHERE '$userID'=match_removed_vehicles.user_id) ";
+							// dont include vehicles which the user has already viewed
+							$matchqueryID .= "AND vehicle.car_vin NOT IN (SELECT removed_vehicle FROM match_stored_vehicles WHERE '$userID'=match_stored_vehicles.user_id)";
+							
 							if($make != NULL) {
 								$matchqueryID .= "WHERE `car_make_id`='$make'";
 							}
@@ -260,8 +264,18 @@ session_start();
 							}
 							
 							$matchList = mysqli_query($conn, $matchqueryID);
-						
+							
 							while($row = mysqli_fetch_assoc($matchList)){
+								
+								// variable for adding vehicle to match_stored_vehicles table
+								$vehicleVin = $row['car_vin'];
+								// add vehicle to match_stored_vehicles so it will appear in 'stored' tab next time rather than 'new matches'
+								// userID currently hard coded to 2
+								$query_vehicle_to_stored = "INSERT INTO `match_stored_vehicles` (`user_id`, `removed_vehicle`, `match_id`)
+															VALUES ('{$userID}','{$vehicleVin}', '{$matchRequestID}')";
+								mysqli_query($conn, $query_vehicle_to_stored);
+							
+								// display breif information about each vehicle
 								echo '<section class="row col-sm-12 carShortInfo" data-toggle="modal" data-target="#mod'.$modelNum.'">';
 									echo "<article class='col-sm-6'>";
 										echo "<ul class='carInfoList'>";
@@ -372,108 +386,110 @@ session_start();
 
 					<div id="Saved" class="tabcontent">
 					
-						<!-- old matches -->	
+						<!-- stored matches -->	
 						<?php
 						// first get users match requests from match_request table
 						// TEMPORARY QUERY, THE USER ID WILL HAVE TO BE SET TO MATCH CURRENT USERS ID
-						$matchRequestsID = "SELECT *";
-						$matchRequestsID .= "FROM match_request ";
-						$matchRequestsID .= "WHERE `user_id`='$userID'";
+						$storedMatchRequestsID = "SELECT *";
+						$storedMatchRequestsID .= "FROM match_request ";
+						$storedMatchRequestsID .= "WHERE `user_id`='$userID'";
 
-						$matchRequests = mysqli_query($conn, $matchRequestsID);
+						$storedMatchRequests = mysqli_query($conn, $storedMatchRequestsID);
 				
 						// Test query error
-						if(!$matchRequests){
+						if(!$storedMatchRequests){
 								die("Database query failed. ");
 						}
 							
 							echo'<h2>Stored matches</h2>';
 						
-						while($requestRow = mysqli_fetch_assoc($matchRequests)){
+						while($storedRequestRow = mysqli_fetch_assoc($storedMatchRequests)){
 							// put match request result into variables
-							$make = $requestRow['make_request'];
-							$model = $requestRow['model_request'];
-							$body_style = $requestRow['body_type_request'];
-							$door = $requestRow['min_num_doors_request'];
-							$yearmin = $requestRow['year_min_request'];
-							$yearmax = $requestRow['year_max_request'];
-							$trans = $requestRow['transmission_type_request'];
-							$ex_Color = $requestRow['exterior_color_request'];
-							$fuel = $requestRow['fuel_type_request'];
-							$drive = $requestRow['drive_type_request'];
-							$mile_max = $requestRow['max_kilometers_request'];
-							$cond = $requestRow['condition_request'];
-							$pricemin = $requestRow['min_price_request'];
-							$pricemax = $requestRow['max_price_request'];
+							$make = $storedRequestRow['make_request'];
+							$model = $storedRequestRow['model_request'];
+							$body_style = $storedRequestRow['body_type_request'];
+							$door = $storedRequestRow['min_num_doors_request'];
+							$yearmin = $storedRequestRow['year_min_request'];
+							$yearmax = $storedRequestRow['year_max_request'];
+							$trans = $storedRequestRow['transmission_type_request'];
+							$ex_Color = $storedRequestRow['exterior_color_request'];
+							$fuel = $storedRequestRow['fuel_type_request'];
+							$drive = $storedRequestRow['drive_type_request'];
+							$mile_max = $storedRequestRow['max_kilometers_request'];
+							$cond = $storedRequestRow['condition_request'];
+							$pricemin = $storedRequestRow['min_price_request'];
+							$pricemax = $storedRequestRow['max_price_request'];
 
 							// find vehicles which match the request and are not in the users match_removed_vehicles list
-							$matchqueryID = "SELECT *";
-							$matchqueryID .= "FROM vehicle ";
-							$matchqueryID .= "JOIN users ";
-							$matchqueryID .= "ON vehicle.user_id=users.id ";
-							$matchqueryID .= "AND vehicle.car_vin NOT IN (SELECT removed_vehicle FROM match_removed_vehicles WHERE '$userID'=match_removed_vehicles.user_id)";
-
+							$storedMatchqueryID = "SELECT *";
+							$storedMatchqueryID .= "FROM vehicle ";
+							$storedMatchqueryID .= "JOIN users ";
+							$storedMatchqueryID .= "ON vehicle.user_id=users.id ";
+							$storedMatchqueryID .= "AND vehicle.car_vin NOT IN (SELECT removed_vehicle FROM match_removed_vehicles WHERE '$userID'=match_removed_vehicles.user_id)";
+							
+							
+							
 							if($make != NULL) {
-								$matchqueryID .= "WHERE `car_make_id`='$make'";
+								$storedMatchqueryID .= "WHERE `car_make_id`='$make'";
 							}
 							else {
-								$matchqueryID .= "WHERE `car_make_id`!='NULL'";
+								$storedMatchqueryID .= "WHERE `car_make_id`!='NULL'";
 							}
 							if($model != NULL) {
-								$matchqueryID .= " && `car_model_id`='$model'";
+								$storedMatchqueryID .= " && `car_model_id`='$model'";
 							}
 							if($body_style != NULL) {
-								$matchqueryID .= " && `car_body_type_id`='$body_style'";
+								$storedMatchqueryID .= " && `car_body_type_id`='$body_style'";
 							}
-							if($door != NULL) {
-								$matchqueryID .= " && `car_num_doors`>='$door'";
+							if($door != NULL && $door != 0) {
+								$storedMatchqueryID .= " && `car_num_doors`>='$door'";
 							}
-							if($yearmin != NULL) {
-								$matchqueryID .= " && `car_year`>='$yearmin'";
+							if($yearmin != NULL && $yearmin != 0) {
+								$storedMatchqueryID .= " && `car_year`>='$yearmin'";
 							}
-							if($yearmax != NULL) {
-								$matchqueryID .= " && `car_year`<='$yearmax'";
+							if($yearmax != NULL && $yearmax != 0) {
+								$storedMatchqueryID .= " && `car_year`<='$yearmax'";
 							}
 							if($trans != NULL) {
-								$matchqueryID .= " && `car_transmission_type_id`='$trans'";
+								$storedMatchqueryID .= " && `car_transmission_type_id`='$trans'";
 							}
 							if($ex_Color != NULL) {
-								$matchqueryID .= " && `car_exterior_color`='$ex_Color'";
+								$storedMatchqueryID .= " && `car_exterior_color`='$ex_Color'";
 							}
 							if($fuel != NULL) {
-								$matchqueryID .= " && `car_fuel_type`='$fuel'";
+								$storedMatchqueryID .= " && `car_fuel_type`='$fuel'";
 							}
 							if($drive != NULL) {
-								$matchqueryID .= " && `car_drive_type`='$drive'";
+								$storedMatchqueryID .= " && `car_drive_type`='$drive'";
 							}
-							if($mile_max != NULL) {
-								$matchqueryID .= " && `car_kilometers`<='$mile_max'";
+							if($mile_max != NULL && $mile_max != 0) {
+								$storedMatchqueryID .= " && `car_kilometers`<='$mile_max'";
 							}
 							if($cond != NULL) {
-								$matchqueryID .= " && `car_new_used_condition`='$cond'";
+								$storedMatchqueryID .= " && `car_new_used_condition`='$cond'";
 							}
-							if($pricemin != NULL) {
-								$matchqueryID .= " && `car_price`>='$pricemin'";
+							if($pricemin != NULL && $pricemin != 0) {
+								$storedMatchqueryID .= " && `car_price`>='$pricemin'";
 							}
-							if($pricemax != NULL) {
-								$matchqueryID .= " && `car_price`<='$pricemax'";
+							if($pricemax != NULL && $pricemax != 0) {
+								$storedMatchqueryID .= " && `car_price`<='$pricemax'";
 							}
 							
-							$matchList = mysqli_query($conn, $matchqueryID);
-
-							while($row = mysqli_fetch_assoc($matchList)){
+							$storedMatchList = mysqli_query($conn, $storedMatchqueryID);
+							
+							while($storedRow = mysqli_fetch_assoc($storedMatchList)){
 								echo '<section class="row col-sm-12 carShortInfo" data-toggle="modal" data-target="#mod'.$modelNum.'">';
 									echo "<article class='col-sm-6'>";
 										echo "<ul class='carInfoList'>";
-											echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
-											echo " {$row['car_model_id']}<h3></li>";
-											echo "<li><h6>$ {$row['car_price']}<h6></li>";
-											echo "<li>{$row['dealer_name']}</li>";
-											echo "<li>{$row['dealer_location']}</li>";
+											echo "<li><h4 class='carTitle'>{$storedRow['car_make_id']}";
+											echo " {$storedRow['car_model_id']}<h3></li>";
+											echo "<li><h6>$ {$storedRow['car_price']}<h6></li>";
+											echo "<li>{$storedRow['dealer_name']}</li>";
+											echo "<li>{$storedRow['dealer_location']}</li>";
 										echo "</ul>";
 									echo "</article>";
 									echo '<aside class="col-sm-6" data-toggle="modal" data-target="#mod'.$modelNum.'">';
-										echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'" data-toggle="modal" data-target="#mod'.$modelNum.'">';
+										echo '<img class="carPhoto" src="data:image/jpeg;base64,'.base64_encode( $storedRow['photo'] ).'" data-toggle="modal" data-target="#mod'.$modelNum.'">';
 									echo "</aside>";
 								echo "</section>";
 						
@@ -485,7 +501,7 @@ session_start();
 											// modal content
 											echo '<div class="modal-content">';
 												echo '<div class="modal-header">';
-													echo "<h4 class='modal-title'>{$row['car_make_id']} {$row['car_model_id']}</h4>";
+													echo "<h4 class='modal-title'>{$storedRow['car_make_id']} {$storedRow['car_model_id']}</h4>";
 														echo '<button type="button" class="close" data-dismiss="modal">&times;</button>';
 													echo '</div>';
 													echo '<div class="modal-body">';
@@ -525,14 +541,14 @@ session_start();
 															echo "<li><b>Minimum Number of Doors: </b>$door</li>";
 														}
 														echo '</ul>';
-														echo '<img height=500 width=765 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
+														echo '<img height=500 width=765 img src="data:image/jpeg;base64,'.base64_encode( $storedRow['photo'] ).'"/>';
 													echo '</div>';
 													echo '<div class="modal-footer">';
-														echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}&match_request_id={$requestRow['id']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
+														echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$storedRow['car_vin']}&match_request_id={$storedRequestRow['id']}' id=".htmlspecialchars($storedRow['car_vin']).">View Vehicle</a>";
 														// button for adding vehicle to match_removed_vehicles table
 														echo '<form method="post" enctype="multipart/form-data" action='.htmlspecialchars($_SERVER["PHP_SELF"]).'>';
-															echo "<input type='hidden' name='value' placeholder='Mandatory' value='{$row['car_vin']}'>";
-															echo "<input type='hidden' name='matchRequestID' placeholder='Mandatory' value='{$requestRow['id']};'>";
+															echo "<input type='hidden' name='value' placeholder='Mandatory' value='{$storedRow['car_vin']}'>";
+															echo "<input type='hidden' name='matchRequestID' placeholder='Mandatory' value='{$storedRequestRow['id']};'>";
 															echo '<button type="submit" name="remove_vehicle" class="form-control btn btn-primary">Remove Vehicle</button>';
 														echo '</form>';
 													echo '</div>';
@@ -547,7 +563,7 @@ session_start();
 								echo '</div>';
 
 							// release returned data
-							mysqli_free_result($matchList);						
+							mysqli_free_result($storedMatchList);						
 						// close db connection
 						mysqli_close($conn);					
 						?>
