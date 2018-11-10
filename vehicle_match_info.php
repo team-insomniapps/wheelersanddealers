@@ -359,5 +359,4 @@ span.onclick = function() {
 modal.addEventListener('click',function(){
 this.style.display="none";
 })
-
 </script>

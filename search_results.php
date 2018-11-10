@@ -7,19 +7,9 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/wheelers.css">
-		
-		<!-- link Jquery, Bootstrap -->
-		<script src="js/jquery-3.3.1.slim.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-
-		<title>Wheelers & Deelers - Search Results</title>
-		
+		<?php
+			$title = "Search Results";
+			include "head.php"; ?>
 	</head>
 		
 	<body>
@@ -61,12 +51,8 @@
 							</br>
 						<a class="filterBtn btn btn-sm btn-outline-secondary">Filter</a>
 						
-						<!-- create match button -->
-						<form method="post" enctype="multipart/form-data" action="search_results.php">
-							<input type="submit" name="create_match" value="CREATE MATCH" class="form-control" formaction="matchList.php">
-						</form>
 						
-					</div>					
+					</div>
 				</aside>
 				<section class="col-sm-8">
 					<article class="row carShortArticle">

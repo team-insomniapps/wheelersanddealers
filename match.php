@@ -1,55 +1,15 @@
 <?php
 session_start();
-?>
-<?php
-	// database info
-	$servername = "localhost";
-	$dbname = "efftwelv_wheelersanddealers";
-	$dsn = "mysql:host=$servername;dbname=$dbname";
-
-	// connect to database
-	$username = "efftwelv_andrew";
-	$password = "Andrew1000";
-
-	try 
-	{		
-		$conn = mysqli_connect($servername,$username,$password,$dbname);
-	}
-	catch(PDOException $e)
-	{
-		echo "<script>alert('Connection failed: ')</script>";
-	}
-	
-	// get user ID
-	// this will need to be updated to pull from $_SESSION
-	$userID='2';
-	//$loggedInUserName=$_SESSION['loginID'];
-	//$loggedInUserID = "SELECT *";
-	//$loggedInUserID .= "FROM users ";
-	//$loggedInUserID .= "WHERE `customer_login`='$loggedInUserName'"; // DOESNT WORK!!!
-	//$loggedInUserID .= "WHERE `id`='2'"; // WORKS!!!
-	//$loggedInUser = mysqli_query($conn, $loggedInUserID);
-	//while($rr = mysqli_fetch_assoc($loggedInUser)){
-	//	$userID = $rr['id'];
-	//}
-	//mysqli_free_result($logginInUser);
+ 
+	require "dbConnection.php";
 ?>
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/wheelers.css">
-		
-		<!-- link Jquery, Bootstrap, and Popper.js -->
-		<script src="js/jquery-3.3.1.slim.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>		
-		
-		<title>Wheelers & Deelers</title>
+		<?php
+			$title = "Matches";
+			include "head.php"; ?>
 		
 		<!-- this is temporary and will eventualy be moved to the css folder -->
 		<style>
@@ -142,11 +102,11 @@ session_start();
 						
 						<!-- new matches -->
 						<?php
-						// get users match requests from match_request table
+						// first get users match requests from match_request table
 						// TEMPORARY QUERY, THE USER ID WILL HAVE TO BE SET TO MATCH CURRENT USERS ID
 						$matchRequestsID = "SELECT *";
 						$matchRequestsID .= "FROM match_request ";
-						$matchRequestsID .= "WHERE `user_id`='$userID'";
+						$matchRequestsID .= "WHERE `user_id`='2'";
 						
 						$matchRequests = mysqli_query($conn, $matchRequestsID);
 				
@@ -158,21 +118,7 @@ session_start();
 						//incrementer for modal id
 						$modelNum = 0;
 							
-						//echo '<div class="col-sm-12" id="newMatches">';
-						
-						// get number of rows returned by query
-						$row_cnt = $matchRequests->num_rows;
-						
-						if($row_cnt !=0)
-						{
-							echo "<h2>Congratulations! You have ".$row_cnt. " new matches!</h2>";
-							echo '<div class="col-sm-12" id="newMatches">';
-						}
-						else
-						{
-							echo "<h2>You have no new matches</h2>";
-							echo '<div>';
-						}
+						echo '<div class="col-sm-12" id="newMatches">';
 						
 						while($requestRow = mysqli_fetch_assoc($matchRequests)){
 							// put match request result into variables
@@ -190,13 +136,10 @@ session_start();
 							$cond = $requestRow['condition_request'];
 							$pricemin = $requestRow['min_price_request'];
 							$pricemax = $requestRow['max_price_request'];
-
-							// find vehicles which match the request
+							
+							// find vehicles which match the reuqest
 							$matchqueryID = "SELECT *";
 							$matchqueryID .= "FROM vehicle ";
-							$matchqueryID .= "LEFT JOIN users ";
-							$matchqueryID .= "ON vehicle.user_id=users.id ";
-							
 							if($make != NULL) {
 								$matchqueryID .= "WHERE `car_make_id`='$make'";
 							}
@@ -245,6 +188,12 @@ session_start();
 							
 							$matchList = mysqli_query($conn, $matchqueryID);
 						
+							// get number of rows returned by query
+							//$row_cnt = $result->num_rows;
+
+							//printf("Result set has %d rows.\n", $row_cnt);
+							//echo "<h2>Congratulations! You have ".$row_cnt. " new matches!</h2>";
+				
 							while($row = mysqli_fetch_assoc($matchList)){
 								echo '<section class="row col-sm-12 carShortInfo" data-toggle="modal" data-target="#mod'.$modelNum.'">';
 									echo "<article class='col-sm-6'>";
@@ -252,8 +201,8 @@ session_start();
 											echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
 											echo " {$row['car_model_id']}<h3></li>";
 											echo "<li><h6>$ {$row['car_price']}<h6></li>";
-											echo "<li>{$row['dealer_name']}</li>";
-											echo "<li>{$row['dealer_location']}</li>";
+											echo "<li>Dealership</li>";
+											echo "<li>Suburb/Town, STATE</li>";
 										echo "</ul>";
 									echo "</article>";
 									echo '<aside class="col-sm-6" data-toggle="modal" data-target="#mod'.$modelNum.'">';
@@ -278,12 +227,6 @@ session_start();
 														echo '<ul id="requestInfoTable">';
 														if($make != NULL && $model != NULL) {
 															echo "<li><b>Vehicle: </b>$make $model</li>";
-														}
-														else if($make != NULL){
-															echo "<li><b>Vehicle: </b>$make</li>";
-														}
-														else if($model != NULL){
-															echo "<li><b>Vehicle: </b>$model</li>";
 														}
 														if($yearmin != NULL) {
 															echo "<li><b>Minimum Year: </b>$yearmin</li>";
@@ -320,8 +263,9 @@ session_start();
 													echo '</div>';
 													echo '<div class="modal-footer">';
 						
-														echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}&match_request_id={$requestRow['id']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
+														echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
 														echo '<button type="button" class="btn btn-default" data-dismiss="modal">Remove Vehicle</button>';
+														echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
 													echo '</div>';
 												echo '</div>';
 											echo '</div>';
@@ -347,7 +291,7 @@ session_start();
 						// TEMPORARY QUERY, THE USER ID WILL HAVE TO BE SET TO MATCH CURRENT USERS ID
 						$matchRequestsID = "SELECT *";
 						$matchRequestsID .= "FROM match_request ";
-						$matchRequestsID .= "WHERE `user_id`='$userID'";
+						$matchRequestsID .= "WHERE `user_id`='2'";
 						
 						$matchRequests = mysqli_query($conn, $matchRequestsID);
 				
@@ -378,11 +322,6 @@ session_start();
 							// find vehicles which match the reuqest
 							$matchqueryID = "SELECT *";
 							$matchqueryID .= "FROM vehicle ";
-							$matchqueryID .= "LEFT JOIN users ";
-							$matchqueryID .= "ON vehicle.user_id=users.id ";
-							//$matchqueryID .= "LEFT JOIN match_request ";
-							//$matchqueryID .= "ON users.id=match_request.user_id ";
-							
 							if($make != NULL) {
 								$matchqueryID .= "WHERE `car_make_id`='$make'";
 							}
@@ -430,7 +369,13 @@ session_start();
 							}
 							
 							$matchList = mysqli_query($conn, $matchqueryID);
+						
+							// get number of rows returned by query
+							//$row_cnt = $result->num_rows;
 
+							//printf("Result set has %d rows.\n", $row_cnt);
+							//echo "<h2>Congratulations! You have ".$row_cnt. " new matches!</h2>";
+				
 							while($row = mysqli_fetch_assoc($matchList)){
 								echo '<section class="row col-sm-12 carShortInfo" data-toggle="modal" data-target="#mod'.$modelNum.'">';
 									echo "<article class='col-sm-6'>";
@@ -438,8 +383,8 @@ session_start();
 											echo "<li><h4 class='carTitle'>{$row['car_make_id']}";
 											echo " {$row['car_model_id']}<h3></li>";
 											echo "<li><h6>$ {$row['car_price']}<h6></li>";
-											echo "<li>{$row['dealer_name']}</li>";
-											echo "<li>{$row['dealer_location']}</li>";
+											echo "<li>Dealership</li>";
+											echo "<li>Suburb/Town, STATE</li>";
 										echo "</ul>";
 									echo "</article>";
 									echo '<aside class="col-sm-6" data-toggle="modal" data-target="#mod'.$modelNum.'">';
@@ -500,6 +445,8 @@ session_start();
 														echo '<img height=500 width=765 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
 													echo '</div>';
 													echo '<div class="modal-footer">';
+						
+														echo "<button type='button' class='btn btn-default' onclick= location.href='vehicle_match_info.php?car_vin={$row['car_vin']}' id=".htmlspecialchars($row['car_vin']).">View Vehicle</a>";
 														echo '<button type="button" class="btn btn-default" data-dismiss="modal">Remove Vehicle</button>';
 														echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
 													echo '</div>';
@@ -516,7 +463,7 @@ session_start();
 							// release returned data
 							mysqli_free_result($matchList);						
 						// close db connection
-						mysqli_close($conn);					
+						mysqli_close($conn);
 						?>
 						</article>
 						</section>

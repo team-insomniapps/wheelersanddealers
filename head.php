@@ -12,4 +12,4 @@
 <script src="js/bootstrap.min.js"></script>
 
 
-<title><?php echo $title; ?> | Wheelers & Deelers</title>
+<title><?php echo $title; ?> | Wheelers & Dealers</title>
