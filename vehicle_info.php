@@ -1,20 +1,17 @@
-<?php
-session_start();
-?>
-<?php
+<?php 
+
+	session_start();
 	
-	// connect to database
-	require "dbConnection.php";
+	$title = "Vehicle Info";
+	require 'php/header.php';
+	require 'conn.php';
 	
 ?>
 
+
 <!doctype html>
 <html lang="en">
-	<head>
 		
-		<?php
-			$title = "Vehicle Info";
-			include "head.php"; ?>
 		
 		<!-- the following css is just here temporarily -->
 		<!-- the following code was sourced from: https://www.w3schools.com/howto/howto_css_modal_images.asp -->
@@ -164,20 +161,16 @@ session_start();
 		
 		</style>
 		
-	</head>
+	
 		
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-
-		
-		<?php include('nav.php'); ?>
-		
-
+		<?php require 'php/navAccess.php' ?>
 		
 		<div class="container">
 		<h1>Vehicle Information</h1>
-		<br>
+		<hr>
 			
 		<div class="container">
 			
@@ -224,8 +217,16 @@ session_start();
 						
 						echo "<li>{$row['dealer_location']}</li>";
 						echo "<br>";
-						echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
+						//echo '<button type="button" class="btn btn-default" data-dismiss="modal">Make an Offer</button>';
 						echo "</a>";
+						
+						// button to send a message to the seller
+						echo "<form action='reply.php' method='post' >";
+						echo "<input type='hidden' name='carVin' value='{$row['car_vin']}'>";
+						echo "<p>Interested? Send the dealer a message:</p>";
+						echo "<button type='submit' name='submit' value='submit' class='btn btn-sm btn-outline-secondary'>Message Dealer</button>";
+						echo "</form>";
+						
 						echo "<aside class='col-sm-2' id='imgCont'>";
 						echo '<img id="myImg" height=280 width=400 img src="data:image/jpeg;base64,'.base64_encode( $row['photo'] ).'"/>';
 						echo "</aside>";
@@ -263,33 +264,41 @@ session_start();
 				<!-- the following code was sourced from: https://www.w3schools.com/howto/howto_css_modal_images.asp -->
 				<!-- The Modal -->
 				<div id="myModal" class="modal">
-				<span class="close">&times;</span>
-				<img class="modal-content" id="img01">
-				<div id="caption"></div>
+					<span class="close">&times;</span>
+					<img class="modal-content" id="img01">
+					<div id="caption"></div>
 				</div>
 				
-				<!-- email dealer box -->
-				Interested? Send the dealer an e-mail:
-				<br>
-				<form action="mailto:someone@example.com" method="post" enctype="text/plain">
+				<!-- email dealer box 
+				Interested? Send the dealer a message:
+				<br><br>
+				<form action='reply.php' method='post' >
+					<input type='hidden' name='carVin' value='<?php echo $row['car_vin']; ?>'>
+						<button type='submit' name='submit' value='submit' class='btn btn-sm btn-outline-secondary'>Message Dealer</button>
+				</form>
+				<br><br>
+				<!-- <form action="mailto:someone@example.com" method="post" enctype="text/plain">
 					<input type="text" name="comment" style="width:1078px;height:200px;">
 					<input type="submit" value="Send">
 					<input type="reset" value="Reset">
 				</form>
-				<br>
+				<br> 
+				-->
 				
 				</div>
 		</div>
-</div>
-		<div>		
-		<footer class="page-footer">
-			<div class="footerTxt container-fluid text-left">
-				<a class="footerTxt" href="#">Privacy Policy</a>
-				<a class="footerTxt" href="#">Contact</a>
-				<a class="footerTxt" href="#">Logout</a>
-			</div>
-		</footer>
 
+		
+		<?php 
+			require 'php/logRegmodals.php';
+		?>
+		
+	
+	
+	<?php 
+		require 'php/footer.php';
+	?>
+		
 	</body>
 </html>
 

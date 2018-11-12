@@ -1,12 +1,16 @@
 <?php
 	session_start();
+	
+	
+	$title = "Reply";
+	require 'php/header.php';
+	require 'conn.php';
+	
+
 
 	$msgID = null;
 	$from_userID = null;
 	$to_userID = null;
-	
-	// connect to database
-	require "dbConnection.php";
 
 if(isset($_POST['submitReply'])){
 	
@@ -14,26 +18,43 @@ if(isset($_POST['submitReply'])){
 		$fromID = $_SESSION['loginID'];
 		$carID = $_POST['carID'];
 		$replyMessage = $_POST['replyMessage'];
-		$replyID = $_POST['messageID'];
+		
+		if(isset($_POST['messageID'])){
+			$parentID = $_POST['messageID'];
+		}else{
+			$parentID = null;
+		}
 		
 		try 
 		{
-			$conn = new PDO($dsn, $username, $password);
-			// set the PDO error mode to exception
-			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			require "conn.php";
 			
-			
+			if($parentID != null){
 			// add a message to the message table
-			$query_add_message = "INSERT INTO `messages` (`to_userID`, `from_userID`, `carID`, `message`, `parentID`) VALUES ( {$toID}, {$fromID}, {$carID}, '{$replyMessage}', {$replyID})"; 
+			$query_add_message = "INSERT INTO `messages` (`to_userID`, `from_userID`, `carID`, `message`, `parentID`) VALUES ( {$toID}, {$fromID}, {$carID}, '{$replyMessage}', {$parentID})"; 
+			
+				mysqli_query($conn, $query_add_message);
+			}
+			else{
+			$query_add_message = "INSERT INTO `messages` (`to_userID`, `from_userID`, `carID`, `message`) VALUES ( {$toID}, {$fromID}, {$carID}, '{$replyMessage}')"; 
+				
+				mysqli_query($conn, $query_add_message);
+				
+				$parentID = mysqli_insert_id($conn);
+				
+				$query_add_parent = "UPDATE `messages` SET `parentID` = '$parentID' WHERE `messages`.`message_id` = $parentID"; 
+			
+				$_POST['parentMsg'] = $parentID;
+				
+				mysqli_query($conn, $query_add_parent);
+			}
+			
+			
+			
 			
 			// add all fields to all the tables
-			$conn->beginTransaction();	
-			$conn->exec($query_add_message);
-			$conn->commit();
 			
-			// echo "Connected successfully"; 
-			// echo "<script>alert('Connected successfully')</script>";
-			//header ("Location: reply.php");
+			
 			
 		}
 		catch(PDOException $e)
@@ -53,50 +74,58 @@ if(isset($_POST['submitReply'])){
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/wheelers.css">
-		
-		<!-- link Jquery, Bootstrap -->
-		<script src="js/jquery-3.3.1.slim.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		
-		<script src="js/message.js"></script>
-		
-		<title>Wheelers & Deelers</title>
-		
-		
-	</head>
-		
+	
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<?php include('nav.php'); ?>
-		
+		<?php require 'php/navAccess.php' ?>
 		
 		<div class="container">
 			<h1>Message</h1>
+			<hr>
 			<form method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 			
 			
 				<div  class="row">
 				
 				<?php
-				// MySQL database query
-					
+					if(isset($_POST['submit'])){
+						require "conn.php";
 						
-						/*
-						$queryID = "SELECT * FROM `messages` ";
-						$queryID .= " INNER JOIN users ON messages.from_userID=users.id";
-						$queryID .= " INNER JOIN vehicle ON messages.carID=vehicle.id";
-						$queryID .= " WHERE message_id=".$_POST['messageID'];
-*/
-
-
+						// MySQL database query
+						$queryID = "SELECT * FROM `vehicle` ";
+						$queryID .= " INNER JOIN users ON vehicle.user_id=users.id";
+						$queryID .= " WHERE car_vin='".$_POST['carVin']."'";
+						
+						$result = mysqli_query($conn, $queryID);
+						
+						// Test query error
+						if(!$result){
+								die("Database query failed.dfs ");
+						}
+						
+						$row = mysqli_fetch_assoc($result);
+						$from_userID = $_SESSION['loginID'];
+						$to_userID = $row['user_id'];
+						
+						echo "<section class='row col-sm-12 carShortInfo' >";
+								
+						require "reply_message_Content.php";
+						
+						$queryID = "SELECT id FROM `vehicle` ";
+						$queryID .= " WHERE car_vin='".$_POST['carVin']."'";
+						
+						$result = mysqli_query($conn, $queryID);
+						$row = mysqli_fetch_assoc($result);
+						
+						$carID = $row['id'];
+						
+								
+						echo "<article class='col-sm-8 msgLong' id='msgBox'>";
+						
+						
+					}else{
+						
 						// MySQL database query
 						$queryID = "SELECT * FROM `messages` ";
 						$queryID .= " INNER JOIN users ON messages.from_userID=users.id";
@@ -116,15 +145,6 @@ if(isset($_POST['submitReply'])){
 								die("Database query failed. ");
 						}
 						
-						
-						//$row = mysqli_fetch_assoc($result);
-						
-							//require "reply_message_Content.php";
-						//require "message_Content.php";
-						
-						
-						
-						
 						while($row = mysqli_fetch_assoc($result)){
 							
 
@@ -141,7 +161,7 @@ if(isset($_POST['submitReply'])){
 							}
 							
 							if($row['to_userID'] == $_SESSION['loginID'] and $row['unread'] == 1){	
-								echo "<p class='msgBuyerNew'><sub>{$row['customer_fname']} {$row['customer_lname']} {$row['msgDate']}</sub><br>";
+								echo "<p class='msgBuyerNew'><sub>{$row['customer_login']} {$row['msgDate']}</sub><br>";
 								echo "{$row['message']}</p>";
 								$queryRead = "UPDATE `messages` SET `unread` = '0' WHERE `messages`.`message_id` = {$row['message_id']}";
 								mysqli_query($conn, $queryRead);
@@ -151,11 +171,11 @@ if(isset($_POST['submitReply'])){
 
 							else if($row['from_userID'] == $_SESSION['loginID'])
 							{
-								echo "<p class='msgSeller'><sub>{$row['customer_fname']} {$row['customer_lname']} {$row['msgDate']}</sub><br>";
+								echo "<p class='msgSeller'><sub>{$row['customer_login']} {$row['msgDate']}</sub><br>";
 								echo "{$row['message']}</p>";
 								
 							}else{
-								echo "<p class='msgBuyer'><sub>{$row['customer_fname']} {$row['customer_lname']} {$row['msgDate']}</sub><br>";
+								echo "<p class='msgBuyer'><sub>{$row['customer_login']} {$row['msgDate']}</sub><br>";
 								echo " {$row['message']}</p>";
 								
 							}
@@ -165,7 +185,9 @@ if(isset($_POST['submitReply'])){
 							//require "message_Content.php";
 							
 						}
-						
+					
+					}
+					
 						?>
 						
 						<textarea class="replyMsgTxt" name="replyMessage"></textarea>
@@ -205,18 +227,20 @@ if(isset($_POST['submitReply'])){
 					?>
 				
 					
-					
-				
-				
-				
-				
-				
 			</div>
 			</div>
 			</form>
 		</div>	
+		<?php 
+			require 'php/logRegmodals.php';
+		?>
+		<div id="results"></div>
+	
+	
+	<?php 
+		require 'php/footer.php';
+	?>
 		
-		<?php include('footer.php'); ?>
 		
 	</body>
 </html>

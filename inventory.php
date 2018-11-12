@@ -1,26 +1,17 @@
 <?php
-
 	session_start();
-/*
-*	php code to check if form has been submitted.
-*	If true, then connect to the database and input the data.
-*
-*
-*/
-// database connection
-require "dbConnection.php";
 
-
+$title = "Inventory";
 	
 	
+	require 'php/header.php';
+	require 'conn.php';
+
 ?>
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<?php
-			$title = "Inventory";
-			include "head.php"; ?>
+	
 		
 		<script>
 			
@@ -42,20 +33,19 @@ require "dbConnection.php";
 				return arrString;
 			}
 		
-		</script>
-	</head>
-		
+		</script>	
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
+		<?php require 'php/navAccess.php' ?>
 		
-		<?php include('nav.php'); ?>
+		<div class="container">
 		
+		<h1>Inventory</h1>
+			<hr>
 		
-		
-		<div class="main">
 			<div class ="row col-sm-3">
-				<a class="addCar btn btn-sm btn-outline-secondary"  href="add.php">Add Vehicle</a>
+				<a class="addCar btn btn-primary"  href="add_vehicle.php">Add Vehicle</a>
 			</div>
 		
 		
@@ -85,7 +75,7 @@ require "dbConnection.php";
 								}
 							</script>
 							</br>
-						<a class="filterBtn btn btn-sm btn-outline-secondary">Filter</a>
+						<button class="btn btn-secondary btn-sm">Filter</a>
 						
 						
 					</div>
@@ -95,6 +85,7 @@ require "dbConnection.php";
 					<?php 
 					
 					// MySQL database query
+					
 						$queryRecords = "SELECT COUNT(`id`) FROM `vehicle` ";
 						$queryRecords .= "WHERE user_id=".$_SESSION['loginID'];
 						$result = mysqli_query($conn, $queryRecords);
@@ -127,7 +118,6 @@ require "dbConnection.php";
 						if(isset($_SESSION['loginID'])){
 							$queryID .= "WHERE user_id=".$_SESSION['loginID'];
 						}
-						// echo "<script>alert('$queryID')</script>";
 						
 						$result = mysqli_query($conn, $queryID);
 						
@@ -156,8 +146,17 @@ require "dbConnection.php";
 			</div>
 			
 		</div>	
+		<!-- Modal -->
+		<?php 
+			require 'php/logRegmodals.php';
+		?>
+	
+		<div id="results" name="results"></div>
+	<?php 
+		require 'php/footer.php';
 		
-		<?php include('footer.php'); ?>
+	?>	
+		
 		
 	</body>
 </html>

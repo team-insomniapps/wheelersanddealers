@@ -13,12 +13,12 @@ if($row['from_userID'] == $_SESSION['loginID']){
 	$queryUserName .= " WHERE id=".$row['to_userID'];
 	$userName = mysqli_fetch_assoc(mysqli_query($conn, $queryUserName));
 
-	echo "To: {$userName['customer_fname']} {$userName['customer_lname']}";
+	echo "To: {$userName['customer_login']}";
 	
 } 
 
 
-else{echo "From: {$row['customer_fname']} {$row['customer_lname']}";}
+else{echo "From: {$row['customer_login']}";}
 
 echo "</h6></li>";
 

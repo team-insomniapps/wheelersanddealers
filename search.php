@@ -1,99 +1,24 @@
+<?php session_start(); ?>
+
 <?php
-session_start();
-?>
-<?php
-
-// database information and connection 
-// might need to separate this later
-/*
-$servername = "localhost";
-$dbname = "efftwelv_wheelersanddealers";
-$dsn = "mysql:host=$servername;dbname=$dbname";
-
-$username = "efftwelv_andrew";
-$password = "Andrew1000";
-
-$conn = mysqli_connect($servername,$username,$password,$dbname);		
-*/
-/*
-<?php
-							
-							// Search database for all distinct entries of car makes
-							$queryRecords = "SELECT DISTINCT `car_make_id` FROM `vehicle` WHERE `car_make_id` = `car_make_id`";
-							$result = mysqli_query($conn, $queryRecords);
-				
-							// Store in arrary
-							$make_array = array();
-							
-							// Test query error
-							if(!$result){ die("Database query failed. "); }
-						
-							// create index for while loop
-							$index = 0;
-							
-							// search each row of the results and store in an array 
-							// add a dropdown box to the form with the database entries
-							while($row = mysqli_fetch_assoc($result)){
-								
-								if($index == 0){
-									
-									$make_array[$index] = $row;
-									echo "<option></option><option value=".$make_array[$index]['car_make_id'].">".$make_array[$index]['car_make_id']."</option>";
-								} else {
-									
-								
-									$make_array[$index] = $row;
-									echo "<option value=".$make_array[$index]['car_make_id'].">".$make_array[$index]['car_make_id']."</option>";
-								}
-								
-								$index = $index + 1;
-							}
-							
-							?>
-							*/
-
+	$title = "Search";
+	require 'php/header.php';
+	require 'conn.php';
+	
 ?>
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<?php
-			$title = "Search";
-			include "head.php"; ?>
-		
-		<script>
-			<!-- Generating year ranges -->
-			var yearRangeStr; 
-			var year = 2018;
-			while (year > 1919){
-				yearRangeStr += '<option value="' + year + '">';
-				year -= 1;
-			}
-		</script>	
-		<script>	
-			<!-- generic loading -->
-			function loadArray(array){
-				var arrString = "";
-				for (var i=0; i < array.length; i++){
-					arrString += '<option value="' + array[i] + '">';
-				}
-				return arrString;
-			}
-		</script>
-	</head>
 		
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		<?php include('nav.php'); ?>
-		
-	</div>
-		
+		<?php require 'php/navAccess.php' ?>
+	
 	<div class="container">
-		<h1>Wheelers & Dealers</h1>
-		<p>Search for a Vehicle</p>
-			
-		<form method="post" enctype="multipart/form-data" action="search_results.php">
+		<h1>Search</h1>
+			<hr>
+		<form method="post" enctype="multipart/form-data" action="search_result.php">
 			<div  class="row">	
 				<div class="col-sm-6">
 
@@ -125,7 +50,8 @@ $conn = mysqli_connect($servername,$username,$password,$dbname);
 						<input list="bodyStyle" name="bodyStyle" class="form-control">
 							<datalist id="bodyStyle">
 								<script>
-									document.getElementById("bodyStyle").innerHTML = loadArray(["bus", "hatch", "sedan", "wagon", "SUV", "people mover", "coupe", "convertable", "performance", "ute/pick-up", "cab chassis", "van"]);
+									var bodyArray = [];
+									document.getElementById("bodyStyle").innerHTML = bodyArray["bus", "hatch", "sedan", "wagon", "SUV", "people mover", "coupe", "convertable", "performance", "ute/pick-up", "cab chassis", "van"];
 								</script>
 							</datalist>
 					</div>
@@ -138,7 +64,8 @@ $conn = mysqli_connect($servername,$username,$password,$dbname);
 						<input list="doors" name="doors" class="form-control">
 							<datalist id="doors">
 								<script>
-									document.getElementById("doors").innerHTML = loadArray(["2", "4", "5+"]);
+									var door = [];
+									document.getElementById("doors").innerHTML = door["2", "4", "5+"];
 								</script>
 							</datalist>
 					</div>
@@ -177,7 +104,8 @@ $conn = mysqli_connect($servername,$username,$password,$dbname);
 						<input list="cylindersmin" name="cylindersmin" class="form-control">
 							<datalist id="cylindersmin">
 								<script>
-									document.getElementById("cylinders").innerHTML = loadArray(["2", "4", "6", "8", "10", "12+"]);
+									var cyc = [];
+									document.getElementById("cylinders").innerHTML = cyc["2", "4", "6", "8", "10", "12+"];
 								</script>
 							</datalist>
 					</div>
@@ -190,7 +118,8 @@ $conn = mysqli_connect($servername,$username,$password,$dbname);
 						<input list="cylindersmax" name="cylindersmax" class="form-control">
 							<datalist id="cylindersmax">
 								<script>
-									document.getElementById("cylinders").innerHTML = loadArray(["2", "4", "6", "8", "10", "12+"]);
+									var cyc2 = [];
+									document.getElementById("cylinders").innerHTML = cyc2["2", "4", "6", "8", "10", "12+"];
 								</script>
 							</datalist>
 					</div>
@@ -303,8 +232,15 @@ $conn = mysqli_connect($servername,$username,$password,$dbname);
 				<!-- submit -->
 				<div  class="form-group row">
 					<div class="col-sm-6">
-						<input type="submit" name="submit" value="SEARCH" class="form-control">
+						<input type="submit" name="submit" value="SEARCH" class="btn btn-lg btn-secondary btn-block">
 						
+					</div>
+				</div>
+				
+				<!-- create match -->
+				<div  class="form-group row">
+					<div class="col-sm-6">
+						<input type="submit" name="create_match" value="CREATE MATCH" class="btn btn-lg btn-primary btn-block" formaction="user_match_requests.php">
 					</div>
 				</div>
 				
@@ -313,17 +249,10 @@ $conn = mysqli_connect($servername,$username,$password,$dbname);
 			</form>
 		</div>		
 	
-		<!-- link Jquery, Bootstrap, and Popper.js -->
-		<script src="js/jquery-3.3.1.slim.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-
-	<footer class="page-footer">
-			<div class="footerTxt container-fluid text-left">
-				<a class="footerTxt" href="#">Privacy Policy</a>
-				<a class="footerTxt" href="#">Contact</a>
-				<a class="footerTxt" href="#">Logout</a>
-			</div>
-		</footer>
+	<?php 
+		require 'php/footer.php';
+	?>
+	
 		
 	</body>
 </html>
