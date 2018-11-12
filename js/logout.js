@@ -1,6 +1,7 @@
 function signOut(){
 	if (cognitoUser != null) {
 		cognitoUser.signOut();
-		location.reload();
 	}
+	document.cookie = "access=;"
+	document.location.href = "logout.php";
 }

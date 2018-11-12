@@ -1,17 +1,15 @@
 <?php
-if(!isset($_SESSION)){ session_start(); }
-
-	require "dbConnection.php";
-
+	session_start();
+	
+	$title = "Messages";
+	
+	require 'php/header.php';
+	require 'conn.php';
 ?>
 
 <!doctype html>
 <html lang="en">
 	<head>
-	
-		<?php
-			$title = "Messages";
-			include "head.php"; ?>
 		
 		<script src="js/message.js"></script>
 		
@@ -21,12 +19,7 @@ if(!isset($_SESSION)){ session_start(); }
 	<body>
 		<!-- Header/navigation bar div -->
 		<!-- https://getbootstrap.com/docs/4.0/components/navbar/? -->
-		
-		<?php 
-				include('nav.php'); 
-				
-		?>
-		
+		<?php require 'php/navAccess.php' ?>
 		
 		<div class="container">
 		
@@ -35,7 +28,7 @@ if(!isset($_SESSION)){ session_start(); }
 			<section class="col-sm-12">
 					<!-- <article class="row carShortArticle col-sm-12"> -->
 					<?php 
-				
+						
 						// MySQL database query
 						$queryID = "SELECT * FROM `messages` ";
 						$queryID .= " INNER JOIN users ON messages.from_userID=users.id";
@@ -73,17 +66,17 @@ if(!isset($_SESSION)){ session_start(); }
 							
 							
 							if($row['to_userID'] == $_SESSION['loginID'] and $row['unread'] == 1){	
-								echo "<p class='msgBuyerNew'><sub>{$row['customer_fname']} {$row['customer_lname']} {$row['msgDate']}</sub><br>";
+								echo "<p class='msgBuyerNew'><sub>{$row['customer_login']} {$row['msgDate']}</sub><br>";
 								echo "{$row['message']}</p>";
 								
 							}
 							else if($row['from_userID'] == $_SESSION['loginID'])
 							{
-								echo "<p class='msgSeller'><sub>{$row['customer_fname']} {$row['customer_lname']} {$row['msgDate']}</sub><br>";
+								echo "<p class='msgSeller'><sub>{$row['customer_login']} {$row['msgDate']}</sub><br>";
 								echo "{$row['message']}</p>";
 								
 							}else{
-								echo "<p class='msgBuyer'><sub>{$row['customer_fname']} {$row['customer_lname']} {$row['msgDate']}</sub><br>";
+								echo "<p class='msgBuyer'><sub>{$row['customer_login']} {$row['msgDate']}</sub><br>";
 								echo " {$row['message']}</p>";
 								
 							}
@@ -115,9 +108,11 @@ if(!isset($_SESSION)){ session_start(); }
 			
 		</div>	
 		
-		
-		
-		<?php include('footer.php'); ?>
+		<!-- Modal -->
+		<?php 
+			require 'php/logRegmodals.php';
+		?>
+		<?php include('php/footer.php'); ?>
 
 	</body>
 </html>
